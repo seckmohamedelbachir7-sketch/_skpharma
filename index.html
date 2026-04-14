@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SKPharma — Espace Pharmacien</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Styles -->
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- AUTH -->
+<div class="auth-wrap" id="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-logo">SK<span>Pharma</span></div>
+      <div class="auth-sub">Espace professionnel pharmacien</div>
+    </div>
+    <div class="auth-body">
+      <div class="auth-tabs">
+        <div class="auth-tab active" onclick="switchTab('login')">Connexion</div>
+        <div class="auth-tab" onclick="switchTab('register')">Inscription</div>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="tab-login">
+        <div class="form-group">
+          <label class="form-label">Adresse e-mail</label>
+          <input class="form-input" type="email" id="login-email" placeholder="pharmacien@exemple.fr"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mot de passe</label>
+          <input class="form-input" type="password" id="login-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+        </div>
+        <button class="auth-btn" onclick="doLogin()">Se connecter</button>
+        <div class="auth-msg" id="login-msg"></div>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="tab-register" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Prénom et nom</label>
+          <input class="form-input" type="text" id="reg-name" placeholder="Dr. Sarah Benali"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nom de la pharmacie</label>
+          <input class="form-input" type="text" id="reg-pharma" placeholder="Pharmacie Centrale"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Adresse e-mail professionnelle</label>
+          <input class="form-input" type="email" id="reg-email" placeholder="pharmacien@exemple.fr"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mot de passe</label>
+          <input class="form-input" type="password" id="reg-pwd" placeholder="8 caractères minimum" onkeydown="if(event.key==='Enter')doRegister()"/>
+        </div>
+        <button class="auth-btn" onclick="doRegister()">Créer mon compte</button>
+        <div class="auth-msg" id="reg-msg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app-wrap" id="app-wrap">
+  <nav>
+    <div class="nav-logo">SK<span>Pharma</span></div>
+    <div class="nav-links">
+      <div class="nav-link active" onclick="showPage('dashboard',this)">Tableau de bord</div>
+      <div class="nav-link" onclick="showPage('patients',this)">Patients</div>
+      <div class="nav-link" onclick="showPage('medicaments',this)">Médicaments</div>
+      <div class="nav-link" onclick="showPage('pathologies',this)">Pathologies</div>
+      <div class="nav-link" onclick="showPage('entretiens',this)">Entretiens</div>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="nav-user">
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Changer de thème">
+        <span id="theme-icon">🌙</span>
+      </button>
+      <div class="nav-avatar" id="nav-avatar">?</div>
+      <span id="nav-name">—</span>
+      <button class="logout-btn" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </nav>
+
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-val" id="stat-patients">—</div><div class="stat-lbl">Patients enregistrés</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-ordos">—</div><div class="stat-lbl">Ordonnances ce mois</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-alerts">0</div><div class="stat-lbl">Alertes interactions</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-today">—</div><div class="stat-lbl">Patients vus aujourd'hui</div></div>
+      </div>
+      <div class="ai-bar">
+        <div class="ai-top"><div class="ai-dot"></div><div class="ai-title">Assistant IA clinique</div><div class="ai-sub">Alimenté par Claude</div></div>
+        <div class="ai-row">
+          <input class="ai-input" id="ai-q" type="text" placeholder="Ex: Interaction Metformine + Ibuprofène ? Posologie Amoxicilline enfant 20kg ?" onkeydown="if(event.key==='Enter')askAI()"/>
+          <button class="ai-btn" onclick="askAI()">Demander</button>
+        </div>
+        <div class="ai-response" id="ai-resp"></div>
+      </div>
+      <div class="dash-grid">
+        <div class="card">
+          <div class="card-title">Derniers patients <button class="btn btn-ghost btn-sm" onclick="showPage('patients',document.querySelectorAll('.nav-link')[1])">Voir tous →</button></div>
+          <div id="dash-patients-list"><div class="loading">Chargement…</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Dernières ordonnances</div>
+          <div id="dash-ordos-list"><div class="loading">Chargement…</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATIENTS -->
+    <div class="page" id="page-patients">
+      <div class="page-header">
+        <div class="page-title">Mes patients</div>
+        <button class="btn btn-primary" onclick="openModal('add-patient')">+ Nouveau patient</button>
+      </div>
+      <div class="search-row">
+        <input class="search-input" type="text" placeholder="Rechercher par nom, pathologie…" oninput="filterPatients(this.value)"/>
+      </div>
+      <div class="patient-grid" id="patient-grid"><div class="loading">Chargement…</div></div>
+    </div>
+
+    <!-- PATIENT DETAIL -->
+    <div class="page" id="page-patient-detail">
+      <div class="page-header">
+        <button class="btn btn-ghost btn-sm" onclick="showPage('patients',document.querySelectorAll('.nav-link')[1])">← Retour</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost btn-sm" onclick="scanOrdonnance()">📷 Scanner ordonnance</button>
+          <button class="btn btn-primary btn-sm" onclick="openModal('add-ordo')">+ Ordonnance</button>
+        </div>
+      </div>
+      <div class="detail-wrap">
+        <div class="detail-header">
+          <div class="detail-avatar" id="det-avatar">?</div>
+          <div>
+            <div class="detail-name" id="det-name">—</div>
+            <div class="detail-meta" id="det-meta">—</div>
+          </div>
+        </div>
+        <div class="detail-body">
+          <div class="detail-tabs">
+            <div class="detail-tab active" onclick="switchDetailTab('info',this)">Informations</div>
+            <div class="detail-tab" onclick="switchDetailTab('ordos',this)">Ordonnances</div>
+            <div class="detail-tab" onclick="switchDetailTab('patho',this)">Pathologies</div>
+            <div class="detail-tab" onclick="switchDetailTab('interactions',this)">Interactions</div>
+          </div>
+          <div class="detail-section active" id="dtab-info">
+            <div class="info-grid" id="det-info-grid"></div>
+          </div>
+          <div class="detail-section" id="dtab-ordos">
+            <div id="det-ordos-list"><div class="loading">Chargement…</div></div>
+          </div>
+          <div class="detail-section" id="dtab-patho">
+            <div id="det-patho-list"><div class="loading">Chargement…</div></div>
+          </div>
+          <div class="detail-section" id="dtab-interactions">
+            <div id="det-interactions-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDICAMENTS -->
+    <div class="page" id="page-medicaments">
+      <div class="page-header">
+        <div class="page-title">Base médicamenteuse</div>
+        <div style="font-size:12px;color:var(--text-muted)">Source : <a href="https://base-donnees-publique.medicaments.gouv.fr" target="_blank" style="color:var(--teal)">BDPM — medicaments.gouv.fr</a></div>
+      </div>
+      <div class="search-row">
+        <input class="search-input" type="text" placeholder="Rechercher par nom commercial, DCI, classe thérapeutique…" oninput="filterDrugs(this.value)"/>
+      </div>
+      <div class="forme-filters-bar" id="forme-filters"></div>
+      <div id="drug-list"></div>
+    </div>
+
+    <!-- PATHOLOGIES -->
+    <div class="page" id="page-pathologies">
+      <div class="page-header">
+        <div class="page-title">Base pathologies</div>
+        <button class="btn btn-primary" onclick="openModal('add-pathologie')">+ Nouvelle pathologie</button>
+      </div>
+      <div class="search-row">
+        <input class="search-input" type="text" placeholder="Rechercher une pathologie…" oninput="filterPathologies(this.value)"/>
+      </div>
+      <div id="patho-global-list"><div class="loading">Chargement…</div></div>
+    </div>
+
+    <!-- ENTRETIENS -->
+    <div class="page" id="page-entretiens">
+      <div class="page-header">
+        <div class="page-title">Entretiens pharmaceutiques</div>
+        <button class="btn btn-primary" onclick="openModal('add-entretien')">+ Nouvel entretien</button>
+      </div>
+      <div class="search-row">
+        <input class="search-input" type="text" placeholder="Rechercher par patient, type d'entretien…" oninput="filterEntretiens(this.value)"/>
+      </div>
+      <div class="entretien-stats" id="entretien-stats"></div>
+      <div id="entretien-list"><div class="loading">Chargement…</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-add-patient">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Nouveau patient</div><button class="modal-close" onclick="closeModal('add-patient')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Prénom et nom *</label><input class="form-input" id="p-name" placeholder="Marie Lambert"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group"><label class="form-label">Date de naissance</label><input class="form-input" type="date" id="p-dob"/></div>
+        <div class="form-group"><label class="form-label">Mutuelle</label><input class="form-input" id="p-mutuelle" placeholder="MGEN"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Pathologies connues</label><input class="form-input" id="p-patho" placeholder="Diabète T2, Hypertension…"/></div>
+      <div class="form-group"><label class="form-label">Allergies</label><input class="form-input" id="p-allergies" placeholder="Pénicilline, Aspirine…"/></div>
+      <div class="form-group"><label class="form-label">Téléphone</label><input class="form-input" id="p-tel" placeholder="06 12 34 56 78"/></div>
+      <div class="form-group"><label class="form-label">Notes</label><input class="form-input" id="p-notes" placeholder="Observations complémentaires…"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-patient')">Annuler</button>
+      <button class="btn btn-primary" onclick="savePatient()">Enregistrer le patient</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-add-ordo">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Nouvelle ordonnance</div><button class="modal-close" onclick="closeModal('add-ordo')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Médecin prescripteur</label><input class="form-input" id="o-medecin" placeholder="Dr. Lemaire"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group"><label class="form-label">Date</label><input class="form-input" type="date" id="o-date"/></div>
+        <div class="form-group"><label class="form-label">Renouvellement</label><select class="form-input" id="o-renouvellement"><option value="">Non</option><option>1 mois</option><option>3 mois</option><option>6 mois</option><option>12 mois</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Médicaments prescrits *</label><textarea class="form-input" id="o-meds" rows="3" placeholder="Amoxicilline 500mg × 3/j, Doliprane 1g si douleur…" style="resize:vertical"></textarea></div>
+      <div class="form-group"><label class="form-label">Statut</label><select class="form-input" id="o-statut"><option>Dispensé</option><option>En attente</option><option>Partiellement dispensé</option></select></div>
+      <div class="form-group"><label class="form-label">Notes pharmacien</label><input class="form-input" id="o-notes" placeholder="Conseils donnés au patient…"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-ordo')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveOrdonnance()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SCAN ORDONNANCE -->
+<div class="modal-overlay" id="modal-scan-ordo">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📷 Scanner une ordonnance</div>
+      <button class="modal-close" onclick="closeModal('scan-ordo')">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="scan-dropzone" style="border:2px dashed var(--gray-300);border-radius:var(--radius-lg);padding:32px;text-align:center;margin-bottom:16px;cursor:pointer;transition:border-color 0.15s" onclick="document.getElementById('scan-file').click()">
+        <div style="font-size:36px;margin-bottom:8px">🖼️</div>
+        <div style="font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px">Cliquez pour choisir une photo</div>
+        <div style="font-size:12px;color:var(--text-muted)">JPG, PNG, WEBP — Photo de l'ordonnance manuscrite ou imprimée</div>
+        <input type="file" id="scan-file" accept="image/*" style="display:none" onchange="previewScan(this)"/>
+      </div>
+      <img id="scan-preview" style="display:none;width:100%;border-radius:var(--radius);max-height:220px;object-fit:contain;border:var(--border);margin-bottom:12px"/>
+      <div id="scan-status" style="display:none;font-size:13px;color:var(--teal);background:var(--teal-pale);padding:10px 14px;border-radius:8px;margin-bottom:8px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('scan-ordo')">Annuler</button>
+      <button class="btn btn-primary" onclick="processScan()">🔍 Analyser et pré-remplir</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PATHOLOGIE (dossier patient) -->
+<div class="modal-overlay" id="modal-add-patho-patient">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Ajouter une pathologie</div><button class="modal-close" onclick="closeModal('add-patho-patient')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Pathologie *</label><input class="form-input" id="pp-nom" placeholder="Diabète de type 2"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group"><label class="form-label">Date de diagnostic</label><input class="form-input" type="date" id="pp-date"/></div>
+        <div class="form-group"><label class="form-label">Sévérité</label>
+          <select class="form-input" id="pp-severite"><option>Légère</option><option>Modérée</option><option>Sévère</option><option>Chronique</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Traitements associés</label><input class="form-input" id="pp-traitements" placeholder="Metformine 850mg, régime alimentaire…"/></div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-input" id="pp-notes" rows="2" placeholder="Observations, suivi…" style="resize:vertical"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-patho-patient')">Annuler</button>
+      <button class="btn btn-primary" onclick="savePathoPatient()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOUVELLE PATHOLOGIE (base globale) -->
+<div class="modal-overlay" id="modal-add-pathologie">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Nouvelle pathologie</div><button class="modal-close" onclick="closeModal('add-pathologie')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Nom de la pathologie *</label><input class="form-input" id="glob-nom" placeholder="Hypertension artérielle"/></div>
+      <div class="form-group"><label class="form-label">Catégorie</label>
+        <select class="form-input" id="glob-categorie">
+          <option>Cardiovasculaire</option><option>Métabolique</option><option>Respiratoire</option>
+          <option>Neurologique</option><option>Infectieuse</option><option>Rhumatologique</option><option>Autre</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Description / Définition</label><textarea class="form-input" id="glob-desc" rows="2" style="resize:vertical" placeholder="Définition courte…"></textarea></div>
+      <div class="form-group"><label class="form-label">Traitements de référence</label><input class="form-input" id="glob-traitements" placeholder="IEC, ARA2, diurétiques…"/></div>
+      <div class="form-group"><label class="form-label">Points de vigilance pharmacien</label><textarea class="form-input" id="glob-vigilance" rows="2" style="resize:vertical" placeholder="Interactions, CI, surveillance…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-pathologie')">Annuler</button>
+      <button class="btn btn-primary" onclick="savePathologieGlobale()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ENTRETIEN PHARMACEUTIQUE -->
+<div class="modal-overlay" id="modal-add-entretien">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header"><div class="modal-title">Nouvel entretien pharmaceutique</div><button class="modal-close" onclick="closeModal('add-entretien')">×</button></div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group"><label class="form-label">Patient *</label><input class="form-input" id="ent-patient" placeholder="Nom du patient" list="ent-patients-list"/><datalist id="ent-patients-list"></datalist></div>
+        <div class="form-group"><label class="form-label">Date *</label><input class="form-input" type="date" id="ent-date"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Type d'entretien *</label>
+        <select class="form-input" id="ent-type">
+          <option value="">— Choisir —</option>
+          <option>Asthme — Primo-entretien</option>
+          <option>Asthme — Entretien de suivi</option>
+          <option>Anticoagulants AVK — Primo-entretien</option>
+          <option>Anticoagulants AVK — Suivi</option>
+          <option>Anticoagulants AOD — Primo-entretien</option>
+          <option>Anticoagulants AOD — Suivi</option>
+          <option>Insuffisance cardiaque — Entretien</option>
+          <option>Diabète — Entretien éducatif</option>
+          <option>Sevrage tabagique</option>
+          <option>Bilan partagé de médication (BPM)</option>
+          <option>Accompagnement chimiothérapie orale</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Durée (minutes)</label>
+        <select class="form-input" id="ent-duree"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">1h</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Observations / Compte-rendu</label><textarea class="form-input" id="ent-notes" rows="3" placeholder="Résumé de l'entretien, points abordés, actions à suivre…" style="resize:vertical"></textarea></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group"><label class="form-label">Statut facturation</label>
+          <select class="form-input" id="ent-facturation"><option>Non facturé</option><option>Facturé Assurance Maladie</option><option>Facturé mutuelle</option><option>Non facturable</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Montant (€)</label><input class="form-input" type="number" id="ent-montant" placeholder="0.00" step="0.01"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Prochain entretien</label><input class="form-input" type="date" id="ent-prochain"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-entretien')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveEntretien()">Enregistrer l'entretien</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS — Chargés dans l'ordre des dépendances              -->
+<!-- ============================================================ -->
+<script src="data/drugs.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/patients.js"></script>
+<script src="js/ordonnances.js"></script>
+<script src="js/drugs-ui.js"></script>
+<script src="js/pathologies.js"></script>
+<script src="js/entretiens.js"></script>
+<script src="js/ui.js"></script>
+
+</body>
+</html>
