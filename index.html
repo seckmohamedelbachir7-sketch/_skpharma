@@ -5,11 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>SKPharma — Espace Pharmacien</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
-
-<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- Styles -->
 <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
@@ -26,39 +22,17 @@
         <div class="auth-tab active" onclick="switchTab('login')">Connexion</div>
         <div class="auth-tab" onclick="switchTab('register')">Inscription</div>
       </div>
-
-      <!-- LOGIN -->
       <div id="tab-login">
-        <div class="form-group">
-          <label class="form-label">Adresse e-mail</label>
-          <input class="form-input" type="email" id="login-email" placeholder="pharmacien@exemple.fr"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Mot de passe</label>
-          <input class="form-input" type="password" id="login-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
-        </div>
+        <div class="form-group"><label class="form-label">Adresse e-mail</label><input class="form-input" type="email" id="login-email" placeholder="pharmacien@exemple.fr"/></div>
+        <div class="form-group"><label class="form-label">Mot de passe</label><input class="form-input" type="password" id="login-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
         <button class="auth-btn" onclick="doLogin()">Se connecter</button>
         <div class="auth-msg" id="login-msg"></div>
       </div>
-
-      <!-- REGISTER -->
       <div id="tab-register" style="display:none">
-        <div class="form-group">
-          <label class="form-label">Prénom et nom</label>
-          <input class="form-input" type="text" id="reg-name" placeholder="Dr. Sarah Benali"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Nom de la pharmacie</label>
-          <input class="form-input" type="text" id="reg-pharma" placeholder="Pharmacie Centrale"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Adresse e-mail professionnelle</label>
-          <input class="form-input" type="email" id="reg-email" placeholder="pharmacien@exemple.fr"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Mot de passe</label>
-          <input class="form-input" type="password" id="reg-pwd" placeholder="8 caractères minimum" onkeydown="if(event.key==='Enter')doRegister()"/>
-        </div>
+        <div class="form-group"><label class="form-label">Prénom et nom</label><input class="form-input" type="text" id="reg-name" placeholder="Dr. Sarah Benali"/></div>
+        <div class="form-group"><label class="form-label">Nom de la pharmacie</label><input class="form-input" type="text" id="reg-pharma" placeholder="Pharmacie Centrale"/></div>
+        <div class="form-group"><label class="form-label">Adresse e-mail professionnelle</label><input class="form-input" type="email" id="reg-email" placeholder="pharmacien@exemple.fr"/></div>
+        <div class="form-group"><label class="form-label">Mot de passe</label><input class="form-input" type="password" id="reg-pwd" placeholder="8 caractères minimum" onkeydown="if(event.key==='Enter')doRegister()"/></div>
         <button class="auth-btn" onclick="doRegister()">Créer mon compte</button>
         <div class="auth-msg" id="reg-msg"></div>
       </div>
@@ -76,6 +50,8 @@
       <div class="nav-link" onclick="showPage('medicaments',this)">Médicaments</div>
       <div class="nav-link" onclick="showPage('pathologies',this)">Pathologies</div>
       <div class="nav-link" onclick="showPage('entretiens',this)">Entretiens</div>
+      <div class="nav-link" onclick="showPage('archive',this);loadArchive()">📦 Archive</div>
+      <div class="nav-link" onclick="showPage('trash',this);loadTrash()">🗑 Corbeille <span id="trash-badge" class="trash-badge"></span></div>
     </div>
     <div class="nav-spacer"></div>
     <div class="nav-user">
@@ -136,6 +112,7 @@
         <button class="btn btn-ghost btn-sm" onclick="showPage('patients',document.querySelectorAll('.nav-link')[1])">← Retour</button>
         <div style="display:flex;gap:8px">
           <button class="btn btn-ghost btn-sm" onclick="scanOrdonnance()">📷 Scanner ordonnance</button>
+          <button class="btn btn-ghost btn-sm" onclick="openEditPatient()">✏️ Modifier le dossier</button>
           <button class="btn btn-primary btn-sm" onclick="openModal('add-ordo')">+ Ordonnance</button>
         </div>
       </div>
@@ -152,7 +129,7 @@
             <div class="detail-tab active" onclick="switchDetailTab('info',this)">Informations</div>
             <div class="detail-tab" onclick="switchDetailTab('ordos',this)">Ordonnances</div>
             <div class="detail-tab" onclick="switchDetailTab('patho',this)">Pathologies</div>
-            <div class="detail-tab" onclick="switchDetailTab('interactions',this)">Interactions</div>
+            <div class="detail-tab" onclick="switchDetailTab('interactions',this)">Allergies</div>
           </div>
           <div class="detail-section active" id="dtab-info">
             <div class="info-grid" id="det-info-grid"></div>
@@ -208,10 +185,50 @@
       <div id="entretien-list"><div class="loading">Chargement…</div></div>
     </div>
 
+    <!-- ARCHIVE -->
+    <div class="page" id="page-archive">
+      <div class="page-header">
+        <div>
+          <div class="page-title">📦 Archive</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Dossiers des patients inactifs — <span id="archive-count">0</span> dossier(s)</div>
+        </div>
+      </div>
+      <div id="archive-list"><div class="loading">Chargement…</div></div>
+    </div>
+
+    <!-- CORBEILLE -->
+    <div class="page" id="page-trash">
+      <div class="page-header">
+        <div>
+          <div class="page-title">🗑 Corbeille</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Dossiers supprimés — <span id="trash-count">0</span> dossier(s)</div>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="emptyTrashNow()">🗑 Vider maintenant</button>
+      </div>
+      <div style="background:var(--red-pale);border:1px solid var(--red);border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--red)">
+        ⚠️ Les dossiers ici peuvent être restaurés. La suppression définitive est irréversible.
+      </div>
+      <div class="trash-settings-card">
+        <div class="trash-settings-header">
+          <span style="font-size:13px;font-weight:600;color:var(--text)">⚙️ Vidage automatique</span>
+          <span id="trash-delay-summary" style="font-size:12px;color:var(--text-muted)">Chargement…</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px">
+          Choisissez au bout de combien de temps les dossiers sont supprimés définitivement :
+        </div>
+        <div id="trash-delay-options" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      </div>
+      <div id="trash-list"><div class="loading">Chargement…</div></div>
+    </div>
+
   </div>
 </div>
 
-<!-- MODALS -->
+<!-- ============================================================ -->
+<!-- MODALS                                                        -->
+<!-- ============================================================ -->
+
+<!-- MODAL : Nouveau patient -->
 <div class="modal-overlay" id="modal-add-patient">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Nouveau patient</div><button class="modal-close" onclick="closeModal('add-patient')">×</button></div>
@@ -233,6 +250,29 @@
   </div>
 </div>
 
+<!-- MODAL : Modifier patient -->
+<div class="modal-overlay" id="modal-edit-patient">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">✏️ Modifier le dossier patient</div><button class="modal-close" onclick="closeModal('edit-patient')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Prénom et nom *</label><input class="form-input" id="ep-name" placeholder="Marie Lambert"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group"><label class="form-label">Date de naissance</label><input class="form-input" type="date" id="ep-dob"/></div>
+        <div class="form-group"><label class="form-label">Mutuelle</label><input class="form-input" id="ep-mutuelle" placeholder="MGEN"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Pathologies connues</label><input class="form-input" id="ep-patho" placeholder="Diabète T2, Hypertension…"/></div>
+      <div class="form-group"><label class="form-label">Allergies (séparées par des virgules)</label><input class="form-input" id="ep-allergies" placeholder="Pénicilline, Aspirine…"/></div>
+      <div class="form-group"><label class="form-label">Téléphone</label><input class="form-input" id="ep-tel" placeholder="06 12 34 56 78"/></div>
+      <div class="form-group"><label class="form-label">Notes</label><input class="form-input" id="ep-notes" placeholder="Observations complémentaires…"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('edit-patient')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveEditPatient()">Enregistrer les modifications</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL : Nouvelle ordonnance -->
 <div class="modal-overlay" id="modal-add-ordo">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Nouvelle ordonnance</div><button class="modal-close" onclick="closeModal('add-ordo')">×</button></div>
@@ -253,13 +293,31 @@
   </div>
 </div>
 
-<!-- MODAL SCAN ORDONNANCE -->
+<!-- MODAL : Modifier ordonnance -->
+<div class="modal-overlay" id="modal-edit-ordo">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">✏️ Modifier l'ordonnance</div><button class="modal-close" onclick="closeModal('edit-ordo')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Médecin prescripteur</label><input class="form-input" id="eo-medecin" placeholder="Dr. Lemaire"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group"><label class="form-label">Date</label><input class="form-input" type="date" id="eo-date"/></div>
+        <div class="form-group"><label class="form-label">Renouvellement</label><select class="form-input" id="eo-renouvellement"><option value="">Non</option><option>1 mois</option><option>3 mois</option><option>6 mois</option><option>12 mois</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Médicaments prescrits *</label><textarea class="form-input" id="eo-meds" rows="3" style="resize:vertical" placeholder="Amoxicilline 500mg × 3/j…"></textarea></div>
+      <div class="form-group"><label class="form-label">Statut</label><select class="form-input" id="eo-statut"><option>Dispensé</option><option>En attente</option><option>Partiellement dispensé</option></select></div>
+      <div class="form-group"><label class="form-label">Notes pharmacien</label><input class="form-input" id="eo-notes" placeholder="Conseils donnés au patient…"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('edit-ordo')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveEditOrdo()">Enregistrer les modifications</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL : Scanner ordonnance -->
 <div class="modal-overlay" id="modal-scan-ordo">
   <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">📷 Scanner une ordonnance</div>
-      <button class="modal-close" onclick="closeModal('scan-ordo')">×</button>
-    </div>
+    <div class="modal-header"><div class="modal-title">📷 Scanner une ordonnance</div><button class="modal-close" onclick="closeModal('scan-ordo')">×</button></div>
     <div class="modal-body">
       <div id="scan-dropzone" style="border:2px dashed var(--gray-300);border-radius:var(--radius-lg);padding:32px;text-align:center;margin-bottom:16px;cursor:pointer;transition:border-color 0.15s" onclick="document.getElementById('scan-file').click()">
         <div style="font-size:36px;margin-bottom:8px">🖼️</div>
@@ -277,7 +335,7 @@
   </div>
 </div>
 
-<!-- MODAL PATHOLOGIE (dossier patient) -->
+<!-- MODAL : Pathologie dossier patient -->
 <div class="modal-overlay" id="modal-add-patho-patient">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Ajouter une pathologie</div><button class="modal-close" onclick="closeModal('add-patho-patient')">×</button></div>
@@ -299,7 +357,7 @@
   </div>
 </div>
 
-<!-- MODAL NOUVELLE PATHOLOGIE (base globale) -->
+<!-- MODAL : Nouvelle pathologie (base globale) -->
 <div class="modal-overlay" id="modal-add-pathologie">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Nouvelle pathologie</div><button class="modal-close" onclick="closeModal('add-pathologie')">×</button></div>
@@ -322,7 +380,7 @@
   </div>
 </div>
 
-<!-- MODAL ENTRETIEN PHARMACEUTIQUE -->
+<!-- MODAL : Entretien pharmaceutique -->
 <div class="modal-overlay" id="modal-add-entretien">
   <div class="modal" style="max-width:600px">
     <div class="modal-header"><div class="modal-title">Nouvel entretien pharmaceutique</div><button class="modal-close" onclick="closeModal('add-entretien')">×</button></div>
@@ -334,16 +392,11 @@
       <div class="form-group"><label class="form-label">Type d'entretien *</label>
         <select class="form-input" id="ent-type">
           <option value="">— Choisir —</option>
-          <option>Asthme — Primo-entretien</option>
-          <option>Asthme — Entretien de suivi</option>
-          <option>Anticoagulants AVK — Primo-entretien</option>
-          <option>Anticoagulants AVK — Suivi</option>
-          <option>Anticoagulants AOD — Primo-entretien</option>
-          <option>Anticoagulants AOD — Suivi</option>
-          <option>Insuffisance cardiaque — Entretien</option>
-          <option>Diabète — Entretien éducatif</option>
-          <option>Sevrage tabagique</option>
-          <option>Bilan partagé de médication (BPM)</option>
+          <option>Asthme — Primo-entretien</option><option>Asthme — Entretien de suivi</option>
+          <option>Anticoagulants AVK — Primo-entretien</option><option>Anticoagulants AVK — Suivi</option>
+          <option>Anticoagulants AOD — Primo-entretien</option><option>Anticoagulants AOD — Suivi</option>
+          <option>Insuffisance cardiaque — Entretien</option><option>Diabète — Entretien éducatif</option>
+          <option>Sevrage tabagique</option><option>Bilan partagé de médication (BPM)</option>
           <option>Accompagnement chimiothérapie orale</option>
         </select>
       </div>
@@ -366,10 +419,105 @@
   </div>
 </div>
 
+<!-- MODAL : Confirmer archivage -->
+<div class="modal-overlay" id="modal-confirm-archive">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header" style="border-bottom:2px solid var(--amber-pale)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--amber-pale);display:flex;align-items:center;justify-content:center;font-size:18px">📦</div>
+        <div><div class="modal-title" style="color:var(--amber)">Archiver le dossier</div><div style="font-size:11px;color:var(--text-muted);font-weight:400;margin-top:1px">Action réversible</div></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('confirm-archive')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--amber-pale);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px">
+        <div style="font-weight:600;color:var(--amber);margin-bottom:4px" id="confirm-archive-name">—</div>
+        <div style="font-size:12px;color:var(--text-muted)" id="confirm-archive-meta">—</div>
+      </div>
+      <p style="font-size:13px;color:var(--text);line-height:1.6;margin:0 0 6px 0">Ce dossier sera déplacé dans la section <strong>Archive</strong> et ne sera plus visible dans la liste des patients actifs.</p>
+      <p style="font-size:12px;color:var(--text-muted);margin:0">Vous pouvez le restaurer à tout moment depuis l'onglet Archive.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('confirm-archive')">Annuler</button>
+      <button class="btn" style="background:var(--amber);color:#fff;border-color:var(--amber)" id="confirm-archive-btn" onclick="confirmArchive()">📦 Archiver le dossier</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL : Confirmer corbeille -->
+<div class="modal-overlay" id="modal-confirm-trash">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header" style="border-bottom:2px solid var(--red-pale)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--red-pale);display:flex;align-items:center;justify-content:center;font-size:18px">🗑</div>
+        <div><div class="modal-title" style="color:var(--red)">Mettre à la corbeille</div><div style="font-size:11px;color:var(--text-muted);font-weight:400;margin-top:1px">Action réversible</div></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('confirm-trash')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--red-pale);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px">
+        <div style="font-weight:600;color:var(--red);margin-bottom:4px" id="confirm-trash-name">—</div>
+        <div style="font-size:12px;color:var(--text-muted)" id="confirm-trash-meta">—</div>
+      </div>
+      <p style="font-size:13px;color:var(--text);line-height:1.6;margin:0 0 6px 0">Ce dossier sera déplacé dans la <strong>Corbeille</strong>.</p>
+      <p style="font-size:12px;color:var(--text-muted);margin:0">Vous pouvez le restaurer depuis la Corbeille avant suppression définitive.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('confirm-trash')">Annuler</button>
+      <button class="btn btn-danger" id="confirm-trash-btn" onclick="confirmTrash()">🗑 Mettre à la corbeille</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL : Suppression définitive -->
+<div class="modal-overlay" id="modal-confirm-harddelete">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header" style="border-bottom:2px solid var(--red-pale)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:18px">⚠️</div>
+        <div><div class="modal-title" style="color:var(--red)">Suppression définitive</div><div style="font-size:11px;color:var(--red);font-weight:500;margin-top:1px">⚠️ Action IRRÉVERSIBLE</div></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('confirm-harddelete')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--red-pale);border:1px solid var(--red);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px">
+        <div style="font-weight:600;color:var(--red);margin-bottom:4px" id="confirm-harddelete-name">—</div>
+        <div style="font-size:12px;color:var(--text-muted)" id="confirm-harddelete-meta">—</div>
+      </div>
+      <p style="font-size:13px;color:var(--text);line-height:1.6;margin:0 0 6px 0"><strong>Toutes les données</strong> de ce patient seront supprimées définitivement.</p>
+      <p style="font-size:12px;font-weight:600;color:var(--red);margin:0">Cette action ne peut pas être annulée.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('confirm-harddelete')">Annuler</button>
+      <button class="btn btn-danger" id="confirm-harddelete-btn" onclick="confirmHardDelete()">Supprimer définitivement</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL : Guide migration SQL -->
+<div class="modal-overlay" id="modal-migration" style="z-index:500">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-header" style="background:var(--red-pale);border-color:var(--red)">
+      <div class="modal-title" style="color:var(--red)">⚠️ Migration base de données requise</div>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;margin-bottom:14px;color:var(--text)">Des colonnes manquent dans votre base Supabase. Exécutez ce SQL dans votre <strong>Dashboard Supabase → SQL Editor</strong> puis rechargez la page :</p>
+      <div style="position:relative">
+        <pre id="migration-sql" style="background:var(--navy);color:#4ecdb4;padding:16px;border-radius:8px;font-size:12px;overflow-x:auto;line-height:1.6;white-space:pre-wrap"></pre>
+        <button onclick="copyMigrationSQL()" style="position:absolute;top:8px;right:8px;padding:4px 10px;background:rgba(78,205,180,0.2);border:1px solid rgba(78,205,180,0.4);border-radius:6px;color:#4ecdb4;font-size:11px;cursor:pointer">Copier</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="https://supabase.com/dashboard" target="_blank" class="btn btn-primary">Ouvrir Supabase Dashboard ↗</a>
+      <button class="btn btn-ghost" onclick="document.getElementById('modal-migration').classList.remove('open');location.reload()">J'ai exécuté le SQL — Recharger</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- ============================================================ -->
-<!-- SCRIPTS — Chargés dans l'ordre des dépendances              -->
+<!-- SCRIPTS                                                       -->
 <!-- ============================================================ -->
 <script src="data/drugs.js"></script>
 <script src="js/config.js"></script>
@@ -380,7 +528,8 @@
 <script src="js/drugs-ui.js"></script>
 <script src="js/pathologies.js"></script>
 <script src="js/entretiens.js"></script>
+<script src="js/trash-auto.js"></script>
 <script src="js/ui.js"></script>
-<script src="js/fichier trash auto.js"></script>
+
 </body>
 </html>
