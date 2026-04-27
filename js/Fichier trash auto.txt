@@ -1,13 +1,4 @@
-Fichier trash auto
-
-Ahmed TERMOUL
-Lun 2026-04-27 13:27
-(Aucun texte de message)
-
-Ahmed TERMOUL
 
-​
-Mohamed SECK​
 // trash-auto.js — Vidage automatique de la corbeille
 // Paramètre stocké en localStorage : pharmaref_trash_delay
 // Valeurs : 3, 7, 10, 14, 30, 0 (jamais)
