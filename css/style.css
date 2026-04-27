@@ -833,6 +833,7 @@ body.dark .badge-blue { background: rgba(37,99,235,0.12); }
 body.dark .loading::before { border-color: rgba(255,255,255,0.06); border-top-color: var(--teal); }
 body.dark #scan-dropzone { border-color: rgba(255,255,255,0.1) !important; }
 body.dark #scan-dropzone:hover { background: rgba(14,158,130,0.08) !important; }
+
 /* ============================================================ */
 /* ADDITIONS v6 — Corbeille, Archive, Interactions, Tags        */
 /* ============================================================ */
