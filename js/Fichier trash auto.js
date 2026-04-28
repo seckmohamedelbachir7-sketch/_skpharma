@@ -135,3 +135,143 @@ async function emptyTrashNow() {
   updateTrashBadge();
   loadDashboard();
 }
+// ─── Charger la corbeille ─────────────────────
+
+async function loadTrash() {
+  if (!currentUser) return;
+  const { data } = await sb
+    .from('patients')
+    .select('*')
+    .eq('pharmacist_id', currentUser.id)
+    .eq('status', 'deleted')
+    .order('deleted_at', { ascending: false });
+
+  const list = data || [];
+  document.getElementById('trash-count').textContent = list.length;
+
+  const el = document.getElementById('trash-list');
+  if (!list.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">🗑</div><div class="empty-title">Corbeille vide</div><div class="empty-sub">Aucun dossier supprimé</div></div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(p => `
+    <div class="patient-card">
+      <div class="p-avatar">${(p.name||'?').charAt(0).toUpperCase()}</div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-meta">Supprimé le ${formatDate(p.deleted_at)}</div>
+      <div class="p-actions">
+        <button class="btn btn-ghost btn-sm" onclick="restorePatient('${p.id}')">♻️ Restaurer</button>
+        <button class="btn btn-danger btn-sm" onclick="openHardDelete('${p.id}','${p.name}',${p.dob ? `'${p.dob}'` : 'null'})">🗑 Supprimer définitivement</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── Charger l'archive ────────────────────────
+
+async function loadArchive() {
+  if (!currentUser) return;
+  const { data } = await sb
+    .from('patients')
+    .select('*')
+    .eq('pharmacist_id', currentUser.id)
+    .eq('status', 'archived')
+    .order('created_at', { ascending: false });
+
+  const list = data || [];
+  document.getElementById('archive-count').textContent = list.length;
+
+  const el = document.getElementById('archive-list');
+  if (!list.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📦</div><div class="empty-title">Archive vide</div><div class="empty-sub">Aucun dossier archivé</div></div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(p => `
+    <div class="patient-card">
+      <div class="p-avatar">${(p.name||'?').charAt(0).toUpperCase()}</div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-meta">${p.dob ? formatDate(p.dob) : '—'} · ${p.mutuelle || 'Sans mutuelle'}</div>
+      <div class="p-tags">
+        ${p.pathologies ? p.pathologies.split(',').map(t => `<span class="badge badge-blue">${t.trim()}</span>`).join('') : ''}
+      </div>
+      <div class="p-actions">
+        <button class="btn btn-ghost btn-sm" onclick="restorePatient('${p.id}')">♻️ Restaurer</button>
+        <button class="btn btn-danger btn-sm" onclick="openTrashFromArchive('${p.id}','${p.name}',${p.dob ? `'${p.dob}'` : 'null'})">🗑 Corbeille</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── Restaurer un patient (corbeille ou archive → actif) ──
+
+async function restorePatient(id) {
+  await sb.from('patients').update({
+    status: 'active',
+    deleted_at: null
+  }).eq('id', id);
+  showToast('Dossier restauré avec succès', 'success');
+  loadTrash();
+  loadArchive();
+  updateTrashBadge();
+  loadPatients();
+}
+
+// ─── Ouvrir modal archivage ───────────────────
+
+function openArchiveModal(id, name, dob) {
+  document.getElementById('confirm-archive-name').textContent = name;
+  document.getElementById('confirm-archive-meta').textContent = dob ? formatDate(dob) : '—';
+  document.getElementById('confirm-archive-btn').onclick = () => confirmArchive(id);
+  openModal('confirm-archive');
+}
+
+async function confirmArchive(id) {
+  await sb.from('patients').update({ status: 'archived' }).eq('id', id);
+  closeModal('confirm-archive');
+  showToast('Dossier archivé', 'success');
+  loadPatients();
+  loadArchive();
+}
+
+// ─── Ouvrir modal corbeille ───────────────────
+
+function openTrashFromArchive(id, name, dob) {
+  document.getElementById('confirm-trash-name').textContent = name;
+  document.getElementById('confirm-trash-meta').textContent = dob ? formatDate(dob) : '—';
+  document.getElementById('confirm-trash-btn').onclick = () => confirmTrash(id);
+  openModal('confirm-trash');
+}
+
+async function confirmTrash(id) {
+  await sb.from('patients').update({
+    status: 'deleted',
+    deleted_at: new Date().toISOString()
+  }).eq('id', id);
+  closeModal('confirm-trash');
+  showToast('Dossier déplacé dans la corbeille', 'success');
+  loadPatients();
+  loadTrash();
+  loadArchive();
+  updateTrashBadge();
+}
+
+// ─── Ouvrir modal suppression définitive ─────
+
+function openHardDelete(id, name, dob) {
+  document.getElementById('confirm-harddelete-name').textContent = name;
+  document.getElementById('confirm-harddelete-meta').textContent = dob ? formatDate(dob) : '—';
+  document.getElementById('confirm-harddelete-btn').onclick = () => confirmHardDelete(id);
+  openModal('confirm-harddelete');
+}
+
+async function confirmHardDelete(id) {
+  await sb.from('ordonnances').delete().eq('patient_id', id);
+  await sb.from('patients').delete().eq('id', id);
+  closeModal('confirm-harddelete');
+  showToast('Dossier supprimé définitivement', 'success');
+  loadTrash();
+  updateTrashBadge();
+  loadDashboard();
+}
