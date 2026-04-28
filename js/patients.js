@@ -67,12 +67,31 @@ async function savePatient() {
 }
 
 async function deletePatient(id) {
-  if (!confirm('Supprimer ce patient et toutes ses ordonnances ?')) return;
-  await sb.from('ordonnances').delete().eq('patient_id', id);
-  await sb.from('patients').delete().eq('id', id);
-  showToast('Patient supprimé', 'success');
-  loadPatients();
-  loadDashboard();
+  const p = allPatients.find(p => p.id === id);
+  if (!p) return;
+  document.getElementById('confirm-trash-name').textContent = p.name;
+  document.getElementById('confirm-trash-meta').textContent = p.dob ? formatDate(p.dob) : '—';
+  document.getElementById('confirm-trash-btn').onclick = () => confirmTrash(id);
+  openModal('confirm-trash');
 }
 
+// 2. Confirmer → met status = 'deleted' avec timestamp
+async function confirmTrash(id) {
+  await sb.from('patients').update({
+    status: 'deleted',
+    deleted_at: new Date().toISOString()
+  }).eq('id', id);
+  closeModal('confirm-trash');
+  showToast('Dossier déplacé dans la corbeille', 'success');
+  loadPatients(); loadTrash(); updateTrashBadge();
+}
+
+// 3. Suppression définitive depuis la corbeille
+async function confirmHardDelete(id) {
+  await sb.from('ordonnances').delete().eq('patient_id', id);
+  await sb.from('patients').delete().eq('id', id);
+  closeModal('confirm-harddelete');
+  showToast('Dossier supprimé définitivement', 'success');
+  loadTrash(); updateTrashBadge();
+}
 // ---- PATIENT DETAIL ----
