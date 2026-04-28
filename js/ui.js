@@ -12,6 +12,7 @@ function showPage(name, el) {
   if (name === 'dashboard') loadDashboard();
   if (name === 'pathologies') loadPathologiesGlobales();
   if (name === 'entretiens') loadEntretiens();
+  if (name === 'posologies') loadPosologiesGlobales();
 }
 
 function switchTab(tab) {
@@ -27,6 +28,7 @@ function switchDetailTab(name, el) {
   document.getElementById('dtab-'+name).classList.add('active');
   el.classList.add('active');
   if (name === 'patho' && currentPatient) loadPathoPatient(currentPatient.id);
+  if (name === 'posologies' && currentPatient) loadPosologiesPatient(currentPatient.id);
 }
 
 function openModal(name) {
