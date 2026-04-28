@@ -98,6 +98,7 @@ function showApp(user) {
   loadDashboard();
   loadPatients();
   initMedicaments();
+  initAutoTrash();
   setTodayDate();
 }
 
