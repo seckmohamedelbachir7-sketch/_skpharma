@@ -185,7 +185,21 @@
       <div class="entretien-stats" id="entretien-stats"></div>
       <div id="entretien-list"><div class="loading">Chargement…</div></div>
     </div>
+ <!-- POSOLOGIES -->
+    <div class="page" id="page-posologies">
+      <div class="page-header">
+        <div class="page-title">Posologies patients</div>
+        <div style="font-size:12px;color:var(--text-muted)">Récapitulatif de tous les schémas posologiques</div>
+      </div>
+      <div class="search-row">
+        <input class="search-input" type="text" placeholder="Rechercher par médicament, patient…" oninput="filterPosologies(this.value)"/>
+      </div>
+      <div id="poso-stats"></div>
+      <div id="poso-global-list"><div class="loading">Chargement…</div></div>
+    </div>
 
+  </div>
+</div>
     <!-- ARCHIVE -->
     <div class="page" id="page-archive">
       <div class="page-header">
@@ -511,6 +525,104 @@
     <div class="modal-footer">
       <a href="https://supabase.com/dashboard" target="_blank" class="btn btn-primary">Ouvrir Supabase Dashboard ↗</a>
       <button class="btn btn-ghost" onclick="document.getElementById('modal-migration').classList.remove('open');location.reload()">J'ai exécuté le SQL — Recharger</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<!-- MODAL POSOLOGIE (dossier patient) -->
+<div class="modal-overlay" id="modal-add-posologie">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-header">
+      <div class="modal-title">💊 Nouvelle posologie</div>
+      <button class="modal-close" onclick="closeModal('add-posologie')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Médicament *</label>
+          <input class="form-input" id="pos-medicament" placeholder="Amoxicilline, Metformine…"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Dosage</label>
+          <input class="form-input" id="pos-dosage" placeholder="500 mg, 1 comprimé…"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Voie d'administration</label>
+          <select class="form-input" id="pos-voie">
+            <option value="">— Choisir —</option>
+            <option>Orale</option>
+            <option>Sublinguale</option>
+            <option>Injectable SC</option>
+            <option>Injectable IV</option>
+            <option>Topique</option>
+            <option>Inhalée</option>
+            <option>Ophtalmique</option>
+            <option>Rectale</option>
+            <option>Transdermique</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fréquence</label>
+          <select class="form-input" id="pos-frequence">
+            <option value="">— Choisir —</option>
+            <option>1 fois/jour</option>
+            <option>2 fois/jour</option>
+            <option>3 fois/jour</option>
+            <option>4 fois/jour</option>
+            <option>Toutes les 8h</option>
+            <option>Toutes les 12h</option>
+            <option>1 fois/semaine</option>
+            <option>Si besoin</option>
+            <option>Traitement chronique continu</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Horaires de prise</label>
+          <input class="form-input" id="pos-horaires" placeholder="Matin · Midi · Soir"/>
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Conditions de prise</label>
+          <input class="form-input" id="pos-conditions" placeholder="Pendant les repas, À jeun, Au coucher…"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Durée du traitement</label>
+          <input class="form-input" id="pos-duree" placeholder="7 jours, 3 mois, Chronique…"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prescripteur</label>
+          <input class="form-input" id="pos-prescripteur" placeholder="Dr. Martin"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date de début</label>
+          <input class="form-input" type="date" id="pos-debut"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date de fin</label>
+          <input class="form-input" type="date" id="pos-fin"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Statut</label>
+          <select class="form-input" id="pos-statut">
+            <option>En cours</option>
+            <option>Terminé</option>
+            <option>Suspendu</option>
+            <option>À surveiller</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Effets indésirables à surveiller</label>
+          <input class="form-input" id="pos-effets" placeholder="Nausées, hypoglycémie, INR à contrôler…"/>
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Notes pharmacien</label>
+          <textarea class="form-input" id="pos-notes" rows="2" style="resize:vertical" placeholder="Conseils spécifiques, adaptations…"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-posologie')">Annuler</button>
+      <button class="btn btn-primary" onclick="savePosologie()">Enregistrer la posologie</button>
     </div>
   </div>
 </div>
