@@ -61,7 +61,17 @@ function formatDate(d) {
   const dt = new Date(d);
   return dt.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' });
 }
-
+function formatDateTime(d) {
+  if (!d) return '—';
+  const dt = new Date(d);
+  return dt.toLocaleDateString('fr-FR', { 
+    day: '2-digit', 
+    month: '2-digit', 
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
 // ---- THEME TOGGLE ----
 function toggleTheme() {
   const isDark = document.body.classList.toggle('dark');
