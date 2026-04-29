@@ -71,7 +71,9 @@ async function doRegister() {
     return showMsg('reg-msg', 'Un compte existe déjà avec cet email. Utilisez "Se connecter".', 'error');
   }
 
-  showMsg('reg-msg', '✅ Compte créé ! Un e-mail de confirmation vous a été envoyé. Vérifiez aussi vos spams.', 'success');
+  showMsg('reg-msg', '✅ Un code à 6 chiffres a été envoyé à votre email.', 'success');
+document.getElementById('otp-section').style.display = 'block';
+document.getElementById('otp-email-hidden').value = email;
 
   // Vider le formulaire après succès
   document.getElementById('reg-name').value  = '';
@@ -123,5 +125,24 @@ sb.auth.onAuthStateChange((event, session) => {
     // Evite le clignotement lors du refresh du token
     currentUser = session.user;
   }
+  async function verifyOtp() {
+  const email = document.getElementById('otp-email-hidden').value;
+  const token = document.getElementById('otp-input').value.trim();
+
+  if (!token || token.length !== 6)
+    return showMsg('otp-msg', 'Entrez le code à 6 chiffres reçu par email.', 'error');
+
+  const { data, error } = await sb.auth.verifyOtp({
+    email,
+    token,
+    type: 'signup'
+  });
+
+  if (error)
+    return showMsg('otp-msg', 'Code incorrect ou expiré. Vérifiez votre email.', 'error');
+
+  showMsg('otp-msg', '✅ Compte confirmé !', 'success');
+  showApp(data.user);
+}
 });
 
