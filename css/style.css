@@ -989,3 +989,7 @@ body.dark .interaction-add-box { background: var(--bg); }
 body.dark .trash-item { background: var(--card-bg); border-color: var(--border-color); }
 body.dark .trash-settings-card { background: var(--card-bg); border-color: var(--border-color); }
 body.dark .trash-delay-btn { background: var(--card-bg); border-color: var(--border-color); color: var(--text-muted); }
+.logout-btn {
+  background-color: red;
+  color: white;
+}
