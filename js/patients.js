@@ -26,7 +26,7 @@ function renderPatients(list) {
       </div>
       <div class="p-actions">
         <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openPatient('${p.id}')">Voir dossier</button>
-        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deletePatient('${p.id}')">Supprimer</button>
+   
       </div>
     </div>
   `).join('');
