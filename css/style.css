@@ -220,6 +220,7 @@ textarea.form-input { resize: vertical; }
   color: #0e9e82;
   font-weight: 600;
 }
+  background: #ffffff;
   flex-direction: column; /* ← vertical */
   align-items: stretch;
   height: 100vh;
