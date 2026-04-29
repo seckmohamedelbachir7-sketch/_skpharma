@@ -216,7 +216,7 @@ textarea.form-input { resize: vertical; }
 .nav-link.active {
   border-left: 3px solid rgba(255,255,255,0.6);
   padding-left: 11px;
-  color: white;
+  color: black;
 }
   flex-direction: column; /* ← vertical */
   align-items: stretch;
