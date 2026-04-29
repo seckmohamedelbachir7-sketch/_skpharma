@@ -1,7 +1,11 @@
 // patients.js — Chargement, rendu, filtrage, ajout, suppression des patients
 
 async function loadPatients() {
-  const { data, error } = await sb.from('patients').select('*').eq('pharmacist_id', currentUser.id).order('created_at', { ascending: false });
+  const { data, error } = await sb.from('patients')
+  .select('*')
+  .eq('pharmacist_id', currentUser.id)
+  .eq('status', 'active')
+  .order('created_at', { ascending: false });
   if (error) { console.error(error); return; }
   allPatients = data || [];
   document.getElementById('stat-patients').textContent = allPatients.length;
