@@ -109,3 +109,19 @@ function setTodayDate() {
 }
 
 // ---- PATIENTS ----
+// Écoute les changements de session en temps réel
+sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' && session) {
+    showApp(session.user);
+  }
+  if (event === 'SIGNED_OUT') {
+    document.getElementById('auth-wrap').style.display = 'flex';
+    document.getElementById('app-wrap').style.display  = 'none';
+    currentUser = null;
+  }
+  if (event === 'TOKEN_REFRESHED' && session) {
+    // Evite le clignotement lors du refresh du token
+    currentUser = session.user;
+  }
+});
+
