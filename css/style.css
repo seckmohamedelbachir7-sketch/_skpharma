@@ -237,7 +237,7 @@ textarea.form-input { resize: vertical; }
   font-family: 'Space Grotesk', sans-serif;
   font-size: 21px;
   font-weight: 700;
-  color: var(--white);
+  color: #0d1f2d;
   margin: 0 0 28px 0;
   padding: 0 20px;
   letter-spacing: -0.5px;
