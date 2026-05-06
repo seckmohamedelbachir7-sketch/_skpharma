@@ -275,3 +275,8 @@ async function confirmHardDelete(id) {
   updateTrashBadge();
   loadDashboard();
 }
+body.dark .trash-delay-btn.active {
+  background-color: var(--teal);
+  color: white;
+  border: 2px solid white;
+}
