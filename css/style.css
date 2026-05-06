@@ -204,11 +204,14 @@ textarea.form-input { resize: vertical; }
 .nav-link.active {
   border-left: 3px solid #4ecdb4;
   padding-left: 11px;
-  color: #0e9e82;
+  color: #4ecdb4;        /* ← blanc-vert visible sur fond sombre */
   font-weight: 600;
 }
-  background: #ffffff;
-  flex-direction: column; /* ← vertical */
+
+nav {
+  background: var(--bg-sidebar);   /* #0d1f2d — fond sombre */
+  display: flex;
+  flex-direction: column;
   align-items: stretch;
   height: 100vh;
   width: 220px;
@@ -218,8 +221,8 @@ textarea.form-input { resize: vertical; }
   z-index: 100;
   box-shadow: 2px 0 12px rgba(13,31,45,0.25);
   gap: 0;
+  padding: 24px 0 20px;
 }
-
 .nav-logo {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 21px;
