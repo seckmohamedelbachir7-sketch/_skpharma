@@ -129,9 +129,9 @@ sb.auth.onAuthStateChange((event, session) => {
   const email = document.getElementById('otp-email-hidden').value;
   const token = document.getElementById('otp-input').value.trim();
 
-  if (!token || token.length !== 6)
-    return showMsg('otp-msg', 'Entrez le code à 6 chiffres reçu par email.', 'error');
-
+  if (!token || token.length < 6)
+    return showMsg('otp-msg', 'Entrez le code reçu par email.', 'error'); 
+  
   const { data, error } = await sb.auth.verifyOtp({
     email,
     token,
