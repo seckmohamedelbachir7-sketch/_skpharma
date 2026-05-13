@@ -34,16 +34,18 @@
         <div class="form-group"><label class="form-label">Adresse e-mail professionnelle</label><input class="form-input" type="email" id="reg-email" placeholder="pharmacien@exemple.fr"/></div>
         <div class="form-group"><label class="form-label">Mot de passe</label><input class="form-input" type="password" id="reg-pwd" placeholder="8 caractères minimum" onkeydown="if(event.key==='Enter')doRegister()"/></div>
         <button class="auth-btn" onclick="doRegister()">Créer mon compte</button>
-<div class="auth-msg" id="reg-msg"></div>
+        <div class="auth-msg" id="reg-msg"></div>
 
-<!-- BLOC OTP — caché par défaut -->
-<div id="otp-section" style="display:none;margin-top:16px">
-  <input type="hidden" id="otp-email-hidden"/>
-  <div class="form-group">
-    <label class="form-label">Code de confirmation reçu par email</label>
-    <input class="form-input" type="text" id="otp-input" maxlength="8" placeholder="12345678" style="letter-spacing:6px;font-size:20px;text-align:center"/>
-  <div class="auth-msg" id="otp-msg"></div>
-</div>
+        <!-- BLOC OTP — caché par défaut -->
+        <div id="otp-section" style="display:none;margin-top:16px">
+          <input type="hidden" id="otp-email-hidden"/>
+          <div class="form-group">
+            <label class="form-label">Code de confirmation reçu par email</label>
+            <input class="form-input" type="text" id="otp-input" maxlength="8" placeholder="12345678" style="letter-spacing:6px;font-size:20px;text-align:center"/>
+          </div>
+          <button class="auth-btn" onclick="verifyOtp()">Valider le code</button>
+          <div class="auth-msg" id="otp-msg"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -54,9 +56,7 @@
   <nav>
    <div class="nav-logo">
   <img src="logo.svg" style="height:56px;margin-right:10px;vertical-align:middle;border-radius:10px"/>
-
 </div>
-     
     <div class="nav-links">
       <div class="nav-link active" onclick="showPage('dashboard',this)">Tableau de bord</div>
       <div class="nav-link" onclick="showPage('patients',this)">Patients</div>
@@ -157,8 +157,8 @@
           </div>
           <div class="detail-section" id="dtab-interactions">
             <div id="det-interactions-list"></div>
-           </div>
-             <div class="detail-section" id="dtab-posologies">
+          </div>
+          <div class="detail-section" id="dtab-posologies">
             <div id="det-poso-list"><div class="loading">Chargement…</div></div>
           </div>
         </div>
@@ -202,7 +202,8 @@
       <div class="entretien-stats" id="entretien-stats"></div>
       <div id="entretien-list"><div class="loading">Chargement…</div></div>
     </div>
- <!-- POSOLOGIES -->
+
+    <!-- POSOLOGIES -->
     <div class="page" id="page-posologies">
       <div class="page-header">
         <div class="page-title">Posologies patients</div>
@@ -544,7 +545,6 @@
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
 <!-- MODAL POSOLOGIE (dossier patient) -->
 <div class="modal-overlay" id="modal-add-posologie">
   <div class="modal" style="max-width:620px">
@@ -637,20 +637,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('add-posologie')">Annuler</button>
-      <button class="btn btn-primary" onclick="savePosologie()">Enregistrer la posologie</button
-       <button class="auth-btn" onclick="doRegister()">Créer mon compte</button>
-<div class="auth-msg" id="reg-msg"></div>
-
-<!-- BLOC OTP — caché par défaut -->
-<div id="otp-section" style="display:none;margin-top:16px">
-  <input type="hidden" id="otp-email-hidden"/>
-  <div class="form-group">
-    <label class="form-label">Code de confirmation reçu par email</label>
-    <input class="form-input" type="text" id="otp-input" maxlength="6" placeholder="123456" style="letter-spacing:6px;font-size:20px;text-align:center"/>
-  </div>
-  <button class="auth-btn" onclick="verifyOtp()">Valider le code</button>
-  <div class="auth-msg" id="otp-msg"></div>
-</div>                                                                                   
+      <button class="btn btn-primary" onclick="savePosologie()">Enregistrer la posologie</button>
     </div>
   </div>
 </div>
