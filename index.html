@@ -107,6 +107,8 @@
       <div class="nav-link" onclick="showPage('archive',this);loadArchive()">📦 Archive</div>
       <div class="nav-link" onclick="showPage('trash',this);loadTrash()">🗑 Corbeille <span id="trash-badge" class="trash-badge"></span></div>
       <div class="nav-link" onclick="showPage('posologies',this)">Posologies</div>
+      <!-- MODIFICATION 1 : Onglet Avis ajouté dans la navigation -->
+      <div class="nav-link" onclick="showPage('avis',this)">⭐ Avis</div>
     </div>
     <div class="nav-spacer"></div>
     <div class="nav-user">
@@ -291,6 +293,14 @@
         <div id="trash-delay-options" style="display:flex;gap:8px;flex-wrap:wrap"></div>
       </div>
       <div id="trash-list"><div class="loading">Chargement…</div></div>
+    </div>
+
+    <!-- MODIFICATION 2 : Page Avis ajoutée -->
+    <div class="page" id="page-avis">
+      <div class="page-header">
+        <div class="page-title">⭐ Avis patients</div>
+      </div>
+      <div id="avis-list"><div class="loading">Chargement…</div></div>
     </div>
 
   </div>
@@ -717,6 +727,8 @@
 <script src="js/entretiens.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/posologies.js"></script>
+<!-- MODIFICATION 3 : Script avis-pharmacien ajouté -->
+<script src="js/avis-pharmacien.js"></script>
 
 </body>
 </html>
