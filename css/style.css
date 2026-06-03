@@ -991,3 +991,17 @@ body.dark .trash-delay-btn.active {
   color: white;
   border: 2px solid white;
 }
+create table avis (
+  id uuid default gen_random_uuid() primary key,
+  pharmacist_id uuid references auth.users(id),
+  note integer not null check (note >= 1 and note <= 5),
+  created_at timestamp with time zone default now()
+);
+
+alter table avis enable row level security;
+
+create policy "Lecture pharmacien" on avis
+  for select using (auth.uid() = pharmacist_id);
+
+create policy "Insertion publique" on avis
+  for insert with check (true);
