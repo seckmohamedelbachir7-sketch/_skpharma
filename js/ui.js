@@ -1,6 +1,8 @@
 // ui.js — Helpers UI : navigation, modals, toasts, formats, IA, scan ordonnance
 
-const MISTRAL_KEY = 'yh1nMx7EhMGaBlE0wJN2hT1nT9mhZ7U6';
+// ─────────────────────────────────────────────
+//  NAVIGATION
+// ─────────────────────────────────────────────
 
 function showPage(name, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -31,6 +33,10 @@ function switchDetailTab(name, el) {
   if (name === 'posologies' && currentPatient) loadPosologiesPatient(currentPatient.id);
 }
 
+// ─────────────────────────────────────────────
+//  MODALS & TOASTS
+// ─────────────────────────────────────────────
+
 function openModal(name) {
   document.getElementById('modal-'+name).classList.add('open');
   setTodayDate();
@@ -56,23 +62,29 @@ function clearForm(ids) {
   ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
 }
 
+// ─────────────────────────────────────────────
+//  FORMATS DATE
+// ─────────────────────────────────────────────
+
 function formatDate(d) {
   if (!d) return '—';
   const dt = new Date(d);
   return dt.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric' });
 }
+
 function formatDateTime(d) {
   if (!d) return '—';
   const dt = new Date(d);
-  return dt.toLocaleDateString('fr-FR', { 
-    day: '2-digit', 
-    month: '2-digit', 
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+  return dt.toLocaleDateString('fr-FR', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
   });
 }
-// ---- THEME TOGGLE ----
+
+// ─────────────────────────────────────────────
+//  THEME TOGGLE
+// ─────────────────────────────────────────────
+
 function toggleTheme() {
   const isDark = document.body.classList.toggle('dark');
   document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
@@ -88,7 +100,10 @@ function applyStoredTheme() {
   }
 }
 
-// ---- ASSISTANT IA ----
+// ─────────────────────────────────────────────
+//  ASSISTANT IA (Mistral — inchangé)
+// ─────────────────────────────────────────────
+
 async function askAI() {
   const q = document.getElementById('ai-q').value.trim();
   const resp = document.getElementById('ai-resp');
@@ -116,7 +131,10 @@ async function askAI() {
   }
 }
 
-// ---- SCAN ORDONNANCE ----
+// ─────────────────────────────────────────────
+//  SCAN ORDONNANCE — via Claude API (vision)
+// ─────────────────────────────────────────────
+
 function previewScan(input) {
   const f = input.files[0];
   if (!f) return;
@@ -142,38 +160,84 @@ async function processScan() {
   if (!file) { showToast('Veuillez choisir une image', 'error'); return; }
 
   statusEl.style.display = 'block';
-  statusEl.textContent = 'Analyse de l\'ordonnance en cours…';
+  statusEl.textContent = "Analyse de l'ordonnance en cours…";
 
   const reader = new FileReader();
   reader.onload = async (e) => {
-    const base64    = e.target.result.split(',')[1];
-    const mediaType = file.type || 'image/jpeg';
+    const base64 = e.target.result.split(',')[1];
+    // Claude accepte : jpeg, png, gif, webp
+    let mediaType = file.type || 'image/jpeg';
+    if (!['image/jpeg','image/png','image/gif','image/webp'].includes(mediaType)) {
+      mediaType = 'image/jpeg';
+    }
+
+    const prompt = `Tu es un pharmacien expert spécialisé dans la lecture d'ordonnances médicales françaises, y compris les écritures manuscrites difficiles, raturées ou mal formées.
+
+Analyse cette ordonnance avec le maximum de précision. Même si l'écriture est illisible ou difficile, essaie de deviner le médicament le plus probable d'après le contexte médical (classe thérapeutique, forme pharmaceutique, dosage habituel).
+
+Règles :
+- Pour les médicaments manuscrits illisibles → indique ta meilleure hypothèse entre parenthèses ex: "(probable: Amoxicilline 500mg)"
+- Pour les dosages partiellement lisibles → complète avec la forme standard la plus courante
+- La date : si absente ou illisible, utilise la date du jour au format YYYY-MM-DD
+- Les médicaments : sépare chaque ligne par une virgule, inclus dosage et posologie si visibles
+- Renouvellement : indique "1 mois", "3 mois", "6 mois" si mentionné, sinon chaîne vide
+
+Réponds UNIQUEMENT avec ce JSON strict sans markdown ni commentaire :
+{"medecin":"nom complet du médecin","date":"YYYY-MM-DD","medicaments":"méd1 dosage posologie, méd2 dosage posologie, ...","renouvellement":"durée ou chaîne vide","notes":"informations complémentaires ou chaîne vide"}`;
+
     try {
-      const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + MISTRAL_KEY },
+        headers: {
+          'Content-Type': 'application/json',
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
         body: JSON.stringify({
-          model: 'pixtral-12b-2409',
-          max_tokens: 1000,
+          model: 'claude-opus-4-5',
+          max_tokens: 1024,
           messages: [{
             role: 'user',
             content: [
-              { type: 'image_url', image_url: { url: 'data:' + mediaType + ';base64,' + base64 } },
-              { type: 'text', text: 'Tu es un assistant pharmacien. Analyse cette ordonnance medicale et extrais les informations en JSON strict sans markdown: {"medecin":"nom du medecin","date":"YYYY-MM-DD ou date du jour","medicaments":"liste des medicaments avec dosages separes par virgules","renouvellement":"duree ou chaine vide","notes":"autres infos ou chaine vide"}. Reponds UNIQUEMENT avec le JSON.' }
+              {
+                type: 'image',
+                source: {
+                  type: 'base64',
+                  media_type: mediaType,
+                  data: base64,
+                }
+              },
+              { type: 'text', text: prompt }
             ]
           }]
         })
       });
 
       const data = await res.json();
-      if (!data.choices || !data.choices[0]) {
-        statusEl.textContent = 'Erreur API : ' + JSON.stringify(data);
+
+      // Gestion erreurs API
+      if (data.error) {
+        statusEl.textContent = 'Erreur API : ' + (data.error.message || JSON.stringify(data.error));
         return;
       }
 
-      let raw = data.choices[0].message.content.trim().replace(/```json|```/g, '').trim();
-      const parsed = JSON.parse(raw);
+      const raw = (data.content?.[0]?.text || '').trim().replace(/```json|```/g, '').trim();
+      if (!raw) {
+        statusEl.textContent = 'Réponse vide du modèle.';
+        return;
+      }
 
+      let parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch(_) {
+        // Récupération si JSON mal formé
+        const match = raw.match(/\{[\s\S]*\}/);
+        if (match) parsed = JSON.parse(match[0]);
+        else { statusEl.textContent = 'Impossible de lire la réponse : ' + raw.substring(0, 120); return; }
+      }
+
+      // Pré-remplissage formulaire
       if (parsed.medecin)     document.getElementById('o-medecin').value = parsed.medecin;
       if (parsed.date)        document.getElementById('o-date').value    = parsed.date;
       if (parsed.medicaments) document.getElementById('o-meds').value    = parsed.medicaments;
@@ -181,13 +245,16 @@ async function processScan() {
       if (parsed.renouvellement) {
         const sel = document.getElementById('o-renouvellement');
         for (let opt of sel.options) {
-          if (opt.value && parsed.renouvellement.includes(opt.value)) { sel.value = opt.value; break; }
+          if (opt.value && parsed.renouvellement.toLowerCase().includes(opt.value.toLowerCase())) {
+            sel.value = opt.value;
+            break;
+          }
         }
       }
 
       closeModal('scan-ordo');
       statusEl.style.display = 'none';
-      showToast('Ordonnance analysee et formulaire pre-rempli', 'success');
+      showToast('✅ Ordonnance analysée et formulaire pré-rempli', 'success');
       openModal('add-ordo');
 
     } catch (err) {
@@ -197,7 +264,10 @@ async function processScan() {
   reader.readAsDataURL(file);
 }
 
-// ---- LISTENERS & INIT ----
+// ─────────────────────────────────────────────
+//  LISTENERS & INIT
+// ─────────────────────────────────────────────
+
 document.addEventListener('DOMContentLoaded', () => {
   applyStoredTheme();
   document.querySelectorAll('.modal-overlay').forEach(m => {
