@@ -132,7 +132,8 @@ async function askAI() {
 }
 
 // ─────────────────────────────────────────────
-//  SCAN ORDONNANCE — via Claude API (vision)
+//  SCAN ORDONNANCE — appel via route API /api/scan-ordonnance
+//  (la clé Anthropic reste sécurisée côté serveur Vercel)
 // ─────────────────────────────────────────────
 
 function previewScan(input) {
@@ -165,76 +166,24 @@ async function processScan() {
   const reader = new FileReader();
   reader.onload = async (e) => {
     const base64 = e.target.result.split(',')[1];
-    // Claude accepte : jpeg, png, gif, webp
     let mediaType = file.type || 'image/jpeg';
     if (!['image/jpeg','image/png','image/gif','image/webp'].includes(mediaType)) {
       mediaType = 'image/jpeg';
     }
 
-    const prompt = `Tu es un pharmacien expert spécialisé dans la lecture d'ordonnances médicales françaises, y compris les écritures manuscrites difficiles, raturées ou mal formées.
-
-Analyse cette ordonnance avec le maximum de précision. Même si l'écriture est illisible ou difficile, essaie de deviner le médicament le plus probable d'après le contexte médical (classe thérapeutique, forme pharmaceutique, dosage habituel).
-
-Règles :
-- Pour les médicaments manuscrits illisibles → indique ta meilleure hypothèse entre parenthèses ex: "(probable: Amoxicilline 500mg)"
-- Pour les dosages partiellement lisibles → complète avec la forme standard la plus courante
-- La date : si absente ou illisible, utilise la date du jour au format YYYY-MM-DD
-- Les médicaments : sépare chaque ligne par une virgule, inclus dosage et posologie si visibles
-- Renouvellement : indique "1 mois", "3 mois", "6 mois" si mentionné, sinon chaîne vide
-
-Réponds UNIQUEMENT avec ce JSON strict sans markdown ni commentaire :
-{"medecin":"nom complet du médecin","date":"YYYY-MM-DD","medicaments":"méd1 dosage posologie, méd2 dosage posologie, ...","renouvellement":"durée ou chaîne vide","notes":"informations complémentaires ou chaîne vide"}`;
-
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      // Appel vers la route API serveur — la clé Anthropic n'est jamais côté client
+      const res = await fetch('/api/scan-ordonnance', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-opus-4-5',
-          max_tokens: 1024,
-          messages: [{
-            role: 'user',
-            content: [
-              {
-                type: 'image',
-                source: {
-                  type: 'base64',
-                  media_type: mediaType,
-                  data: base64,
-                }
-              },
-              { type: 'text', text: prompt }
-            ]
-          }]
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ base64, mediaType })
       });
 
-      const data = await res.json();
+      const parsed = await res.json();
 
-      // Gestion erreurs API
-      if (data.error) {
-        statusEl.textContent = 'Erreur API : ' + (data.error.message || JSON.stringify(data.error));
+      if (!res.ok || parsed.error) {
+        statusEl.textContent = 'Erreur API : ' + (parsed.error || res.statusText);
         return;
-      }
-
-      const raw = (data.content?.[0]?.text || '').trim().replace(/```json|```/g, '').trim();
-      if (!raw) {
-        statusEl.textContent = 'Réponse vide du modèle.';
-        return;
-      }
-
-      let parsed;
-      try {
-        parsed = JSON.parse(raw);
-      } catch(_) {
-        // Récupération si JSON mal formé
-        const match = raw.match(/\{[\s\S]*\}/);
-        if (match) parsed = JSON.parse(match[0]);
-        else { statusEl.textContent = 'Impossible de lire la réponse : ' + raw.substring(0, 120); return; }
       }
 
       // Pré-remplissage formulaire
