@@ -1,4 +1,4 @@
-// avis-pharmacien.js — Onglet "Avis clients" dans SKPharma
+// js/avis-pharmacien.js — Onglet "Avis clients" dans SKPharma
 
 async function loadAvis() {
   const el = document.getElementById('avis-list');
@@ -19,35 +19,34 @@ async function loadAvis() {
   }
 
   if (!data.length) {
+    if (statsEl) statsEl.innerHTML = '';
     el.innerHTML = `
       <div class="empty">
         <div class="empty-icon">⭐</div>
         <div class="empty-title">Aucun avis pour l'instant</div>
-        <div class="empty-sub">Partagez votre lien public pour recevoir des avis</div>
+        <div class="empty-sub">Partagez votre lien public pour recevoir des avis clients</div>
       </div>`;
-    if (statsEl) statsEl.innerHTML = '';
     return;
   }
 
-  // Calcul stats
+  // ── Stats ──
   const total = data.length;
   const moyenne = data.reduce((s, a) => s + a.note, 0) / total;
-  const dist = [1,2,3,4,5].map(n => ({
+  const dist = [5,4,3,2,1].map(n => ({
     note: n,
     count: data.filter(a => a.note === n).length
   }));
 
-  // Rendu stats
   if (statsEl) {
     statsEl.innerHTML = `
       <div class="avis-stats-grid">
         <div class="avis-score-card">
           <div class="avis-score-num">${moyenne.toFixed(1)}</div>
-          <div class="avis-score-stars">${renderStars(moyenne)}</div>
+          <div class="avis-score-stars">${renderStarsFloat(moyenne)}</div>
           <div class="avis-score-sub">${total} avis</div>
         </div>
         <div class="avis-dist">
-          ${dist.reverse().map(d => `
+          ${dist.map(d => `
             <div class="avis-dist-row">
               <div class="avis-dist-label">${d.note}★</div>
               <div class="avis-dist-bar-wrap">
@@ -60,27 +59,34 @@ async function loadAvis() {
       </div>`;
   }
 
-  // Rendu liste
+  // ── Liste ──
   el.innerHTML = data.map(a => `
     <div class="avis-item">
-      <div class="avis-item-stars">${renderStarsInt(a.note)}</div>
-      <div class="avis-item-date">${formatDateTime(a.created_at)}</div>
+      <div class="avis-item-top">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="avis-item-avatar">${(a.prenom || '?').charAt(0).toUpperCase()}</div>
+          <div>
+            <div class="avis-item-name">${a.prenom || 'Anonyme'}</div>
+            <div class="avis-item-stars">${renderStarsInt(a.note)}</div>
+          </div>
+        </div>
+        <div class="avis-item-date">${formatDateTime(a.created_at)}</div>
+      </div>
+      ${a.commentaire ? `<div class="avis-item-comment">"${a.commentaire}"</div>` : ''}
     </div>
   `).join('');
 }
 
-function renderStars(avg) {
-  let html = '';
-  for (let i = 1; i <= 5; i++) {
-    if (avg >= i) html += '<span style="color:#1D9E75">★</span>';
-    else if (avg >= i - 0.5) html += '<span style="color:#1D9E75;opacity:0.5">★</span>';
-    else html += '<span style="color:#ddd">★</span>';
-  }
-  return html;
+function renderStarsFloat(avg) {
+  return [1,2,3,4,5].map(i => {
+    if (avg >= i) return '<span style="color:#1D9E75;font-size:18px">★</span>';
+    if (avg >= i - 0.5) return '<span style="color:#1D9E75;opacity:0.5;font-size:18px">★</span>';
+    return '<span style="color:#ddd;font-size:18px">★</span>';
+  }).join('');
 }
 
 function renderStarsInt(note) {
   return [1,2,3,4,5].map(i =>
-    `<span style="color:${i <= note ? '#1D9E75' : '#ddd'}">★</span>`
+    `<span style="color:${i <= note ? '#1D9E75' : '#ddd'};font-size:15px">★</span>`
   ).join('');
 }
