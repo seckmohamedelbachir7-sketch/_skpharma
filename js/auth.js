@@ -200,15 +200,16 @@ sb.auth.onAuthStateChange((event, session) => {
     currentUser = session.user;
   }
 
-  async function verifyOtp() {
-    const email = document.getElementById('otp-email-hidden').value;
-    const token = document.getElementById('otp-input').value.trim();
-    if (!token || token.length < 6)
-      return showMsg('otp-msg', 'Entrez le code reçu par email.', 'error');
-    const { data, error } = await sb.auth.verifyOtp({ email, token, type: 'signup' });
-    if (error)
-      return showMsg('otp-msg', 'Code incorrect ou expiré. Vérifiez votre email.', 'error');
-    showMsg('otp-msg', '✅ Compte confirmé !', 'success');
-    showApp(data.user);
-  }
-});
+  });
+
+async function verifyOtp() {
+  const email = document.getElementById('otp-email-hidden').value;
+  const token = document.getElementById('otp-input').value.trim();
+  if (!token || token.length < 4)
+    return showMsg('otp-msg', 'Entrez le code reçu par email.', 'error');
+  const { data, error } = await sb.auth.verifyOtp({ email, token, type: 'signup' });
+  if (error)
+    return showMsg('otp-msg', 'Code incorrect ou expiré. Vérifiez votre email.', 'error');
+  showMsg('otp-msg', '✅ Compte confirmé !', 'success');
+  showApp(data.user);
+}
