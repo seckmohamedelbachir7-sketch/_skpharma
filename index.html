@@ -76,7 +76,6 @@
         <div class="form-group"><label class="form-label">Mot de passe</label><input class="form-input" type="password" id="reg-pwd" placeholder="8 caractères minimum" onkeydown="if(event.key==='Enter')doRegister()"/></div>
         <button class="auth-btn" onclick="doRegister()">Créer mon compte</button>
         <div class="auth-msg" id="reg-msg"></div>
-        <!-- BLOC OTP -->
         <div id="otp-section" style="display:none;margin-top:16px">
           <input type="hidden" id="otp-email-hidden"/>
           <div class="form-group">
@@ -107,8 +106,7 @@
       <div class="nav-link" onclick="showPage('archive',this);loadArchive()">📦 Archive</div>
       <div class="nav-link" onclick="showPage('trash',this);loadTrash()">🗑 Corbeille <span id="trash-badge" class="trash-badge"></span></div>
       <div class="nav-link" onclick="showPage('posologies',this)">Posologies</div>
-      <!-- MODIFICATION 1 : Onglet Avis ajouté dans la navigation -->
-      <div class="nav-link" onclick="showPage('avis',this)">⭐ Avis</div>
+      <div class="nav-link" onclick="showPage('avis',this);loadAvis()">⭐ Avis clients</div>
     </div>
     <div class="nav-spacer"></div>
     <div class="nav-user">
@@ -189,21 +187,11 @@
             <div class="detail-tab" onclick="switchDetailTab('interactions',this)">Allergies</div>
             <div class="detail-tab" onclick="switchDetailTab('posologies',this)">Posologies</div>
           </div>
-          <div class="detail-section active" id="dtab-info">
-            <div class="info-grid" id="det-info-grid"></div>
-          </div>
-          <div class="detail-section" id="dtab-ordos">
-            <div id="det-ordos-list"><div class="loading">Chargement…</div></div>
-          </div>
-          <div class="detail-section" id="dtab-patho">
-            <div id="det-patho-list"><div class="loading">Chargement…</div></div>
-          </div>
-          <div class="detail-section" id="dtab-interactions">
-            <div id="det-interactions-list"></div>
-          </div>
-          <div class="detail-section" id="dtab-posologies">
-            <div id="det-poso-list"><div class="loading">Chargement…</div></div>
-          </div>
+          <div class="detail-section active" id="dtab-info"><div class="info-grid" id="det-info-grid"></div></div>
+          <div class="detail-section" id="dtab-ordos"><div id="det-ordos-list"><div class="loading">Chargement…</div></div></div>
+          <div class="detail-section" id="dtab-patho"><div id="det-patho-list"><div class="loading">Chargement…</div></div></div>
+          <div class="detail-section" id="dtab-interactions"><div id="det-interactions-list"></div></div>
+          <div class="detail-section" id="dtab-posologies"><div id="det-poso-list"><div class="loading">Chargement…</div></div></div>
         </div>
       </div>
     </div>
@@ -214,9 +202,7 @@
         <div class="page-title">Base médicamenteuse</div>
         <div style="font-size:12px;color:var(--text-muted)">Source : <a href="https://base-donnees-publique.medicaments.gouv.fr" target="_blank" style="color:var(--teal)">BDPM — medicaments.gouv.fr</a></div>
       </div>
-      <div class="search-row">
-        <input class="search-input" type="text" placeholder="Rechercher par nom commercial, DCI, classe thérapeutique…" oninput="filterDrugs(this.value)"/>
-      </div>
+      <div class="search-row"><input class="search-input" type="text" placeholder="Rechercher par nom commercial, DCI, classe thérapeutique…" oninput="filterDrugs(this.value)"/></div>
       <div class="forme-filters-bar" id="forme-filters"></div>
       <div id="drug-list"></div>
     </div>
@@ -227,9 +213,7 @@
         <div class="page-title">Base pathologies</div>
         <button class="btn btn-primary" onclick="openModal('add-pathologie')">+ Nouvelle pathologie</button>
       </div>
-      <div class="search-row">
-        <input class="search-input" type="text" placeholder="Rechercher une pathologie…" oninput="filterPathologies(this.value)"/>
-      </div>
+      <div class="search-row"><input class="search-input" type="text" placeholder="Rechercher une pathologie…" oninput="filterPathologies(this.value)"/></div>
       <div id="patho-global-list"><div class="loading">Chargement…</div></div>
     </div>
 
@@ -239,9 +223,7 @@
         <div class="page-title">Entretiens pharmaceutiques</div>
         <button class="btn btn-primary" onclick="openModal('add-entretien')">+ Nouvel entretien</button>
       </div>
-      <div class="search-row">
-        <input class="search-input" type="text" placeholder="Rechercher par patient, type d'entretien…" oninput="filterEntretiens(this.value)"/>
-      </div>
+      <div class="search-row"><input class="search-input" type="text" placeholder="Rechercher par patient, type d'entretien…" oninput="filterEntretiens(this.value)"/></div>
       <div class="entretien-stats" id="entretien-stats"></div>
       <div id="entretien-list"><div class="loading">Chargement…</div></div>
     </div>
@@ -252,9 +234,7 @@
         <div class="page-title">Posologies patients</div>
         <div style="font-size:12px;color:var(--text-muted)">Récapitulatif de tous les schémas posologiques</div>
       </div>
-      <div class="search-row">
-        <input class="search-input" type="text" placeholder="Rechercher par médicament, patient…" oninput="filterPosologies(this.value)"/>
-      </div>
+      <div class="search-row"><input class="search-input" type="text" placeholder="Rechercher par médicament, patient…" oninput="filterPosologies(this.value)"/></div>
       <div id="poso-stats"></div>
       <div id="poso-global-list"><div class="loading">Chargement…</div></div>
     </div>
@@ -287,19 +267,35 @@
           <span style="font-size:13px;font-weight:600;color:var(--text)">⚙️ Vidage automatique</span>
           <span id="trash-delay-summary" style="font-size:12px;color:var(--text-muted)">Chargement…</span>
         </div>
-        <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px">
-          Choisissez au bout de combien de temps les dossiers sont supprimés définitivement :
-        </div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px">Choisissez au bout de combien de temps les dossiers sont supprimés définitivement :</div>
         <div id="trash-delay-options" style="display:flex;gap:8px;flex-wrap:wrap"></div>
       </div>
       <div id="trash-list"><div class="loading">Chargement…</div></div>
     </div>
 
-    <!-- MODIFICATION 2 : Page Avis ajoutée -->
+    <!-- AVIS CLIENTS -->
     <div class="page" id="page-avis">
       <div class="page-header">
-        <div class="page-title">⭐ Avis patients</div>
+        <div>
+          <div class="page-title">⭐ Avis clients</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Notes et commentaires de vos patients</div>
+        </div>
       </div>
+
+      <!-- Lien public à partager -->
+      <div class="avis-link-box">
+        <div style="flex:1">
+          <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:5px;letter-spacing:0.05em">🔗 LIEN À PARTAGER AUX CLIENTS</div>
+          <div class="avis-link-url" id="avis-public-url">https://VOTRE-SITE-AVIS.vercel.app/avis.html</div>
+        </div>
+        <button class="avis-link-copy" onclick="
+          navigator.clipboard.writeText(document.getElementById('avis-public-url').textContent);
+          this.textContent='✅ Copié !';
+          setTimeout(()=>this.textContent='Copier le lien',2000)
+        ">Copier le lien</button>
+      </div>
+
+      <div id="avis-stats"></div>
       <div id="avis-list"><div class="loading">Chargement…</div></div>
     </div>
 
@@ -425,9 +421,7 @@
       <div class="form-group"><label class="form-label">Pathologie *</label><input class="form-input" id="pp-nom" placeholder="Diabète de type 2"/></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div class="form-group"><label class="form-label">Date de diagnostic</label><input class="form-input" type="date" id="pp-date"/></div>
-        <div class="form-group"><label class="form-label">Sévérité</label>
-          <select class="form-input" id="pp-severite"><option>Légère</option><option>Modérée</option><option>Sévère</option><option>Chronique</option></select>
-        </div>
+        <div class="form-group"><label class="form-label">Sévérité</label><select class="form-input" id="pp-severite"><option>Légère</option><option>Modérée</option><option>Sévère</option><option>Chronique</option></select></div>
       </div>
       <div class="form-group"><label class="form-label">Traitements associés</label><input class="form-input" id="pp-traitements" placeholder="Metformine 850mg, régime alimentaire…"/></div>
       <div class="form-group"><label class="form-label">Notes</label><textarea class="form-input" id="pp-notes" rows="2" placeholder="Observations, suivi…" style="resize:vertical"></textarea></div>
@@ -439,17 +433,14 @@
   </div>
 </div>
 
-<!-- MODAL : Nouvelle pathologie (base globale) -->
+<!-- MODAL : Nouvelle pathologie globale -->
 <div class="modal-overlay" id="modal-add-pathologie">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Nouvelle pathologie</div><button class="modal-close" onclick="closeModal('add-pathologie')">×</button></div>
     <div class="modal-body">
       <div class="form-group"><label class="form-label">Nom de la pathologie *</label><input class="form-input" id="glob-nom" placeholder="Hypertension artérielle"/></div>
       <div class="form-group"><label class="form-label">Catégorie</label>
-        <select class="form-input" id="glob-categorie">
-          <option>Cardiovasculaire</option><option>Métabolique</option><option>Respiratoire</option>
-          <option>Neurologique</option><option>Infectieuse</option><option>Rhumatologique</option><option>Autre</option>
-        </select>
+        <select class="form-input" id="glob-categorie"><option>Cardiovasculaire</option><option>Métabolique</option><option>Respiratoire</option><option>Neurologique</option><option>Infectieuse</option><option>Rhumatologique</option><option>Autre</option></select>
       </div>
       <div class="form-group"><label class="form-label">Description / Définition</label><textarea class="form-input" id="glob-desc" rows="2" style="resize:vertical" placeholder="Définition courte…"></textarea></div>
       <div class="form-group"><label class="form-label">Traitements de référence</label><input class="form-input" id="glob-traitements" placeholder="IEC, ARA2, diurétiques…"/></div>
@@ -485,7 +476,7 @@
       <div class="form-group"><label class="form-label">Durée (minutes)</label>
         <select class="form-input" id="ent-duree"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">1h</option></select>
       </div>
-      <div class="form-group"><label class="form-label">Observations / Compte-rendu</label><textarea class="form-input" id="ent-notes" rows="3" placeholder="Résumé de l'entretien, points abordés, actions à suivre…" style="resize:vertical"></textarea></div>
+      <div class="form-group"><label class="form-label">Observations / Compte-rendu</label><textarea class="form-input" id="ent-notes" rows="3" placeholder="Résumé de l'entretien…" style="resize:vertical"></textarea></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div class="form-group"><label class="form-label">Statut facturation</label>
           <select class="form-input" id="ent-facturation"><option>Non facturé</option><option>Facturé Assurance Maladie</option><option>Facturé mutuelle</option><option>Non facturable</option></select>
@@ -516,7 +507,7 @@
         <div style="font-weight:600;color:var(--amber);margin-bottom:4px" id="confirm-archive-name">—</div>
         <div style="font-size:12px;color:var(--text-muted)" id="confirm-archive-meta">—</div>
       </div>
-      <p style="font-size:13px;color:var(--text);line-height:1.6;margin:0 0 6px 0">Ce dossier sera déplacé dans la section <strong>Archive</strong> et ne sera plus visible dans la liste des patients actifs.</p>
+      <p style="font-size:13px;color:var(--text);line-height:1.6;margin:0 0 6px 0">Ce dossier sera déplacé dans la section <strong>Archive</strong>.</p>
       <p style="font-size:12px;color:var(--text-muted);margin:0">Vous pouvez le restaurer à tout moment depuis l'onglet Archive.</p>
     </div>
     <div class="modal-footer">
@@ -576,7 +567,7 @@
   </div>
 </div>
 
-<!-- MODAL : Guide migration SQL -->
+<!-- MODAL : Migration SQL -->
 <div class="modal-overlay" id="modal-migration" style="z-index:500">
   <div class="modal" style="max-width:580px">
     <div class="modal-header" style="background:var(--red-pale);border-color:var(--red)">
@@ -596,79 +587,31 @@
   </div>
 </div>
 
-<!-- MODAL : Posologie (dossier patient) -->
+<!-- MODAL : Posologie -->
 <div class="modal-overlay" id="modal-add-posologie">
   <div class="modal" style="max-width:620px">
-    <div class="modal-header">
-      <div class="modal-title">💊 Nouvelle posologie</div>
-      <button class="modal-close" onclick="closeModal('add-posologie')">×</button>
-    </div>
+    <div class="modal-header"><div class="modal-title">💊 Nouvelle posologie</div><button class="modal-close" onclick="closeModal('add-posologie')">×</button></div>
     <div class="modal-body">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="form-group" style="grid-column:1/-1">
-          <label class="form-label">Médicament *</label>
-          <input class="form-input" id="pos-medicament" placeholder="Amoxicilline, Metformine…"/>
+        <div class="form-group" style="grid-column:1/-1"><label class="form-label">Médicament *</label><input class="form-input" id="pos-medicament" placeholder="Amoxicilline, Metformine…"/></div>
+        <div class="form-group"><label class="form-label">Dosage</label><input class="form-input" id="pos-dosage" placeholder="500 mg, 1 comprimé…"/></div>
+        <div class="form-group"><label class="form-label">Voie d'administration</label>
+          <select class="form-input" id="pos-voie"><option value="">— Choisir —</option><option>Orale</option><option>Sublinguale</option><option>Injectable SC</option><option>Injectable IV</option><option>Topique</option><option>Inhalée</option><option>Ophtalmique</option><option>Rectale</option><option>Transdermique</option></select>
         </div>
-        <div class="form-group">
-          <label class="form-label">Dosage</label>
-          <input class="form-input" id="pos-dosage" placeholder="500 mg, 1 comprimé…"/>
+        <div class="form-group"><label class="form-label">Fréquence</label>
+          <select class="form-input" id="pos-frequence"><option value="">— Choisir —</option><option>1 fois/jour</option><option>2 fois/jour</option><option>3 fois/jour</option><option>4 fois/jour</option><option>Toutes les 8h</option><option>Toutes les 12h</option><option>1 fois/semaine</option><option>Si besoin</option><option>Traitement chronique continu</option></select>
         </div>
-        <div class="form-group">
-          <label class="form-label">Voie d'administration</label>
-          <select class="form-input" id="pos-voie">
-            <option value="">— Choisir —</option>
-            <option>Orale</option><option>Sublinguale</option><option>Injectable SC</option>
-            <option>Injectable IV</option><option>Topique</option><option>Inhalée</option>
-            <option>Ophtalmique</option><option>Rectale</option><option>Transdermique</option>
-          </select>
+        <div class="form-group"><label class="form-label">Horaires de prise</label><input class="form-input" id="pos-horaires" placeholder="Matin · Midi · Soir"/></div>
+        <div class="form-group" style="grid-column:1/-1"><label class="form-label">Conditions de prise</label><input class="form-input" id="pos-conditions" placeholder="Pendant les repas, À jeun, Au coucher…"/></div>
+        <div class="form-group"><label class="form-label">Durée du traitement</label><input class="form-input" id="pos-duree" placeholder="7 jours, 3 mois, Chronique…"/></div>
+        <div class="form-group"><label class="form-label">Prescripteur</label><input class="form-input" id="pos-prescripteur" placeholder="Dr. Martin"/></div>
+        <div class="form-group"><label class="form-label">Date de début</label><input class="form-input" type="date" id="pos-debut"/></div>
+        <div class="form-group"><label class="form-label">Date de fin</label><input class="form-input" type="date" id="pos-fin"/></div>
+        <div class="form-group"><label class="form-label">Statut</label>
+          <select class="form-input" id="pos-statut"><option>En cours</option><option>Terminé</option><option>Suspendu</option><option>À surveiller</option></select>
         </div>
-        <div class="form-group">
-          <label class="form-label">Fréquence</label>
-          <select class="form-input" id="pos-frequence">
-            <option value="">— Choisir —</option>
-            <option>1 fois/jour</option><option>2 fois/jour</option><option>3 fois/jour</option>
-            <option>4 fois/jour</option><option>Toutes les 8h</option><option>Toutes les 12h</option>
-            <option>1 fois/semaine</option><option>Si besoin</option><option>Traitement chronique continu</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Horaires de prise</label>
-          <input class="form-input" id="pos-horaires" placeholder="Matin · Midi · Soir"/>
-        </div>
-        <div class="form-group" style="grid-column:1/-1">
-          <label class="form-label">Conditions de prise</label>
-          <input class="form-input" id="pos-conditions" placeholder="Pendant les repas, À jeun, Au coucher…"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Durée du traitement</label>
-          <input class="form-input" id="pos-duree" placeholder="7 jours, 3 mois, Chronique…"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Prescripteur</label>
-          <input class="form-input" id="pos-prescripteur" placeholder="Dr. Martin"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Date de début</label>
-          <input class="form-input" type="date" id="pos-debut"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Date de fin</label>
-          <input class="form-input" type="date" id="pos-fin"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Statut</label>
-          <select class="form-input" id="pos-statut">
-            <option>En cours</option><option>Terminé</option><option>Suspendu</option><option>À surveiller</option>
-          </select>
-        </div>
-        <div class="form-group" style="grid-column:1/-1">
-          <label class="form-label">Effets indésirables à surveiller</label>
-          <input class="form-input" id="pos-effets" placeholder="Nausées, hypoglycémie, INR à contrôler…"/>
-        </div>
-        <div class="form-group" style="grid-column:1/-1">
-          <label class="form-label">Notes pharmacien</label>
-          <textarea class="form-input" id="pos-notes" rows="2" style="resize:vertical" placeholder="Conseils spécifiques, adaptations…"></textarea>
-        </div>
+        <div class="form-group" style="grid-column:1/-1"><label class="form-label">Effets indésirables à surveiller</label><input class="form-input" id="pos-effets" placeholder="Nausées, hypoglycémie, INR à contrôler…"/></div>
+        <div class="form-group" style="grid-column:1/-1"><label class="form-label">Notes pharmacien</label><textarea class="form-input" id="pos-notes" rows="2" style="resize:vertical" placeholder="Conseils spécifiques, adaptations…"></textarea></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -678,43 +621,29 @@
   </div>
 </div>
 
-<!-- MODAL : Réinitialisation mot de passe (après clic lien email) -->
+<!-- MODAL : Réinitialisation mot de passe -->
 <div class="modal-overlay" id="modal-reset-pwd" style="z-index:600">
   <div class="modal" style="max-width:440px">
     <div class="modal-header">
       <div style="display:flex;align-items:center;gap:10px">
         <div style="width:36px;height:36px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;font-size:18px">🔐</div>
-        <div>
-          <div class="modal-title">Nouveau mot de passe</div>
-          <div style="font-size:11px;color:var(--text-muted);font-weight:400;margin-top:1px">Choisissez un mot de passe sécurisé</div>
-        </div>
+        <div><div class="modal-title">Nouveau mot de passe</div><div style="font-size:11px;color:var(--text-muted);font-weight:400;margin-top:1px">Choisissez un mot de passe sécurisé</div></div>
       </div>
     </div>
     <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">Nouveau mot de passe</label>
-        <input class="form-input" type="password" id="reset-pwd" placeholder="8 caractères minimum"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Confirmer le mot de passe</label>
-        <input class="form-input" type="password" id="reset-pwd2" placeholder="Répétez le mot de passe"
-          onkeydown="if(event.key==='Enter')doResetPassword()"/>
-      </div>
+      <div class="form-group"><label class="form-label">Nouveau mot de passe</label><input class="form-input" type="password" id="reset-pwd" placeholder="8 caractères minimum"/></div>
+      <div class="form-group"><label class="form-label">Confirmer le mot de passe</label><input class="form-input" type="password" id="reset-pwd2" placeholder="Répétez le mot de passe" onkeydown="if(event.key==='Enter')doResetPassword()"/></div>
       <div class="auth-msg" id="reset-msg"></div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-primary" id="reset-btn" onclick="doResetPassword()" style="width:100%">
-        Enregistrer le nouveau mot de passe
-      </button>
+      <button class="btn btn-primary" id="reset-btn" onclick="doResetPassword()" style="width:100%">Enregistrer le nouveau mot de passe</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- ============================================================ -->
-<!-- SCRIPTS                                                       -->
-<!-- ============================================================ -->
+<!-- SCRIPTS -->
 <script src="data/drugs.js"></script>
 <script src="js/config.js"></script>
 <script src="js/trash-auto.js"></script>
@@ -727,7 +656,6 @@
 <script src="js/entretiens.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/posologies.js"></script>
-<!-- MODIFICATION 3 : Script avis-pharmacien ajouté -->
 <script src="js/avis-pharmacien.js"></script>
 
 </body>
