@@ -1005,3 +1005,244 @@ create policy "Lecture pharmacien" on avis
 
 create policy "Insertion publique" on avis
   for insert with check (true);
+/* Ajouter à la fin de css/style.css */
+
+/* ─── STATS AVIS ─── */
+.avis-stats-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: center;
+  background: var(--teal-pale, #E1F5EE);
+  border-radius: var(--radius-lg, 12px);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.avis-score-card {
+  text-align: center;
+  min-width: 90px;
+}
+
+.avis-score-num {
+  font-size: 48px;
+  font-weight: 600;
+  color: var(--teal, #1D9E75);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.avis-score-stars {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.avis-score-sub {
+  font-size: 12px;
+  color: var(--text-muted, #888);
+}
+
+.avis-dist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.avis-dist-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.avis-dist-label {
+  width: 24px;
+  color: var(--text-muted, #888);
+  font-weight: 500;
+  text-align: right;
+}
+
+.avis-dist-bar-wrap {
+  flex: 1;
+  background: var(--gray-200, #e8e8e8);
+  border-radius: 99px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.avis-dist-bar {
+  height: 100%;
+  background: var(--teal, #1D9E75);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+  min-width: 2px;
+}
+
+.avis-dist-count {
+  width: 20px;
+  color: var(--text-muted, #888);
+  font-size: 12px;
+}
+
+/* ─── LISTE AVIS ─── */
+.avis-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: 1px solid var(--gray-200, #e8e8e8);
+  border-radius: var(--radius, 8px);
+  margin-bottom: 8px;
+  background: var(--bg, #fff);
+}
+
+.avis-item-stars {
+  font-size: 18px;
+}
+
+.avis-item-date {
+  font-size: 12px;
+  color: var(--text-muted, #888);
+}
+
+/* ─── LIEN PUBLIC ─── */
+.avis-link-box {
+  background: var(--bg, #fff);
+  border: 1px dashed var(--teal, #1D9E75);
+  border-radius: var(--radius, 8px);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.avis-link-url {
+  flex: 1;
+  font-size: 13px;
+  color: var(--teal, #1D9E75);
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.avis-link-copy {
+  font-size: 12px;
+  padding: 6px 14px;
+  background: var(--teal-pale, #E1F5EE);
+  color: var(--teal, #1D9E75);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ─── AVIS ITEM ─── */
+.avis-item {
+  background: var(--bg, #fff);
+  border: 1px solid var(--gray-200, #e8e8e8);
+  border-radius: var(--radius, 10px);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  transition: box-shadow 0.15s;
+}
+.avis-item:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+
+.avis-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.avis-item-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--teal-pale, #E1F5EE);
+  color: var(--teal, #1D9E75);
+  font-weight: 700; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.avis-item-name {
+  font-size: 13px; font-weight: 600;
+  color: var(--text, #1a1a1a);
+  margin-bottom: 2px;
+}
+
+.avis-item-date {
+  font-size: 11px;
+  color: var(--text-muted, #aaa);
+  white-space: nowrap;
+}
+
+.avis-item-comment {
+  font-size: 13px;
+  color: var(--text-muted, #666);
+  line-height: 1.6;
+  font-style: italic;
+  padding-top: 8px;
+  border-top: 1px solid var(--gray-200, #f0f0f0);
+  margin-top: 4px;
+}
+
+/* ─── STATS ─── */
+.avis-stats-grid {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 24px;
+  align-items: center;
+  background: var(--teal-pale, #E1F5EE);
+  border-radius: var(--radius-lg, 12px);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+.avis-score-card { text-align: center; }
+.avis-score-num {
+  font-size: 50px; font-weight: 700;
+  color: var(--teal, #1D9E75);
+  line-height: 1; margin-bottom: 6px;
+}
+.avis-score-sub { font-size: 12px; color: var(--text-muted, #888); margin-top: 4px; }
+.avis-dist { display: flex; flex-direction: column; gap: 6px; }
+.avis-dist-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+.avis-dist-label { width: 24px; color: var(--text-muted, #888); font-weight: 600; text-align: right; }
+.avis-dist-bar-wrap {
+  flex: 1; background: rgba(255,255,255,0.6);
+  border-radius: 99px; height: 8px; overflow: hidden;
+}
+.avis-dist-bar {
+  height: 100%; background: var(--teal, #1D9E75);
+  border-radius: 99px; transition: width 0.5s ease;
+}
+.avis-dist-count { width: 20px; color: var(--text-muted, #888); font-size: 12px; }
+
+/* ─── LIEN PUBLIC ─── */
+.avis-link-box {
+  background: var(--bg, #fff);
+  border: 1.5px dashed var(--teal, #1D9E75);
+  border-radius: var(--radius, 10px);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.avis-link-url {
+  flex: 1; font-size: 13px;
+  color: var(--teal, #1D9E75);
+  font-weight: 500; word-break: break-all;
+}
+.avis-link-copy {
+  font-size: 12px; padding: 7px 14px;
+  background: var(--teal-pale, #E1F5EE);
+  color: var(--teal, #1D9E75);
+  border: none; border-radius: 6px;
+  cursor: pointer; font-weight: 600;
+  white-space: nowrap; font-family: inherit;
+  transition: background 0.15s;
+}
+.avis-link-copy:hover { background: #c5edd9; }
