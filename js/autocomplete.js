@@ -31,10 +31,15 @@ function initAutocomplete(inputId) {
  
     box.innerHTML = matches.map(d => {
       const name = d.name || d.nom || '';
-      return `<div style="padding:8px 12px;cursor:pointer;font-size:13px;
-                border-bottom:var(--border);color:var(--text)"
+      const dci  = d.dci  || '';
+      return `<div style="padding:10px 14px;cursor:pointer;
+                border-bottom:1px solid #eee;
+                background:#fff;color:#1a1a1a;"
+                onmouseover="this.style.background='#f0faf8'"
+                onmouseout="this.style.background='#fff'"
                 onmousedown="pickSuggestion('${inputId}', '${name.replace(/'/g, "\\'")}')">
-                💊 ${name}
+                <div style="font-size:13px;font-weight:600;color:#1a1a1a">💊 ${name}</div>
+                ${dci ? `<div style="font-size:11px;color:#888;margin-top:2px">${dci}</div>` : ''}
               </div>`;
     }).join('');
     box.style.display = 'block';
