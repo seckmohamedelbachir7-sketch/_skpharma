@@ -40,6 +40,13 @@ function switchDetailTab(name, el) {
 function openModal(name) {
   document.getElementById('modal-'+name).classList.add('open');
   setTodayDate();
+  if (name === 'add-ordo' || name === 'edit-ordo') {
+    setTimeout(() => initAutocomplete('o-meds'), 100);
+    setTimeout(() => initAutocomplete('eo-meds'), 100);
+  }
+  if (name === 'add-posologie') {
+    setTimeout(() => initAutocomplete('pos-medicament'), 100);
+  }
 }
 
 function closeModal(name) {
