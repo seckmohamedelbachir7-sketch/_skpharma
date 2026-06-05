@@ -1,398 +1,287 @@
 /* ============================================================
-   SKPharma — AI Modules
-   Fichier : js/ai-modules.js
-   À inclure APRÈS tous les autres scripts dans index.html :
+   SKPharma — AI Modules v2
+   js/ai-modules.js
+   Ajouter à la fin de index.html :
    <script src="js/ai-modules.js"></script>
    ============================================================ */
 
-/* ---------- Clé API ----------
-   Stocke ta clé dans js/config.js comme variable globale :
-   const ANTHROPIC_KEY = 'sk-ant-...';
-   OU directement ici si fichier non versionné :              */
-// const ANTHROPIC_KEY = 'sk-ant-...'; // ← décommenter si pas dans config.js
+/* ─────────────────────────────────────────────────────────────
+   APPEL API (via proxy Vercel sécurisé)
+   Le endpoint /api/analyze-ordo est déjà dans ton projet.
+   On crée un second endpoint /api/analyze-ai pour les autres
+   appels, OU on appelle l'API directement avec ANTHROPIC_KEY
+   défini dans config.js
+   ───────────────────────────────────────────────────────────── */
 
-const AI_MODEL = 'claude-sonnet-4-20250514';
-
-/* ============================================================
-   UTILITAIRES COMMUNS
-   ============================================================ */
-
-function aiFormatMd(text) {
-  return text
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/^#{1,3} (.+)$/gm, '<br><strong style="font-size:14px;color:var(--teal)">$1</strong>')
-    .replace(/^(\d+\.) /gm, '<br><strong>$1</strong> ')
-    .replace(/^- /gm, '&nbsp;&nbsp;• ')
-    .replace(/\n/g, '<br>');
-}
-
-async function aiCall(messages, systemPrompt) {
-  const key = (typeof ANTHROPIC_KEY !== 'undefined') ? ANTHROPIC_KEY : null;
-  if (!key) {
-    throw new Error('Clé API manquante — définis ANTHROPIC_KEY dans js/config.js');
+async function aiModuleCall(messages, systemPrompt, maxTokens = 1000) {
+  /* Priorité 1 : proxy Vercel (plus sécurisé, clé côté serveur) */
+  if (window.AI_PROXY_URL) {
+    const r = await fetch(window.AI_PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages, system: systemPrompt, max_tokens: maxTokens })
+    });
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+    return d.text || '';
   }
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+  /* Priorité 2 : clé directe dans config.js */
+  if (typeof ANTHROPIC_KEY === 'undefined' || !ANTHROPIC_KEY) {
+    throw new Error('Clé API manquante — définis ANTHROPIC_KEY dans config.js');
+  }
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_KEY,
+      'anthropic-version': '2023-06-01'
+    },
     body: JSON.stringify({
-      model: AI_MODEL,
-      max_tokens: 1000,
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens,
       system: systemPrompt,
       messages
     })
   });
-  if (!resp.ok) {
-    const err = await resp.json().catch(() => ({}));
-    throw new Error(err?.error?.message || `Erreur API (${resp.status})`);
+  const d = await r.json();
+  if (d.error) throw new Error(d.error.message || 'Erreur API');
+  return d.content?.find(b => b.type === 'text')?.text || '';
+}
+
+/* ─────────────────────────────────────────────────────────────
+   RENDU MARKDOWN SIMPLE
+   ───────────────────────────────────────────────────────────── */
+function aiMd(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^#{1,3} (.+)$/gm, '<strong style="font-size:13px;color:var(--teal)">$1</strong>')
+    .replace(/^(\d+\.) /gm, '<br><strong>$1</strong> ')
+    .replace(/^[-•] /gm, '<br>&nbsp;&nbsp;• ')
+    .replace(/\n/g, '<br>');
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PANEL D'ALERTE IA — injecté dans l'onglet ordonnances
+   ───────────────────────────────────────────────────────────── */
+function showAIAnalysisPanel(html, isError = false) {
+  let panel = document.getElementById('ai-ordo-analysis');
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.id = 'ai-ordo-analysis';
+    // Insérer avant la liste des ordonnances
+    const list = document.getElementById('det-ordos-list');
+    if (list && list.parentNode) {
+      list.parentNode.insertBefore(panel, list);
+    }
   }
-  const data = await resp.json();
-  return data.content?.find(b => b.type === 'text')?.text || '';
+  panel.innerHTML = `
+    <div style="
+      background:${isError ? 'var(--red-pale)' : 'var(--teal-pale)'};
+      border:1px solid ${isError ? 'var(--red)' : 'var(--teal)'};
+      border-radius:var(--radius-lg);
+      padding:14px 16px;
+      margin-bottom:16px;
+      position:relative;
+    ">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div style="
+          width:28px;height:28px;border-radius:50%;
+          background:${isError ? 'var(--red)' : 'var(--teal)'};
+          display:flex;align-items:center;justify-content:center;
+          font-size:14px;flex-shrink:0
+        ">${isError ? '⚠️' : '🤖'}</div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:${isError ? 'var(--red)' : 'var(--teal)'}">
+            ${isError ? 'Erreur analyse IA' : 'Analyse IA — Ordonnance'}
+          </div>
+          <div style="font-size:11px;color:var(--text-muted)">Basée sur le dossier patient</div>
+        </div>
+        <button onclick="document.getElementById('ai-ordo-analysis').remove()"
+          style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:16px;color:var(--text-muted);padding:0;line-height:1"
+          title="Fermer">×</button>
+      </div>
+      <div style="font-size:13px;line-height:1.7;color:var(--text)">${html}</div>
+    </div>
+  `;
 }
 
-function aiSetLoading(el, isLoading, originalHTML) {
-  if (isLoading) {
-    el.disabled = true;
-    el.dataset.original = el.innerHTML;
-    el.innerHTML = '<span class="ai-spinner"></span> Analyse…';
-  } else {
-    el.disabled = false;
-    el.innerHTML = originalHTML || el.dataset.original || el.innerHTML;
+function showAIAnalysisLoading() {
+  showAIAnalysisPanel(`
+    <div style="display:flex;align-items:center;gap:8px;color:var(--text-muted)">
+      <div style="
+        width:14px;height:14px;border-radius:50%;
+        border:2px solid var(--teal);border-top-color:transparent;
+        animation:ai-spin 0.7s linear infinite;flex-shrink:0
+      "></div>
+      Analyse en cours…
+    </div>
+  `);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ANALYSE ORDONNANCE + DOSSIER PATIENT
+   Appelée après saveOrdonnance() et saveEditOrdo()
+   ───────────────────────────────────────────────────────────── */
+async function analyzeOrdonnanceIA(medicaments) {
+  if (!currentPatient || !medicaments) return;
+
+  // Switcher sur l'onglet ordonnances si nécessaire
+  const ordoTab = document.querySelector('.detail-tab[onclick*="ordos"]');
+  if (ordoTab && !ordoTab.classList.contains('active')) {
+    switchDetailTab('ordos', ordoTab);
+  }
+
+  showAIAnalysisLoading();
+
+  const allergies   = currentPatient.allergies   || 'Aucune allergie connue';
+  const pathologies = currentPatient.pathologies || 'Aucune pathologie connue';
+
+  const prompt = `Tu es un pharmacien expert. Analyse cette ordonnance pour le patient suivant :
+
+**Dossier patient :**
+- Allergies : ${allergies}
+- Pathologies connues : ${pathologies}
+
+**Médicaments prescrits :**
+${medicaments}
+
+Fournis une analyse structurée en français :
+
+1. **⚠️ Alertes allergies** — Y a-t-il un médicament prescrit qui correspond ou croise une allergie connue du patient ? Si oui, alerte immédiate avec explication.
+
+2. **🔄 Interactions médicamenteuses** — Interactions entre les médicaments prescrits (classer : majeure / modérée / mineure). Si aucune : l'indiquer.
+
+3. **🩺 Cohérence avec les pathologies** — Les médicaments sont-ils adaptés aux pathologies connues du patient ? Y a-t-il des contre-indications ?
+
+4. **💊 Effets indésirables à surveiller** — Les principaux effets indésirables à signaler au patient pour cette ordonnance.
+
+5. **✅ Conseils de dispensation** — 2-3 conseils pratiques à donner au patient.
+
+Sois précis, concis et cliniquement rigoureux. Si tout est OK sans problème, dis-le clairement.`;
+
+  try {
+    const text = await aiModuleCall(
+      [{ role: 'user', content: prompt }],
+      'Tu es un pharmacien expert clinicien. Tu t\'adresses à un professionnel de santé. Tes analyses sont précises, structurées et cliniquement pertinentes. En français.',
+      1200
+    );
+    showAIAnalysisPanel(aiMd(text));
+  } catch (e) {
+    showAIAnalysisPanel(`Erreur : ${e.message}`, true);
   }
 }
 
-function aiShowResult(containerId, html) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.style.display = 'block';
-  el.innerHTML = html;
-}
+/* ─────────────────────────────────────────────────────────────
+   HOOK SUR saveOrdonnance — déclenche l'analyse après save
+   ───────────────────────────────────────────────────────────── */
+const _origSaveOrdonnance = window.saveOrdonnance;
+window.saveOrdonnance = async function () {
+  // Récupère les médicaments AVANT que le form soit vidé
+  const meds = document.getElementById('o-meds')?.value?.trim();
+  await _origSaveOrdonnance();
+  // Lance l'analyse après fermeture du modal
+  if (meds && currentPatient) {
+    setTimeout(() => analyzeOrdonnanceIA(meds), 400);
+  }
+};
 
-/* ============================================================
-   1. PAGE MÉDICAMENTS — Bloc IA
-   Injecte un bloc IA en haut de #page-medicaments
-   ============================================================ */
+/* ─────────────────────────────────────────────────────────────
+   HOOK SUR saveEditOrdo — idem pour modification
+   ───────────────────────────────────────────────────────────── */
+const _origSaveEditOrdo = window.saveEditOrdo;
+window.saveEditOrdo = async function () {
+  const meds = document.getElementById('eo-meds')?.value?.trim();
+  await _origSaveEditOrdo();
+  if (meds && currentPatient) {
+    setTimeout(() => analyzeOrdonnanceIA(meds), 400);
+  }
+};
 
-function initAIMedicaments() {
-  const page = document.getElementById('page-medicaments');
-  if (!page || document.getElementById('ai-med-block')) return;
+/* ─────────────────────────────────────────────────────────────
+   HOOK SUR loadPathoPatient — bloc IA en haut de l'onglet
+   ───────────────────────────────────────────────────────────── */
+const _origLoadPathoPatient = window.loadPathoPatient;
+window.loadPathoPatient = async function (patientId) {
+  await _origLoadPathoPatient(patientId);
+  injectAIPathoBlock(patientId);
+};
+
+function injectAIPathoBlock(patientId) {
+  const el = document.getElementById('det-patho-list');
+  if (!el || document.getElementById('ai-patho-block')) return;
 
   const block = document.createElement('div');
-  block.id = 'ai-med-block';
-  block.className = 'ai-bar';
-  block.style.cssText = 'margin-bottom:20px';
+  block.id = 'ai-patho-block';
+  block.style.cssText = 'margin-bottom:16px';
   block.innerHTML = `
-    <div class="ai-top">
-      <div class="ai-dot"></div>
-      <div class="ai-title">Assistant IA — Médicaments</div>
-      <div class="ai-sub">Posologie · Alternatives · Équivalences</div>
+    <div style="
+      background:var(--bg-card,#fff);
+      border:var(--border);
+      border-radius:var(--radius-lg);
+      padding:14px 16px;
+    ">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="
+          width:28px;height:28px;border-radius:50%;background:var(--teal);
+          display:flex;align-items:center;justify-content:center;font-size:14px
+        ">🤖</div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--teal)">Assistant IA — Pathologies</div>
+          <div style="font-size:11px;color:var(--text-muted)">Conseils thérapeutiques personnalisés</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <input class="form-input" id="ai-patho-q" placeholder="Ex : conduite à tenir, médicaments indiqués, surveillance…"
+          style="flex:1;font-size:13px;padding:8px 12px"
+          onkeydown="if(event.key==='Enter')askAIPathoPatient()"/>
+        <button class="btn btn-primary btn-sm" id="ai-patho-btn" onclick="askAIPathoPatient()">Analyser</button>
+      </div>
+      <div id="ai-patho-resp" style="display:none;margin-top:10px;font-size:13px;line-height:1.7;color:var(--text);max-height:280px;overflow-y:auto"></div>
     </div>
-    <div class="ai-row">
-      <input class="ai-input" id="ai-med-q" type="text"
-        placeholder="Ex : Doliprane 1g adulte, alternatives à l'Ibuprofène, équivalence Metformine…"
-        onkeydown="if(event.key==='Enter')askAIMed()"/>
-      <button class="ai-btn" id="ai-med-btn" onclick="askAIMed()">Analyser</button>
-    </div>
-    <div class="ai-response" id="ai-med-resp" style="display:none"></div>
   `;
 
-  // Insère après le page-header
-  const header = page.querySelector('.page-header');
-  if (header && header.nextSibling) {
-    page.insertBefore(block, header.nextSibling);
-  } else {
-    page.insertBefore(block, page.firstChild);
-  }
+  el.insertBefore(block, el.firstChild);
 }
 
-async function askAIMed() {
-  const input = document.getElementById('ai-med-q');
-  const btn = document.getElementById('ai-med-btn');
-  const resp = document.getElementById('ai-med-resp');
-  const q = input?.value?.trim();
-  if (!q) { input?.focus(); return; }
+async function askAIPathoPatient() {
+  const input = document.getElementById('ai-patho-q');
+  const btn   = document.getElementById('ai-patho-btn');
+  const resp  = document.getElementById('ai-patho-resp');
+  const q     = input?.value?.trim();
+  if (!q || !currentPatient) { input?.focus(); return; }
 
-  aiSetLoading(btn, true);
+  btn.disabled = true;
+  btn.textContent = '…';
   resp.style.display = 'block';
   resp.innerHTML = '<em style="color:var(--text-muted)">Analyse en cours…</em>';
 
-  try {
-    const text = await aiCall(
-      [{ role: 'user', content: `Médicament ou question : "${q}"` }],
-      `Tu es un pharmacien expert. Réponds de façon structurée en français avec :
-1. **Posologie standard** (adulte / enfant si pertinent)
-2. **Indications principales**
-3. **Alternatives thérapeutiques** (2-3 équivalents)
-4. **Équivalences de doses** si applicable
-5. **Points de vigilance** essentiels (interactions, CI, effets secondaires notables)
-Sois précis, concis et professionnel. Tu t'adresses à un pharmacien.`
-    );
-    resp.innerHTML = aiFormatMd(text);
-  } catch (e) {
-    resp.innerHTML = `<span style="color:var(--red)">❌ ${e.message}</span>`;
-  }
-
-  aiSetLoading(btn, false, 'Analyser');
-}
-
-/* ============================================================
-   2. PAGE PATHOLOGIES — Bloc IA
-   Injecte un bloc IA en haut de #page-pathologies
-   ============================================================ */
-
-function initAIPathologies() {
-  const page = document.getElementById('page-pathologies');
-  if (!page || document.getElementById('ai-path-block')) return;
-
-  const block = document.createElement('div');
-  block.id = 'ai-path-block';
-  block.className = 'ai-bar';
-  block.style.cssText = 'margin-bottom:20px';
-  block.innerHTML = `
-    <div class="ai-top">
-      <div class="ai-dot"></div>
-      <div class="ai-title">Assistant IA — Pathologies</div>
-      <div class="ai-sub">Traitements · Conduite à tenir · Conseils patient</div>
-    </div>
-    <div class="ai-row">
-      <input class="ai-input" id="ai-path-q" type="text"
-        placeholder="Ex : Hypertension artérielle, diabète type 2, insuffisance cardiaque…"
-        onkeydown="if(event.key==='Enter')askAIPath()"/>
-      <button class="ai-btn" id="ai-path-btn" onclick="askAIPath()">Rechercher</button>
-    </div>
-    <div class="ai-response" id="ai-path-resp" style="display:none"></div>
-  `;
-
-  const header = page.querySelector('.page-header');
-  if (header && header.nextSibling) {
-    page.insertBefore(block, header.nextSibling);
-  } else {
-    page.insertBefore(block, page.firstChild);
-  }
-}
-
-async function askAIPath() {
-  const input = document.getElementById('ai-path-q');
-  const btn = document.getElementById('ai-path-btn');
-  const resp = document.getElementById('ai-path-resp');
-  const q = input?.value?.trim();
-  if (!q) { input?.focus(); return; }
-
-  aiSetLoading(btn, true);
-  resp.style.display = 'block';
-  resp.innerHTML = '<em style="color:var(--text-muted)">Recherche en cours…</em>';
+  const allergies   = currentPatient.allergies   || 'Aucune';
+  const pathologies = currentPatient.pathologies || 'Non renseignées';
 
   try {
-    const text = await aiCall(
-      [{ role: 'user', content: `Pathologie : "${q}"` }],
-      `Tu es un pharmacien expert. Pour cette pathologie, fournis en français :
-1. **Médicaments de 1ère intention** (DCI + classe thérapeutique)
-2. **Médicaments de 2ème intention**
-3. **Conduite à tenir** pratique pour le pharmacien
-4. **Conseils hygiéno-diététiques** à transmettre au patient
-5. **Signaux d'alarme** nécessitant un avis médical urgent
-Sois structuré, précis et professionnel.`
-    );
-    resp.innerHTML = aiFormatMd(text);
-  } catch (e) {
-    resp.innerHTML = `<span style="color:var(--red)">❌ ${e.message}</span>`;
-  }
-
-  aiSetLoading(btn, false, 'Rechercher');
-}
-
-/* ============================================================
-   3. MODAL SCAN ORDONNANCE — Analyse IA intégrée
-   Remplace / enrichit processScan() existant
-   ============================================================ */
-
-let _scanFileData = null;
-let _scanFileType = null;
-
-// Override de previewScan pour stocker les données base64
-const _origPreviewScan = window.previewScan;
-window.previewScan = function(input) {
-  if (_origPreviewScan) _origPreviewScan(input);
-  const file = input.files[0];
-  if (!file) return;
-  _scanFileType = file.type;
-  const reader = new FileReader();
-  reader.onload = () => { _scanFileData = reader.result.split(',')[1]; };
-  reader.readAsDataURL(file);
-};
-
-// Override de processScan pour y injecter l'IA
-window.processScan = async function() {
-  const status = document.getElementById('scan-status');
-  const preview = document.getElementById('scan-preview');
-
-  if (!_scanFileData) {
-    if (status) {
-      status.style.display = 'block';
-      status.style.background = 'var(--red-pale)';
-      status.style.color = 'var(--red)';
-      status.textContent = '⚠️ Veuillez d\'abord choisir une image.';
-    }
-    return;
-  }
-
-  const btn = document.querySelector('#modal-scan-ordo .modal-footer .btn-primary');
-  aiSetLoading(btn, true);
-
-  if (status) {
-    status.style.display = 'block';
-    status.style.background = 'var(--teal-pale)';
-    status.style.color = 'var(--teal)';
-    status.textContent = '🔍 Analyse de l\'ordonnance en cours…';
-  }
-
-  try {
-    const text = await aiCall(
-      [{
-        role: 'user',
-        content: [
-          {
-            type: 'image',
-            source: { type: 'base64', media_type: _scanFileType || 'image/jpeg', data: _scanFileData }
-          },
-          {
-            type: 'text',
-            text: `Analyse cette ordonnance médicale et retourne un JSON strict (sans markdown, sans backticks) :
-{
-  "medecin": "Nom du médecin prescripteur",
-  "date": "YYYY-MM-DD ou vide",
-  "medicaments": "Liste complète des médicaments avec posologie, un par ligne",
-  "renouvellement": "",
-  "statut": "Dispensé",
-  "interactions": "Liste des interactions ou contre-indications détectées (vide si aucune)",
-  "notes": "Conseils pharmacien ou observations importantes"
-}
-Si une information n'est pas lisible, laisse le champ vide. Ne retourne QUE le JSON.`
-          }
-        ]
+    const text = await aiModuleCall(
+      [{ role: 'user', content:
+        `Patient — Allergies : ${allergies} | Pathologies connues : ${pathologies}\n\nQuestion : ${q}`
       }],
-      `Tu es un pharmacien expert en lecture d'ordonnances. Tu analyses des images d'ordonnances médicales françaises et extrais les informations structurées. Tu retournes uniquement du JSON valide, sans aucun texte autour.`
+      `Tu es un pharmacien expert. Tu réponds à des questions sur les pathologies d'un patient en tenant compte de son dossier (allergies, antécédents). Réponses structurées, précises, en français, destinées à un pharmacien professionnel.`,
+      900
     );
-
-    // Parse JSON
-    let data = {};
-    try {
-      const clean = text.replace(/```json|```/g, '').trim();
-      data = JSON.parse(clean);
-    } catch (e) {
-      throw new Error('Impossible de lire la réponse IA. Réessayez.');
-    }
-
-    // Pré-remplir le modal ordonnance
-    if (data.medecin) {
-      const f = document.getElementById('o-medecin');
-      if (f) f.value = data.medecin;
-    }
-    if (data.date) {
-      const f = document.getElementById('o-date');
-      if (f) f.value = data.date;
-    }
-    if (data.medicaments) {
-      const f = document.getElementById('o-meds');
-      if (f) f.value = data.medicaments;
-    }
-    if (data.renouvellement) {
-      const f = document.getElementById('o-renouvellement');
-      if (f) {
-        [...f.options].forEach(o => { if (o.value === data.renouvellement || o.text === data.renouvellement) f.value = o.value; });
-      }
-    }
-    if (data.statut) {
-      const f = document.getElementById('o-statut');
-      if (f) {
-        [...f.options].forEach(o => { if (o.text === data.statut) f.value = o.value; });
-      }
-    }
-
-    // Notes = interactions + notes
-    const notesField = document.getElementById('o-notes');
-    if (notesField) {
-      let notes = '';
-      if (data.interactions) notes += `⚠️ Interactions détectées : ${data.interactions}\n`;
-      if (data.notes) notes += data.notes;
-      notesField.value = notes.trim();
-    }
-
-    if (status) {
-      status.textContent = '✅ Ordonnance analysée — vérifiez et complétez les champs ci-dessous.';
-    }
-
-    // Fermer le modal scan et ouvrir le modal ordonnance après 1.2s
-    setTimeout(() => {
-      closeModal('scan-ordo');
-      _scanFileData = null;
-      _scanFileType = null;
-      // Réinitialise le dropzone
-      const zone = document.getElementById('scan-dropzone');
-      if (zone) zone.style.borderColor = '';
-      const prev = document.getElementById('scan-preview');
-      if (prev) { prev.style.display = 'none'; prev.src = ''; }
-      if (status) status.style.display = 'none';
-      openModal('add-ordo');
-    }, 1200);
-
+    resp.innerHTML = aiMd(text);
   } catch (e) {
-    if (status) {
-      status.style.background = 'var(--red-pale)';
-      status.style.color = 'var(--red)';
-      status.textContent = `❌ ${e.message}`;
-    }
+    resp.innerHTML = `<span style="color:var(--red)">❌ ${e.message}</span>`;
   }
 
-  aiSetLoading(btn, false, '🔍 Analyser et pré-remplir');
-};
+  btn.disabled = false;
+  btn.textContent = 'Analyser';
+}
 
-/* ============================================================
-   CSS SPINNER (injecté dynamiquement)
-   ============================================================ */
-(function injectSpinnerCSS() {
-  if (document.getElementById('ai-modules-style')) return;
-  const style = document.createElement('style');
-  style.id = 'ai-modules-style';
-  style.textContent = `
-    .ai-spinner {
-      display: inline-block;
-      width: 12px; height: 12px;
-      border: 2px solid rgba(255,255,255,0.35);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: ai-spin 0.7s linear infinite;
-      vertical-align: middle;
-      margin-right: 4px;
-    }
-    @keyframes ai-spin { to { transform: rotate(360deg); } }
-    #ai-med-resp, #ai-path-resp {
-      margin-top: 12px;
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--text);
-      max-height: 320px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-  `;
-  document.head.appendChild(style);
+/* ─────────────────────────────────────────────────────────────
+   CSS SPINNER
+   ───────────────────────────────────────────────────────────── */
+(function () {
+  if (document.getElementById('ai-modules-css')) return;
+  const s = document.createElement('style');
+  s.id = 'ai-modules-css';
+  s.textContent = `@keyframes ai-spin { to { transform: rotate(360deg); } }`;
+  document.head.appendChild(s);
 })();
-
-/* ============================================================
-   INIT — appelé automatiquement au chargement
-   Les blocs IA sont injectés quand on navigue vers les pages
-   ============================================================ */
-
-// Hook sur showPage pour injecter les blocs au bon moment
-const _origShowPage = window.showPage;
-window.showPage = function(page, el) {
-  if (_origShowPage) _origShowPage(page, el);
-  if (page === 'medicaments') setTimeout(initAIMedicaments, 50);
-  if (page === 'pathologies') setTimeout(initAIPathologies, 50);
-};
-
-// Init si déjà sur ces pages au chargement
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('page-medicaments')?.classList.contains('active')) initAIMedicaments();
-  if (document.getElementById('page-pathologies')?.classList.contains('active')) initAIPathologies();
-});
