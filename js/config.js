@@ -15,3 +15,4 @@ let currentPatient = null;
 let allPatients = [];
 
 // ---- AUTH ----
+window.AI_PROXY_URL = '/api/analyze-ai';
