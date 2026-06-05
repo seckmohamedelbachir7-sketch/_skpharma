@@ -148,9 +148,11 @@ ${medicaments}
 Fournis une analyse structurée en français :
 
 1. **⚠️ Alertes allergies** — Y a-t-il un médicament prescrit qui correspond ou croise une allergie connue du patient ? Si oui, alerte immédiate avec explication.
-
-2. **🔄 Interactions médicamenteuses** — Interactions entre les médicaments prescrits (classer : majeure / modérée / mineure). Si aucune : l'indiquer.
-
+ 2. **🔄 Interactions médicamenteuses** — Liste toutes les interactions entre les médicaments prescrits en utilisant obligatoirement ces préfixes :
+- 🔴 MAJEURE : [médicament A + médicament B] : explication
+- 🟠 MODÉRÉE : [médicament A + médicament B] : explication  
+- 🟡 MINEURE : [médicament A + médicament B] : explication
+- ✅ Aucune interaction détectée (si aucune)
 3. **🩺 Cohérence avec les pathologies** — Les médicaments sont-ils adaptés aux pathologies connues du patient ? Y a-t-il des contre-indications ?
 
 4. **💊 Effets indésirables à surveiller** — Les principaux effets indésirables à signaler au patient pour cette ordonnance.
