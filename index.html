@@ -274,7 +274,50 @@
       </div>
       <div id="trash-list"><div class="loading">Chargement…</div></div>
     </div>
-
+    
+    <!-- POSOLOGIES ADAPTÉES -->
+    <div class="page" id="page-posologie-adaptee">
+      <div class="page-header">
+        <div class="page-title">⚖️ Posologies adaptées</div>
+        <div style="font-size:12px;color:var(--text-muted)">Calcul selon le poids et la fonction rénale</div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+          <div class="form-group">
+            <label class="form-label">Médicament *</label>
+            <input class="form-input" id="pa-medicament" placeholder="Amoxicilline, Metformine…"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Poids (kg)</label>
+            <input class="form-input" type="number" id="pa-poids" placeholder="70"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">DFG / Clairance créatinine (ml/min)</label>
+            <input class="form-input" type="number" id="pa-dfg" placeholder="90"/>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+          <div class="form-group">
+            <label class="form-label">Age (ans)</label>
+            <input class="form-input" type="number" id="pa-age" placeholder="65"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Contexte particulier</label>
+            <select class="form-input" id="pa-contexte">
+              <option value="">— Aucun —</option>
+              <option>Grossesse</option>
+              <option>Allaitement</option>
+              <option>Insuffisance hépatique</option>
+              <option>Sujet âgé > 75 ans</option>
+              <option>Pédiatrie</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="calculerPosologie()">⚖️ Calculer la posologie adaptée</button>
+      </div>
+      <div id="posologie-adaptee-result"></div>
+    </div>
+    
     <!-- AVIS CLIENTS -->
     <div class="page" id="page-antibio">
       <div class="page-header">
