@@ -1,5 +1,15 @@
 // ── POSOLOGIES ADAPTÉES ──────────────────────────
 
+function formatMarkdown(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/#{4}\s(.+)/g, '<h4 style="margin:12px 0 6px;color:var(--teal)">$1</h4>')
+    .replace(/#{3}\s(.+)/g, '<h3 style="margin:14px 0 8px;color:var(--text)">$1</h3>')
+    .replace(/^- (.+)/gm, '<div style="padding:3px 0 3px 12px;border-left:2px solid var(--teal);margin-bottom:4px">$1</div>')
+    .replace(/\n---\n/g, '<hr style="border:none;border-top:1px solid var(--border);margin:12px 0"/>')
+    .replace(/\n/g, '<br/>');
+}
+
 async function calculerPosologie() {
   const medicament = document.getElementById('pa-medicament').value.trim();
   const poids      = document.getElementById('pa-poids').value.trim();
@@ -18,7 +28,6 @@ async function calculerPosologie() {
     <div style="font-size:14px;color:var(--text-muted)">Calcul de la posologie adaptée en cours…</div>
   </div>`;
 
-  // Construction du prompt
   let prompt = `Tu es un pharmacien clinicien expert. Calcule la posologie adaptée pour :\n\n`;
   prompt += `Médicament : ${medicament}\n`;
   if (poids)    prompt += `Poids : ${poids} kg\n`;
@@ -77,7 +86,7 @@ Sois précis, concis et basé sur les RCP et recommandations ANSM/HAS.`;
           </div>
         </div>
 
-        <div style="font-size:13px;line-height:1.8;color:var(--text);white-space:pre-wrap">${reponse}</div>
+        <div style="font-size:13px;line-height:1.8;color:var(--text)">${formatMarkdown(reponse)}</div>
 
         <div style="margin-top:16px;padding:10px 14px;background:var(--amber-pale);
                     border-radius:8px;font-size:11px;color:var(--amber)">
