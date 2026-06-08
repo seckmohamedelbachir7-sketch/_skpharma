@@ -275,6 +275,16 @@
     </div>
 
     <!-- AVIS CLIENTS -->
+    <div class="page" id="page-antibio">
+      <div class="page-header">
+        <div class="page-title">🦠 Aide à l'antibiothérapie</div>
+        <div style="font-size:12px;color:var(--text-muted)">Recommandations ANSM/HAS — Saisir une infection pour obtenir l'antibiotique adapté</div>
+      </div>
+      <div class="search-row">
+        <input class="search-input" type="text" id="antibio-search" placeholder="Ex: pneumonie, cystite, angine, otite…" oninput="searchAntibio(this.value)"/>
+      </div>
+      <div id="antibio-result"></div>
+    </div>
     <div class="page" id="page-avis">
       <div class="page-header">
         <div>
