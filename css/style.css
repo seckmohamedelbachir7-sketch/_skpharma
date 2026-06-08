@@ -1246,3 +1246,112 @@ create policy "Insertion publique" on avis
   transition: background 0.15s;
 }
 .avis-link-copy:hover { background: #c5edd9; }
+/* ================================================
+   PATHOLOGIES — Chips + Autocomplete
+   Ajouter à la fin de css/style.css
+   ================================================ */
+
+/* Zone chips */
+.patho-chips-zone {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 32px;
+  align-items: center;
+}
+
+/* Chip de base */
+.patho-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: default;
+  transition: opacity 0.15s, transform 0.1s;
+  border: 1px solid transparent;
+}
+.patho-chip:hover {
+  opacity: 0.85;
+}
+
+/* Variantes par sévérité */
+.patho-chip--chronique {
+  background: rgba(59,130,246,0.12);
+  color: var(--blue, #3b82f6);
+  border-color: rgba(59,130,246,0.25);
+}
+.patho-chip--legere,
+.patho-chip--légère {
+  background: rgba(34,197,94,0.12);
+  color: var(--green, #16a34a);
+  border-color: rgba(34,197,94,0.25);
+}
+.patho-chip--moderee,
+.patho-chip--modérée {
+  background: rgba(245,158,11,0.12);
+  color: var(--amber, #d97706);
+  border-color: rgba(245,158,11,0.25);
+}
+.patho-chip--severe,
+.patho-chip--sévère {
+  background: rgba(239,68,68,0.12);
+  color: var(--red, #dc2626);
+  border-color: rgba(239,68,68,0.25);
+}
+
+/* Bouton ✕ dans le chip */
+.patho-chip-remove {
+  background: none;
+  border: none;
+  padding: 0 0 0 2px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  color: inherit;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+}
+.patho-chip-remove:hover {
+  opacity: 1;
+}
+
+/* Barre d'ajout rapide */
+.patho-add-bar {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* Dropdown suggestions */
+.patho-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--card-bg, #fff);
+  border: var(--border, 1px solid #e2e8f0);
+  border-radius: var(--radius, 8px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  z-index: 200;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.patho-suggestion-item {
+  padding: 9px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text, #1e293b);
+  transition: background 0.1s;
+}
+.patho-suggestion-item:hover,
+.patho-suggestion-item:focus {
+  background: var(--teal-pale, rgba(20,184,166,0.08));
+  color: var(--teal, #0d9488);
+  outline: none;
+}
