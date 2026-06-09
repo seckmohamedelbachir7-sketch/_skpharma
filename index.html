@@ -385,6 +385,43 @@
       </div>
       <div id="bilan-result"></div>
     </div>
+    <!-- CRAT -->
+    <div class="page" id="page-crat">
+      <div class="page-header">
+        <div class="page-title">🤰 CRAT — Agents Tératogènes</div>
+        <div style="font-size:12px;color:var(--text-muted)">Risques médicamenteux — Grossesse · Allaitement · Fertilité</div>
+      </div>
+
+      <!-- Onglets CRAT -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+        <button id="crat-tab-grossesse" class="btn btn-primary btn-sm" onclick="switchCratTab('grossesse')">🤰 Grossesse</button>
+        <button id="crat-tab-allaitement" class="btn btn-ghost btn-sm" onclick="switchCratTab('allaitement')">🍼 Allaitement</button>
+        <button id="crat-tab-fertilite" class="btn btn-ghost btn-sm" onclick="switchCratTab('fertilite')">👨 Fertilité</button>
+        <button id="crat-tab-exposition" class="btn btn-ghost btn-sm" onclick="switchCratTab('exposition')">☢️ Exposition accidentelle</button>
+      </div>
+
+      <!-- Formulaire commun -->
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+          <div class="form-group">
+            <label class="form-label">Médicament *</label>
+            <input class="form-input" id="crat-medicament" placeholder="Ex: Amoxicilline, Metformine…"/>
+          </div>
+          <div class="form-group" id="crat-extra-field">
+            <label class="form-label">Trimestre de grossesse</label>
+            <select class="form-input" id="crat-trimestre">
+              <option value="">— Choisir —</option>
+              <option>1er trimestre (1-12 semaines)</option>
+              <option>2ème trimestre (13-26 semaines)</option>
+              <option>3ème trimestre (27-40 semaines)</option>
+              <option>Période périconceptionnelle</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="crat-btn" onclick="analyserCrat()">🤰 Analyser le risque grossesse</button>
+      </div>
+      <div id="crat-result"></div>
+    </div>
     
     <!-- AVIS CLIENTS -->
     <div class="page" id="page-antibio">
