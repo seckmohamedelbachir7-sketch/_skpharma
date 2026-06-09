@@ -355,6 +355,36 @@
       <div id="interactions-result"></div>
     </div>
     
+    <!-- BILAN DE MÉDICATION -->
+    <div class="page" id="page-bilan">
+      <div class="page-header">
+        <div class="page-title">📋 Bilan partagé de médication</div>
+        <div style="font-size:12px;color:var(--text-muted)">Analyse complète du traitement d'un patient</div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="form-group">
+          <label class="form-label">Liste des médicaments du patient *</label>
+          <textarea class="form-input" id="bilan-meds" rows="4" placeholder="Ex: Metformine 850mg × 2/j, Ramipril 5mg × 1/j, Aspirine 100mg × 1/j, Atorvastatine 40mg × 1/j…" style="resize:vertical"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+          <div class="form-group">
+            <label class="form-label">Age (ans)</label>
+            <input class="form-input" type="number" id="bilan-age" placeholder="65"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pathologies connues</label>
+            <input class="form-input" id="bilan-patho" placeholder="Diabète T2, HTA…"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Allergies</label>
+            <input class="form-input" id="bilan-allergies" placeholder="Pénicilline…"/>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="analyserBilan()">📋 Analyser le bilan de médication</button>
+      </div>
+      <div id="bilan-result"></div>
+    </div>
+    
     <!-- AVIS CLIENTS -->
     <div class="page" id="page-antibio">
       <div class="page-header">
