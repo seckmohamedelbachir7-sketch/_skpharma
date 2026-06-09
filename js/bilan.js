@@ -1,5 +1,15 @@
 // ── BILAN PARTAGÉ DE MÉDICATION ──────────────────
  
+function formatBilanText(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/#{4}\s(.+)/g, '<h4 style="margin:12px 0 6px;color:var(--teal)">$1</h4>')
+    .replace(/#{3}\s(.+)/g, '<h3 style="margin:14px 0 8px;color:var(--text)">$1</h3>')
+    .replace(/^- (.+)/gm, '<div style="padding:3px 0 3px 12px;border-left:2px solid var(--teal);margin-bottom:4px;font-size:13px">$1</div>')
+    .replace(/\n---\n/g, '<hr style="border:none;border-top:1px solid var(--border);margin:12px 0"/>')
+    .replace(/\n/g, '<br/>');
+}
+ 
 async function analyserBilan() {
   const meds      = document.getElementById('bilan-meds').value.trim();
   const age       = document.getElementById('bilan-age').value.trim();
@@ -93,13 +103,5 @@ Sois précis, concis et basé sur les recommandations ANSM/HAS et Thériaque.`;
   } catch(e) {
     el.innerHTML = `<div class="card" style="color:var(--red)">Erreur de connexion : ${e.message}</div>`;
   }
-}
- 
-function formatBilanText(text) {
-  return text
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/^(\d+\.\s.+)/gm, '<h4 style="margin:14px 0 6px;color:var(--teal);font-size:13px">$1</h4>')
-    .replace(/^- (.+)/gm, '<div style="padding:3px 0 3px 12px;border-left:2px solid var(--teal);margin-bottom:4px;font-size:13px">$1</div>')
-    .replace(/\n/g, '<br/>');
 }
  
