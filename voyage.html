@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conseils Voyage — SKPharma</title>
+<style>
+  :root {
+    --bg: #f8f9fb;
+    --surface: #ffffff;
+    --surface2: #f0f2f5;
+    --border: #e2e6ea;
+    --text: #1a1d23;
+    --text-muted: #6b7280;
+    --blue: #1e6fcc;
+    --blue-light: #e8f0fb;
+    --blue-dark: #14508f;
+    --green: #1a7a45;
+    --green-light: #e6f4ec;
+    --amber: #b45309;
+    --amber-light: #fef3cd;
+    --red: #b91c1c;
+    --red-light: #fde8e8;
+    --teal: #0f766e;
+    --teal-light: #e0f5f3;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 220px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+  }
+
+  .sidebar-logo {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: -0.3px;
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 2px;
+  }
+
+  .nav { padding: 12px 0; flex: 1; }
+
+  .nav-section {
+    padding: 6px 16px 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    font-size: 13.5px;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: 0;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+
+  .nav-item:hover { background: var(--bg); color: var(--text); }
+  .nav-item.active { background: var(--blue-light); color: var(--blue); font-weight: 500; }
+
+  .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* MAIN */
+  .main {
+    margin-left: 220px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .topbar-icon { 
+    width: 32px; height: 32px; 
+    background: var(--teal-light); 
+    border-radius: 8px; 
+    display: flex; align-items: center; justify-content: center;
+  }
+  .topbar-icon svg { width: 16px; height: 16px; color: var(--teal); }
+  .topbar-title { font-size: 16px; font-weight: 600; color: var(--text); }
+  .topbar-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+
+  .pharmacist-badge {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--text-muted);
+  }
+
+  .avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-weight: 600; font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* CONTENT */
+  .content { padding: 28px; flex: 1; }
+
+  /* SEARCH HERO */
+  .search-hero {
+    background: linear-gradient(135deg, #0f5fa3 0%, #1a7a9c 100%);
+    border-radius: var(--radius);
+    padding: 32px 36px;
+    color: white;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .search-hero::before {
+    content: '';
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    pointer-events: none;
+  }
+
+  .search-hero-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .search-hero-sub {
+    font-size: 14px;
+    opacity: 0.82;
+    margin-bottom: 20px;
+    max-width: 520px;
+  }
+
+  .search-row {
+    display: flex;
+    gap: 10px;
+    max-width: 560px;
+  }
+
+  .search-input-wrap {
+    flex: 1;
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 11px 16px 11px 40px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-size: 14px;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    outline: none;
+    transition: background 0.15s;
+  }
+
+  .search-input::placeholder { color: rgba(255,255,255,0.6); }
+  .search-input:focus { background: rgba(255,255,255,0.22); }
+
+  .search-icon {
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.7;
+  }
+
+  .search-icon svg { width: 16px; height: 16px; }
+
+  .btn-search {
+    padding: 11px 20px;
+    background: white;
+    color: #0f5fa3;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.12s;
+    white-space: nowrap;
+  }
+
+  .btn-search:hover { opacity: 0.9; }
+
+  /* QUICK CHIPS */
+  .quick-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+
+  .chip {
+    padding: 5px 12px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.9);
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.25);
+    transition: background 0.12s;
+  }
+
+  .chip:hover { background: rgba(255,255,255,0.25); }
+
+  /* RESULTS LAYOUT */
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .results-left { display: flex; flex-direction: column; gap: 16px; }
+  .results-right { display: flex; flex-direction: column; gap: 16px; }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .card-icon {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-icon svg { width: 17px; height: 17px; }
+  .card-icon.teal { background: var(--teal-light); color: var(--teal); }
+  .card-icon.amber { background: var(--amber-light); color: var(--amber); }
+  .card-icon.red { background: var(--red-light); color: var(--red); }
+  .card-icon.blue { background: var(--blue-light); color: var(--blue); }
+  .card-icon.green { background: var(--green-light); color: var(--green); }
+
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .card-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+
+  /* RISK BANNER */
+  .risk-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+  }
+
+  .risk-banner.low { background: var(--green-light); border: 1px solid #a7d9bc; }
+  .risk-banner.medium { background: var(--amber-light); border: 1px solid #f0d08a; }
+  .risk-banner.high { background: var(--red-light); border: 1px solid #f5b8b8; }
+
+  .risk-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .risk-banner.low .risk-dot { background: var(--green); }
+  .risk-banner.medium .risk-dot { background: var(--amber); }
+  .risk-banner.high .risk-dot { background: var(--red); }
+
+  .risk-label { font-size: 13px; font-weight: 600; }
+  .risk-banner.low .risk-label { color: var(--green); }
+  .risk-banner.medium .risk-label { color: var(--amber); }
+  .risk-banner.high .risk-label { color: var(--red); }
+
+  .risk-desc { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+
+  /* VACCINE LIST */
+  .vaccine-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .vaccine-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .vaccine-badge {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .vaccine-badge.obligatoire { background: var(--red-light); color: var(--red); }
+  .vaccine-badge.recommande { background: var(--amber-light); color: var(--amber); }
+  .vaccine-badge.conseille { background: var(--blue-light); color: var(--blue); }
+
+  .vaccine-name { font-size: 13.5px; font-weight: 500; color: var(--text); }
+  .vaccine-note { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* MALARIA MAP */
+  .malaria-zones {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .zone-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+  }
+
+  .zone-color { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .zone-name { font-size: 13px; font-weight: 500; flex: 1; }
+  .zone-pill {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  /* AI PANEL */
+  .ai-panel {
+    border: 1.5px solid #c7d8f8;
+    background: linear-gradient(180deg, #f5f8ff 0%, #ffffff 100%);
+  }
+
+  .ai-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ai-badge {
+    display: flex; align-items: center; gap: 5px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  .ai-badge svg { width: 12px; height: 12px; }
+
+  .ai-content {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  .ai-section {
+    margin-bottom: 14px;
+  }
+
+  .ai-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+
+  .ai-section p { color: var(--text); font-size: 13.5px; }
+
+  .ai-alert {
+    display: flex;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+
+  .ai-alert.warning { background: var(--amber-light); border: 1px solid #ecd78a; }
+  .ai-alert.info { background: var(--blue-light); border: 1px solid #b3cfef; }
+  .ai-alert.danger { background: var(--red-light); border: 1px solid #f0b8b8; }
+
+  .ai-alert svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+  .ai-alert.warning svg { color: var(--amber); }
+  .ai-alert.info svg { color: var(--blue); }
+  .ai-alert.danger svg { color: var(--red); }
+
+  .btn-ai {
+    display: flex; align-items: center; gap: 7px;
+    width: 100%;
+    padding: 11px 16px;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.12s;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  .btn-ai:hover { background: var(--blue-dark); }
+  .btn-ai:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-ai svg { width: 16px; height: 16px; }
+
+  /* PATIENT SELECTOR */
+  .patient-select-wrap {
+    margin-bottom: 12px;
+  }
+
+  .patient-select-wrap label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .patient-select-wrap select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* PLACEHOLDER */
+  .placeholder-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+
+  .placeholder-state svg { 
+    width: 48px; height: 48px; 
+    color: var(--border); 
+    margin-bottom: 16px; 
+  }
+
+  .placeholder-state h3 { font-size: 15px; color: var(--text); margin-bottom: 6px; }
+  .placeholder-state p { font-size: 13px; }
+
+  /* SPINNER */
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .spin-dark {
+    border: 2px solid var(--border);
+    border-top-color: var(--blue);
+  }
+
+  /* COUNTRY HEADER */
+  .country-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    margin-bottom: 4px;
+  }
+
+  .country-flag {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .country-name { font-size: 20px; font-weight: 700; }
+  .country-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .source-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .source-note svg { width: 12px; height: 12px; }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    text-align: center;
+  }
+
+  .stat-value { font-size: 22px; font-weight: 700; color: var(--text); }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">SKPharma</div>
+    <div class="logo-sub">Gestion pharmaceutique</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Principal</div>
+    <a class="nav-item" href="#">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+    <a class="nav-item" href="#">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Patients
+    </a>
+    <a class="nav-item" href="#">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 2H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 2v20m0 0h10a2 2 0 0 0 2-2V8m-12 14H5a2 2 0 0 1-2-2V8m0 0h18"/></svg>
+      Ordonnances
+    </a>
+    <a class="nav-item" href="#">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Pathologies
+    </a>
+    <div class="nav-section" style="margin-top:8px;">Outils</div>
+    <a class="nav-item active" href="#">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Conseils Voyage
+    </a>
+    <a class="nav-item" href="#">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Interactions médicam.
+    </a>
+    <a class="nav-item" href="#">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      Analyses IA
+    </a>
+  </nav>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <div>
+        <div class="topbar-title">Conseils Voyage</div>
+        <div class="topbar-sub">Vaccins, prophylaxie paludéenne, risques sanitaires par destination</div>
+      </div>
+    </div>
+    <div class="pharmacist-badge">
+      <div class="avatar">SK</div>
+      <span>Dr. Pharmacien</span>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- SEARCH HERO -->
+    <div class="search-hero">
+      <div class="search-hero-title">Préparer votre patient pour son voyage</div>
+      <div class="search-hero-sub">Données sanitaires officielles + analyse IA personnalisée selon le profil du patient (allergies, traitements en cours, pathologies)</div>
+      <div class="search-row">
+        <div class="search-input-wrap">
+          <div class="search-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+          <input class="search-input" id="countryInput" type="text" placeholder="Pays de destination (ex: Thaïlande, Maroc, Brésil...)" />
+        </div>
+        <button class="btn-search" onclick="searchCountry()">Rechercher</button>
+      </div>
+      <div class="quick-chips">
+        <span class="chip" onclick="loadCountry('Thaïlande')">🇹🇭 Thaïlande</span>
+        <span class="chip" onclick="loadCountry('Maroc')">🇲🇦 Maroc</span>
+        <span class="chip" onclick="loadCountry('Brésil')">🇧🇷 Brésil</span>
+        <span class="chip" onclick="loadCountry('Inde')">🇮🇳 Inde</span>
+        <span class="chip" onclick="loadCountry('Kenya')">🇰🇪 Kenya</span>
+        <span class="chip" onclick="loadCountry('Mexique')">🇲🇽 Mexique</span>
+        <span class="chip" onclick="loadCountry('Vietnam')">🇻🇳 Vietnam</span>
+        <span class="chip" onclick="loadCountry('Sénégal')">🇸🇳 Sénégal</span>
+      </div>
+    </div>
+
+    <!-- PLACEHOLDER / RESULTS -->
+    <div id="resultsSection">
+      <div class="card">
+        <div class="placeholder-state">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.3">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <h3>Sélectionnez un pays de destination</h3>
+          <p>Les recommandations sanitaires, vaccins obligatoires et conseils pharmacien s'afficheront ici.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const COUNTRY_DATA = {
+  "Thaïlande": {
+    flag: "🇹🇭",
+    region: "Asie du Sud-Est",
+    climate: "Tropical humide",
+    risk: "medium",
+    riskLabel: "Risque modéré",
+    riskDesc: "Zones rurales à surveiller, paludisme en zones frontalières",
+    vaccines: [
+      { type: "obligatoire", name: "Fièvre jaune", note: "Si arrivée depuis un pays endémique" },
+      { type: "recommande", name: "Hépatite A", note: "Recommandé pour tous les voyageurs" },
+      { type: "recommande", name: "Typhoïde", note: "Surtout si zones rurales ou nourriture locale" },
+      { type: "recommande", name: "Hépatite B", note: "Séjour prolongé ou soins médicaux prévus" },
+      { type: "conseille", name: "Rage", note: "Séjour prolongé, activités plein air, zones rurales" },
+      { type: "conseille", name: "Encéphalite japonaise", note: "Zones rurales rizicoles, saison des pluies" }
+    ],
+    malaria: { present: true, zones: ["Zones frontalières Myanmar/Cambodge", "Province de Tak", "Province de Kanchanaburi"], treatment: "Atovaquone-Proguanil ou Doxycycline" },
+    stats: { vaccinsObligatoires: 1, vaccinsRecomm: 3, alertes: 2 }
+  },
+  "Maroc": {
+    flag: "🇲🇦",
+    region: "Afrique du Nord",
+    climate: "Méditerranéen / Semi-aride",
+    risk: "low",
+    riskLabel: "Risque faible",
+    riskDesc: "Destination généralement sûre, précautions alimentaires standard",
+    vaccines: [
+      { type: "recommande", name: "Hépatite A", note: "Recommandé pour tous les voyageurs" },
+      { type: "recommande", name: "Typhoïde", note: "Eau et alimentation potentiellement contaminées" },
+      { type: "conseille", name: "Hépatite B", note: "Si soins médicaux ou contacts avec locaux" },
+      { type: "conseille", name: "Rage", note: "Présence de chiens errants, zones rurales" }
+    ],
+    malaria: { present: false },
+    stats: { vaccinsObligatoires: 0, vaccinsRecomm: 2, alertes: 1 }
+  },
+  "Brésil": {
+    flag: "🇧🇷",
+    region: "Amérique du Sud",
+    climate: "Tropical / Équatorial",
+    risk: "high",
+    riskLabel: "Risque élevé",
+    riskDesc: "Fièvre jaune endémique, paludisme en Amazonie, dengue dans les villes",
+    vaccines: [
+      { type: "obligatoire", name: "Fièvre jaune", note: "Obligatoire pour accès à certaines zones, dont l'Amazonie" },
+      { type: "recommande", name: "Hépatite A", note: "Recommandé pour tous les voyageurs" },
+      { type: "recommande", name: "Typhoïde", note: "Zones rurales et petites villes" },
+      { type: "recommande", name: "Rage", note: "Zones rurales, forêt amazonienne" },
+      { type: "conseille", name: "Méningite ACWY", note: "Recommandé si zones de festival / rassemblement" }
+    ],
+    malaria: { present: true, zones: ["Bassin amazonien", "État du Pará", "État de l'Amazonas", "État du Mato Grosso"], treatment: "Chloroquine ou Atovaquone-Proguanil selon la zone" },
+    stats: { vaccinsObligatoires: 1, vaccinsRecomm: 3, alertes: 3 }
+  },
+  "Inde": {
+    flag: "🇮🇳",
+    region: "Asie du Sud",
+    climate: "Tropical / Aride selon régions",
+    risk: "high",
+    riskLabel: "Risque élevé",
+    riskDesc: "Paludisme répandu, dengue urbaine, risques gastro-intestinaux importants",
+    vaccines: [
+      { type: "recommande", name: "Hépatite A", note: "Fortement recommandé" },
+      { type: "recommande", name: "Typhoïde", note: "Risque élevé, eau et alimentation" },
+      { type: "recommande", name: "Hépatite B", note: "Recommandé pour tous" },
+      { type: "recommande", name: "Rage", note: "Nombreux animaux errants" },
+      { type: "conseille", name: "Encéphalite japonaise", note: "Zones rurales, saison des pluies" },
+      { type: "conseille", name: "Méningite ACWY", note: "Zones de pèlerinage (Hajj, Kumbh Mela)" }
+    ],
+    malaria: { present: true, zones: ["Odisha", "Chhattisgarh", "Jharkhand", "Rajasthan rural", "Nord-Est"], treatment: "Atovaquone-Proguanil (résistances à la chloroquine)" },
+    stats: { vaccinsObligatoires: 0, vaccinsRecomm: 4, alertes: 3 }
+  },
+  "Kenya": {
+    flag: "🇰🇪",
+    region: "Afrique de l'Est",
+    climate: "Tropical d'altitude",
+    risk: "high",
+    riskLabel: "Risque élevé",
+    riskDesc: "Fièvre jaune, paludisme hors altitude, risques vectoriels multiples",
+    vaccines: [
+      { type: "obligatoire", name: "Fièvre jaune", note: "Obligatoire à l'entrée du territoire" },
+      { type: "recommande", name: "Hépatite A", note: "Recommandé pour tous" },
+      { type: "recommande", name: "Typhoïde", note: "Eau et alimentation" },
+      { type: "recommande", name: "Méningite ACWY", note: "Ceinture de méningite" },
+      { type: "conseille", name: "Rage", note: "Zones rurales, contacts avec animaux" }
+    ],
+    malaria: { present: true, zones: ["Côte kényane", "Lac Victoria", "Zones rurales <2500m", "Mombasa et périphérie"], treatment: "Atovaquone-Proguanil ou Méfloquine" },
+    stats: { vaccinsObligatoires: 1, vaccinsRecomm: 3, alertes: 3 }
+  },
+  "Mexique": {
+    flag: "🇲🇽",
+    region: "Amérique centrale",
+    climate: "Tropical / Aride selon régions",
+    risk: "medium",
+    riskLabel: "Risque modéré",
+    riskDesc: "Dengue et paludisme dans certaines zones, risques alimentaires",
+    vaccines: [
+      { type: "recommande", name: "Hépatite A", note: "Recommandé pour tous" },
+      { type: "recommande", name: "Typhoïde", note: "Zones rurales et nourriture de rue" },
+      { type: "conseille", name: "Hépatite B", note: "Séjour prolongé" },
+      { type: "conseille", name: "Rage", note: "Zones rurales, contact avec animaux" }
+    ],
+    malaria: { present: true, zones: ["Chiapas", "Oaxaca rural", "Sinaloa côtier", "Nayarit"], treatment: "Chloroquine (zones rurales)" },
+    stats: { vaccinsObligatoires: 0, vaccinsRecomm: 2, alertes: 2 }
+  },
+  "Vietnam": {
+    flag: "🇻🇳",
+    region: "Asie du Sud-Est",
+    climate: "Tropical humide",
+    risk: "medium",
+    riskLabel: "Risque modéré",
+    riskDesc: "Paludisme dans les hauts plateaux, dengue urbaine",
+    vaccines: [
+      { type: "recommande", name: "Hépatite A", note: "Recommandé pour tous" },
+      { type: "recommande", name: "Typhoïde", note: "Eau et alimentation locale" },
+      { type: "recommande", name: "Rage", note: "Zones rurales, nombreux chiens errants" },
+      { type: "conseille", name: "Encéphalite japonaise", note: "Zones rizicoles rurales" },
+      { type: "conseille", name: "Hépatite B", note: "Séjour prolongé" }
+    ],
+    malaria: { present: true, zones: ["Hauts Plateaux du Centre", "Dak Lak", "Gia Lai", "Kon Tum", "Zones frontalières"], treatment: "Atovaquone-Proguanil ou Doxycycline" },
+    stats: { vaccinsObligatoires: 0, vaccinsRecomm: 3, alertes: 2 }
+  },
+  "Sénégal": {
+    flag: "🇸🇳",
+    region: "Afrique de l'Ouest",
+    climate: "Sahélien / Tropical",
+    risk: "high",
+    riskLabel: "Risque élevé",
+    riskDesc: "Fièvre jaune, paludisme généralisé, risques vectoriels importants",
+    vaccines: [
+      { type: "obligatoire", name: "Fièvre jaune", note: "Obligatoire à l'entrée" },
+      { type: "recommande", name: "Méningite ACWY", note: "Ceinture méningitique subsaharienne" },
+      { type: "recommande", name: "Hépatite A", note: "Recommandé pour tous" },
+      { type: "recommande", name: "Typhoïde", note: "Eau et alimentation" },
+      { type: "conseille", name: "Rage", note: "Zones rurales" }
+    ],
+    malaria: { present: true, zones: ["Tout le territoire (sauf Dakar urbain)", "Casamance", "Bassins fluviaux"], treatment: "Atovaquone-Proguanil ou Méfloquine" },
+    stats: { vaccinsObligatoires: 1, vaccinsRecomm: 3, alertes: 3 }
+  }
+};
+
+let currentCountry = null;
+
+function searchCountry() {
+  const input = document.getElementById('countryInput').value.trim();
+  if (input) loadCountry(input);
+}
+
+document.getElementById('countryInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') searchCountry();
+});
+
+function loadCountry(name) {
+  document.getElementById('countryInput').value = name;
+  currentCountry = name;
+
+  const data = COUNTRY_DATA[name];
+  if (!data) {
+    showUnknownCountry(name);
+    return;
+  }
+
+  renderResults(name, data);
+}
+
+function showUnknownCountry(name) {
+  document.getElementById('resultsSection').innerHTML = `
+    <div class="card">
+      <div class="placeholder-state">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.3" style="color: var(--amber-light)">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 8v4m0 4h.01"/>
+        </svg>
+        <h3>Pays non trouvé dans la base locale</h3>
+        <p>Utilisez l'analyse IA ci-dessous pour générer des recommandations pour <strong>${name}</strong>.</p>
+        <button class="btn-ai" style="margin-top: 16px; max-width: 300px;" onclick="runAIOnly('${name}')">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+          Analyser avec l'IA
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderResults(name, data) {
+  const vaccineHTML = data.vaccines.map(v => `
+    <div class="vaccine-item">
+      <span class="vaccine-badge ${v.type}">${v.type}</span>
+      <div>
+        <div class="vaccine-name">${v.name}</div>
+        <div class="vaccine-note">${v.note}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const malariaHTML = data.malaria.present ? `
+    <div class="malaria-zones">
+      ${data.malaria.zones.map(z => `
+        <div class="zone-item">
+          <div class="zone-color" style="background: #b91c1c;"></div>
+          <div class="zone-name">${z}</div>
+          <span class="zone-pill" style="background: var(--red-light); color: var(--red);">Risque</span>
+        </div>
+      `).join('')}
+    </div>
+    <div style="margin-top: 12px; padding: 10px 12px; background: var(--amber-light); border-radius: 6px; border: 1px solid #ecd78a;">
+      <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--amber); letter-spacing: 0.5px; margin-bottom: 3px;">Prophylaxie recommandée</div>
+      <div style="font-size: 13px;">${data.malaria.treatment}</div>
+    </div>
+  ` : `
+    <div style="display: flex; align-items: center; gap: 8px; padding: 12px; background: var(--green-light); border-radius: 6px; border: 1px solid #a7d9bc;">
+      <svg width="16" height="16" fill="none" stroke="${data.malaria.present ? 'red' : '#1a7a45'}" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      <span style="font-size: 13px; color: var(--green); font-weight: 500;">Pas de risque paludéen sur cette destination</span>
+    </div>
+  `;
+
+  document.getElementById('resultsSection').innerHTML = `
+    <div class="country-header">
+      <span class="country-flag">${data.flag}</span>
+      <div>
+        <div class="country-name">${name}</div>
+        <div class="country-meta">${data.region} · ${data.climate}</div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" style="color: var(--red)">${data.stats.vaccinsObligatoires}</div>
+        <div class="stat-label">Vaccin(s) obligatoire(s)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: var(--amber)">${data.stats.vaccinsRecomm}</div>
+        <div class="stat-label">Vaccin(s) recommandé(s)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color: var(--blue)">${data.stats.alertes}</div>
+        <div class="stat-label">Points de vigilance</div>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="results-left">
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon teal">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div class="card-title">Niveau de risque sanitaire</div>
+              <div class="card-sub">Évaluation globale destination</div>
+            </div>
+          </div>
+          <div class="risk-banner ${data.risk}">
+            <div class="risk-dot"></div>
+            <div>
+              <div class="risk-label">${data.riskLabel}</div>
+              <div class="risk-desc">${data.riskDesc}</div>
+            </div>
+          </div>
+          <div class="source-note">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+            Source : Institut Pasteur · Ministère de la Santé · OMS
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon amber">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div>
+              <div class="card-title">Vaccinations</div>
+              <div class="card-sub">${data.vaccines.length} vaccins référencés</div>
+            </div>
+          </div>
+          ${vaccineHTML}
+        </div>
+
+      </div>
+
+      <div class="results-right">
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon red">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            </div>
+            <div>
+              <div class="card-title">Paludisme</div>
+              <div class="card-sub">${data.malaria.present ? 'Zones à risque identifiées' : 'Aucune zone à risque'}</div>
+            </div>
+          </div>
+          ${malariaHTML}
+        </div>
+
+        <div class="card ai-panel">
+          <div class="ai-header">
+            <div style="flex: 1;">
+              <div class="card-title">Analyse IA — Conseils pharmacien</div>
+              <div class="card-sub">Personnalisée selon le profil du patient</div>
+            </div>
+            <div class="ai-badge">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+              IA
+            </div>
+          </div>
+
+          <div class="patient-select-wrap">
+            <label>Patient concerné (optionnel)</label>
+            <select id="patientSelect">
+              <option value="">— Conseil général sans patient —</option>
+              <option value="p1">Martin, Jean-Pierre (42 ans) — Asthme, Metformine</option>
+              <option value="p2">Dubois, Marie (67 ans) — HTA, Anticoagulants</option>
+              <option value="p3">Ahmed, Karim (28 ans) — Aucune pathologie connue</option>
+            </select>
+          </div>
+
+          <div id="aiResult">
+            <button class="btn-ai" onclick="runAI('${name}')">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+              Générer l'analyse IA
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  `;
+}
+
+async function runAIOnly(countryName) {
+  const btn = document.querySelector('.btn-ai');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> Analyse en cours...'; }
+
+  await callAI(countryName, null);
+}
+
+async function runAI(countryName) {
+  const patientSelect = document.getElementById('patientSelect');
+  const patientValue = patientSelect ? patientSelect.value : '';
+  const patientLabel = patientSelect && patientValue ? patientSelect.options[patientSelect.selectedIndex].text : null;
+
+  const resultDiv = document.getElementById('aiResult');
+  resultDiv.innerHTML = `<div style="display:flex;align-items:center;gap:10px;padding:16px;color:var(--text-muted);font-size:13px;">
+    <div class="spinner spin-dark"></div> Analyse en cours...
+  </div>`;
+
+  await callAI(countryName, patientLabel);
+}
+
+async function callAI(countryName, patientLabel) {
+  const data = COUNTRY_DATA[countryName];
+  const vaccineList = data ? data.vaccines.map(v => `${v.name} (${v.type})`).join(', ') : 'données non disponibles localement';
+  const malariaInfo = data ? (data.malaria.present ? `Paludisme présent dans : ${data.malaria.zones.join(', ')}. Traitement : ${data.malaria.treatment}` : 'Pas de risque paludéen') : '';
+
+  const patientContext = patientLabel 
+    ? `\n\nPROFIL PATIENT : ${patientLabel}. Adapte tes conseils selon ce profil (interactions médicamenteuses possibles, contre-indications, précautions particulières).`
+    : '\n\nAucun patient spécifique sélectionné — donne des conseils généraux pour un pharmacien.';
+
+  const prompt = `Tu es pharmacien expert en médecine des voyages. Génère une analyse clinique concise pour la destination ${countryName}.
+
+DONNÉES DE BASE :
+- Vaccins référencés : ${vaccineList}
+- Paludisme : ${malariaInfo}
+- Niveau de risque : ${data ? data.riskLabel : 'à évaluer'}
+${patientContext}
+
+Réponds en JSON strict (pas de markdown, pas de backticks) avec cette structure :
+{
+  "resume": "2 phrases de synthèse clinique",
+  "points_vigilance": ["point 1", "point 2", "point 3"],
+  "conseils_officine": ["conseil pratique 1", "conseil pratique 2", "conseil pratique 3"],
+  "medications_voyage": ["médicament/produit 1 à proposer", "médicament/produit 2"],
+  "avertissement_patient": "1 phrase d'alerte principale à communiquer au patient"
+}`;
+
+  try {
+    const response = await fetch('/api/analyze-ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 900
+      })
+    });
+
+    const raw = await response.json();
+    let text = '';
+
+    if (raw.content && raw.content[0]) {
+      text = raw.content[0].text || '';
+    } else if (raw.choices && raw.choices[0]) {
+      text = raw.choices[0].message?.content || '';
+    }
+
+    const clean = text.replace(/```json|```/g, '').trim();
+    let parsed;
+    try { parsed = JSON.parse(clean); }
+    catch { parsed = null; }
+
+    renderAIResult(parsed, text);
+
+  } catch (err) {
+    const resultDiv = document.getElementById('aiResult');
+    if (resultDiv) {
+      resultDiv.innerHTML = `
+        <div style="padding: 14px; background: var(--red-light); border-radius: 6px; font-size: 13px; color: var(--red);">
+          Erreur lors de l'analyse IA. Vérifiez la connexion au proxy /api/analyze-ai.
+        </div>
+        <button class="btn-ai" style="margin-top:10px;" onclick="runAI('${countryName}')">Réessayer</button>
+      `;
+    }
+  }
+}
+
+function renderAIResult(parsed, rawText) {
+  const resultDiv = document.getElementById('aiResult');
+  if (!resultDiv) return;
+
+  if (!parsed) {
+    resultDiv.innerHTML = `
+      <div class="ai-content">
+        <pre style="font-size: 12px; white-space: pre-wrap; color: var(--text);">${rawText}</pre>
+      </div>
+    `;
+    return;
+  }
+
+  const vigilanceHTML = (parsed.points_vigilance || []).map(p => `
+    <div class="ai-alert warning">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>${p}</span>
+    </div>
+  `).join('');
+
+  const conseilsHTML = (parsed.conseils_officine || []).map(c => `
+    <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+      <svg width="14" height="14" fill="none" stroke="var(--teal)" stroke-width="2.5" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:2px"><polyline points="20 6 9 17 4 12"/></svg>
+      <span style="font-size: 13px;">${c}</span>
+    </div>
+  `).join('');
+
+  const medsHTML = (parsed.medications_voyage || []).map(m => `
+    <span style="display:inline-block;padding:4px 10px;background:var(--teal-light);color:var(--teal);border-radius:4px;font-size:12px;font-weight:600;margin:3px 3px 0 0;">${m}</span>
+  `).join('');
+
+  resultDiv.innerHTML = `
+    <div class="ai-content">
+      <div class="ai-section">
+        <div class="ai-section-title">Synthèse clinique</div>
+        <p>${parsed.resume || ''}</p>
+      </div>
+
+      ${parsed.avertissement_patient ? `
+        <div class="ai-alert danger" style="margin-bottom: 12px;">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span><strong>À communiquer au patient :</strong> ${parsed.avertissement_patient}</span>
+        </div>
+      ` : ''}
+
+      <div class="ai-section">
+        <div class="ai-section-title">Points de vigilance</div>
+        ${vigilanceHTML}
+      </div>
+
+      <div class="ai-section">
+        <div class="ai-section-title">Conseils officine</div>
+        ${conseilsHTML}
+      </div>
+
+      <div class="ai-section">
+        <div class="ai-section-title">Médicaments à proposer</div>
+        <div>${medsHTML}</div>
+      </div>
+    </div>
+
+    <div class="source-note" style="margin-top: 14px;">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+      Analyse générée par IA — à valider par le pharmacien
+    </div>
+  `;
+}
+</script>
+</body>
+</html>
