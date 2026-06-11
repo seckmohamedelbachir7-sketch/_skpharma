@@ -113,6 +113,7 @@
       <div class="nav-link" onclick="showPage('interactions',this)">⚠️ Interactions</div>
       <div class="nav-link" onclick="showPage('bilan',this)">📋 Bilan de médication</div>
       <div class="nav-link" onclick="showPage('crat',this)">🤰 CRAT</div>
+      <div class="nav-link" onclick="showPage('voyage',this)">✈️ Conseils Voyage</div>
     </div>
     <div class="nav-spacer"></div>
     <div class="nav-user">
@@ -278,7 +279,7 @@
       </div>
       <div id="trash-list"><div class="loading">Chargement…</div></div>
     </div>
-    
+
     <!-- POSOLOGIES ADAPTÉES -->
     <div class="page" id="page-posologie-adaptee">
       <div class="page-header">
@@ -321,7 +322,7 @@
       </div>
       <div id="posologie-adaptee-result"></div>
     </div>
-    
+
     <!-- DURÉES DE TRAITEMENT -->
     <div class="page" id="page-durees">
       <div class="page-header">
@@ -333,7 +334,7 @@
       </div>
       <div id="durees-result"></div>
     </div>
-    
+
     <!-- INTERACTIONS -->
     <div class="page" id="page-interactions">
       <div class="page-header">
@@ -355,7 +356,7 @@
       </div>
       <div id="interactions-result"></div>
     </div>
-    
+
     <!-- BILAN DE MÉDICATION -->
     <div class="page" id="page-bilan">
       <div class="page-header">
@@ -385,23 +386,19 @@
       </div>
       <div id="bilan-result"></div>
     </div>
-    
+
     <!-- CRAT -->
     <div class="page" id="page-crat">
       <div class="page-header">
         <div class="page-title">🤰 CRAT — Agents Tératogènes</div>
         <div style="font-size:12px;color:var(--text-muted)">Risques médicamenteux — Grossesse · Allaitement · Fertilité</div>
       </div>
-
-      <!-- Onglets CRAT -->
       <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
         <button id="crat-tab-grossesse" class="btn btn-primary btn-sm" onclick="switchCratTab('grossesse')">🤰 Grossesse</button>
         <button id="crat-tab-allaitement" class="btn btn-ghost btn-sm" onclick="switchCratTab('allaitement')">🍼 Allaitement</button>
         <button id="crat-tab-fertilite" class="btn btn-ghost btn-sm" onclick="switchCratTab('fertilite')">👨 Fertilité</button>
         <button id="crat-tab-exposition" class="btn btn-ghost btn-sm" onclick="switchCratTab('exposition')">☢️ Exposition accidentelle</button>
       </div>
-
-      <!-- Formulaire commun -->
       <div class="card" style="margin-bottom:16px">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
           <div class="form-group">
@@ -423,8 +420,8 @@
       </div>
       <div id="crat-result"></div>
     </div>
-    
-    <!-- AVIS CLIENTS -->
+
+    <!-- ANTIBIOTIQUES -->
     <div class="page" id="page-antibio">
       <div class="page-header">
         <div class="page-title">🦠 Aide à l'antibiothérapie</div>
@@ -435,6 +432,8 @@
       </div>
       <div id="antibio-result"></div>
     </div>
+
+    <!-- AVIS CLIENTS -->
     <div class="page" id="page-avis">
       <div class="page-header">
         <div>
@@ -442,8 +441,6 @@
           <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Notes et commentaires de vos patients</div>
         </div>
       </div>
-
-      <!-- Lien public à partager -->
       <div class="avis-link-box">
         <div style="flex:1">
           <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:5px;letter-spacing:0.05em">🔗 LIEN À PARTAGER AUX CLIENTS</div>
@@ -455,9 +452,17 @@
           setTimeout(()=>this.textContent='Copier le lien',2000)
         ">Copier le lien</button>
       </div>
-
       <div id="avis-stats"></div>
       <div id="avis-list"><div class="loading">Chargement…</div></div>
+    </div>
+
+    <!-- CONSEILS VOYAGE -->
+    <div class="page" id="page-voyage">
+      <iframe
+        src="voyage.html"
+        style="width:100%;height:calc(100vh - 60px);border:none;display:block;"
+        title="Conseils Voyage"
+      ></iframe>
     </div>
 
   </div>
@@ -689,7 +694,7 @@
       <button class="modal-close" onclick="closeModal('confirm-trash')">×</button>
     </div>
     <div class="modal-body">
-      <div style="background:var(--red-pale);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px">
+      <div style="background:var(--red-pale);border:1px solid var(--red);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px">
         <div style="font-weight:600;color:var(--red);margin-bottom:4px" id="confirm-trash-name">—</div>
         <div style="font-size:12px;color:var(--text-muted)" id="confirm-trash-meta">—</div>
       </div>
@@ -823,9 +828,9 @@
 <script src="js/antibio.js"></script>
 <script src="js/posologie-adaptee.js"></script>
 <script src="js/durees.js"></script>
-<script src="js/interactions.js"></script>  
+<script src="js/interactions.js"></script>
 <script src="js/bilan.js"></script>
 <script src="js/crat.js"></script>
-  
+
 </body>
 </html>
