@@ -114,7 +114,7 @@
       <div class="nav-link" onclick="showPage('bilan',this)">📋 Bilan de médication</div>
       <div class="nav-link" onclick="showPage('crat',this)">🤰 CRAT</div>
       <div class="nav-link" onclick="showPage('voyage',this)">✈️ Conseils Voyage</div>
-      <div class="nav-link" onclick="showPage('eligibilite', this)">🎯 Éligibilité</div>
+      <div class="nav-link" onclick="showPage('eligibilite',this)">🎯 Éligibilité</div>
     </div>
     <div class="nav-spacer"></div>
     <div class="nav-user">
@@ -229,7 +229,8 @@
     <div class="page" id="page-entretiens">
       <div class="page-header">
         <div class="page-title">Entretiens pharmaceutiques</div>
-        <button class="btn btn-primary" onclick="openModal('add-entretien')">+ Nouvel entretien</button>
+        <!-- CORRECTION : openAddEntretien() au lieu de openModal() directement -->
+        <button class="btn btn-primary" onclick="openAddEntretien()">+ Nouvel entretien</button>
       </div>
       <div class="search-row"><input class="search-input" type="text" placeholder="Rechercher par patient, type d'entretien…" oninput="filterEntretiens(this.value)"/></div>
       <div class="entretien-stats" id="entretien-stats"></div>
@@ -289,33 +290,17 @@
       </div>
       <div class="card" style="margin-bottom:16px">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
-          <div class="form-group">
-            <label class="form-label">Médicament *</label>
-            <input class="form-input" id="pa-medicament" placeholder="Amoxicilline, Metformine…"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Poids (kg)</label>
-            <input class="form-input" type="number" id="pa-poids" placeholder="70"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">DFG / Clairance créatinine (ml/min)</label>
-            <input class="form-input" type="number" id="pa-dfg" placeholder="90"/>
-          </div>
+          <div class="form-group"><label class="form-label">Médicament *</label><input class="form-input" id="pa-medicament" placeholder="Amoxicilline, Metformine…"/></div>
+          <div class="form-group"><label class="form-label">Poids (kg)</label><input class="form-input" type="number" id="pa-poids" placeholder="70"/></div>
+          <div class="form-group"><label class="form-label">DFG / Clairance créatinine (ml/min)</label><input class="form-input" type="number" id="pa-dfg" placeholder="90"/></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-          <div class="form-group">
-            <label class="form-label">Age (ans)</label>
-            <input class="form-input" type="number" id="pa-age" placeholder="65"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Contexte particulier</label>
+          <div class="form-group"><label class="form-label">Age (ans)</label><input class="form-input" type="number" id="pa-age" placeholder="65"/></div>
+          <div class="form-group"><label class="form-label">Contexte particulier</label>
             <select class="form-input" id="pa-contexte">
               <option value="">— Aucun —</option>
-              <option>Grossesse</option>
-              <option>Allaitement</option>
-              <option>Insuffisance hépatique</option>
-              <option>Sujet âgé > 75 ans</option>
-              <option>Pédiatrie</option>
+              <option>Grossesse</option><option>Allaitement</option>
+              <option>Insuffisance hépatique</option><option>Sujet âgé > 75 ans</option><option>Pédiatrie</option>
             </select>
           </div>
         </div>
@@ -328,11 +313,9 @@
     <div class="page" id="page-durees">
       <div class="page-header">
         <div class="page-title">⏱ Durées de traitement</div>
-        <div style="font-size:12px;color:var(--text-muted)">Recommandations ANSM/HAS — Durées optimales selon l'infection et le terrain</div>
+        <div style="font-size:12px;color:var(--text-muted)">Recommandations ANSM/HAS</div>
       </div>
-      <div class="search-row">
-        <input class="search-input" type="text" id="durees-search" placeholder="Ex: pneumonie, cystite, angine, otite…" oninput="searchDurees(this.value)"/>
-      </div>
+      <div class="search-row"><input class="search-input" type="text" id="durees-search" placeholder="Ex: pneumonie, cystite, angine, otite…" oninput="searchDurees(this.value)"/></div>
       <div id="durees-result"></div>
     </div>
 
@@ -344,14 +327,8 @@
       </div>
       <div class="card" style="margin-bottom:16px">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-          <div class="form-group">
-            <label class="form-label">Médicament 1 *</label>
-            <input class="form-input" id="inter-med1" placeholder="Ex: Metformine"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Médicament 2 *</label>
-            <input class="form-input" id="inter-med2" placeholder="Ex: Ibuprofène"/>
-          </div>
+          <div class="form-group"><label class="form-label">Médicament 1 *</label><input class="form-input" id="inter-med1" placeholder="Ex: Metformine"/></div>
+          <div class="form-group"><label class="form-label">Médicament 2 *</label><input class="form-input" id="inter-med2" placeholder="Ex: Ibuprofène"/></div>
         </div>
         <button class="btn btn-primary" onclick="verifierInteractions()">⚠️ Vérifier les interactions</button>
       </div>
@@ -367,21 +344,12 @@
       <div class="card" style="margin-bottom:16px">
         <div class="form-group">
           <label class="form-label">Liste des médicaments du patient *</label>
-          <textarea class="form-input" id="bilan-meds" rows="4" placeholder="Ex: Metformine 850mg × 2/j, Ramipril 5mg × 1/j, Aspirine 100mg × 1/j, Atorvastatine 40mg × 1/j…" style="resize:vertical"></textarea>
+          <textarea class="form-input" id="bilan-meds" rows="4" placeholder="Ex: Metformine 850mg × 2/j, Ramipril 5mg × 1/j…" style="resize:vertical"></textarea>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
-          <div class="form-group">
-            <label class="form-label">Age (ans)</label>
-            <input class="form-input" type="number" id="bilan-age" placeholder="65"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Pathologies connues</label>
-            <input class="form-input" id="bilan-patho" placeholder="Diabète T2, HTA…"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Allergies</label>
-            <input class="form-input" id="bilan-allergies" placeholder="Pénicilline…"/>
-          </div>
+          <div class="form-group"><label class="form-label">Age (ans)</label><input class="form-input" type="number" id="bilan-age" placeholder="65"/></div>
+          <div class="form-group"><label class="form-label">Pathologies connues</label><input class="form-input" id="bilan-patho" placeholder="Diabète T2, HTA…"/></div>
+          <div class="form-group"><label class="form-label">Allergies</label><input class="form-input" id="bilan-allergies" placeholder="Pénicilline…"/></div>
         </div>
         <button class="btn btn-primary" onclick="analyserBilan()">📋 Analyser le bilan de médication</button>
       </div>
@@ -402,10 +370,7 @@
       </div>
       <div class="card" style="margin-bottom:16px">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-          <div class="form-group">
-            <label class="form-label">Médicament *</label>
-            <input class="form-input" id="crat-medicament" placeholder="Ex: Amoxicilline, Metformine…"/>
-          </div>
+          <div class="form-group"><label class="form-label">Médicament *</label><input class="form-input" id="crat-medicament" placeholder="Ex: Amoxicilline, Metformine…"/></div>
           <div class="form-group" id="crat-extra-field">
             <label class="form-label">Trimestre de grossesse</label>
             <select class="form-input" id="crat-trimestre">
@@ -426,11 +391,9 @@
     <div class="page" id="page-antibio">
       <div class="page-header">
         <div class="page-title">🦠 Aide à l'antibiothérapie</div>
-        <div style="font-size:12px;color:var(--text-muted)">Recommandations ANSM/HAS — Saisir une infection pour obtenir l'antibiotique adapté</div>
+        <div style="font-size:12px;color:var(--text-muted)">Recommandations ANSM/HAS</div>
       </div>
-      <div class="search-row">
-        <input class="search-input" type="text" id="antibio-search" placeholder="Ex: pneumonie, cystite, angine, otite…" oninput="searchAntibio(this.value)"/>
-      </div>
+      <div class="search-row"><input class="search-input" type="text" id="antibio-search" placeholder="Ex: pneumonie, cystite, angine, otite…" oninput="searchAntibio(this.value)"/></div>
       <div id="antibio-result"></div>
     </div>
 
@@ -459,24 +422,22 @@
 
     <!-- CONSEILS VOYAGE -->
     <div class="page" id="page-voyage">
-      <iframe
-        src="voyage.html"
-        style="width:100%;height:calc(100vh - 60px);border:none;display:block;"
-        title="Conseils Voyage"
-      ></iframe>
+      <iframe src="voyage.html" style="width:100%;height:calc(100vh - 60px);border:none;display:block;" title="Conseils Voyage"></iframe>
     </div>
-<!-- ÉLIGIBILITÉ -->
+
+    <!-- ÉLIGIBILITÉ -->
     <div class="page" id="page-eligibilite">
       <div class="page-header">
         <div class="page-title">🎯 Patients éligibles</div>
-        <input class="search-input" style="max-width:300px" 
-          placeholder="Rechercher un patient…" 
+        <input class="search-input" style="max-width:300px"
+          placeholder="Rechercher un patient…"
           oninput="filterEligibilite(this.value)">
       </div>
       <div id="eligibilite-container"></div>
     </div>
-  </div>
-</div>
+
+  </div><!-- fin .main -->
+</div><!-- fin .app-wrap -->
 
 <!-- ============================================================ -->
 <!-- MODALS                                                        -->
@@ -629,7 +590,7 @@
   </div>
 </div>
 
-<!-- MODAL : Entretien pharmaceutique -->
+<!-- MODAL : Entretien pharmaceutique — VERSION COMPLÈTE AVEC TRAMES -->
 <div class="modal-overlay" id="modal-add-entretien">
   <div class="modal" style="max-width:660px">
     <div class="modal-header">
@@ -678,7 +639,7 @@
       </div>
       <div class="form-group">
         <label class="form-label">Observations / Compte-rendu</label>
-        <textarea class="form-input" id="ent-notes" rows="3" 
+        <textarea class="form-input" id="ent-notes" rows="3"
           placeholder="Résumé de l'entretien…" style="resize:vertical"></textarea>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
@@ -712,7 +673,14 @@
     </div>
   </div>
 </div>
-  
+
+<!-- MODAL : Détail entretien -->
+<div class="modal-overlay" id="modal-entretien-detail">
+  <div class="modal" style="max-width:660px">
+    <div id="entretien-detail-content"></div>
+  </div>
+</div>
+
 <!-- MODAL : Confirmer archivage -->
 <div class="modal-overlay" id="modal-confirm-archive">
   <div class="modal" style="max-width:440px">
@@ -864,8 +832,7 @@
 
 <div class="toast" id="toast"></div>
 
-</div>
-<!-- SCRIPTS -->
+<!-- SCRIPTS — ordre important -->
 <script src="data/drugs.js"></script>
 <script src="js/config.js"></script>
 <script src="js/trash-auto.js"></script>
@@ -889,11 +856,6 @@
 <script src="js/crat.js"></script>
 <script src="js/eligibilite.js"></script>
 <script src="js/voice.js"></script>
-  
-  <div class="modal-overlay" id="modal-entretien-detail">
-  <div class="modal" style="max-width:660px">
-    <div id="entretien-detail-content"></div>
-  </div>
-</div>
+
 </body>
 </html>
