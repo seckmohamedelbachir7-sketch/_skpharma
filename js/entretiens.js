@@ -862,5 +862,3 @@ function tryParseJSON(str) {
 
 // Rétrocompatibilité
 function renderStats() { renderEntretienStats(); }
-JSEOF
-echo "Done"
