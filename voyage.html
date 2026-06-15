@@ -367,7 +367,199 @@ const DATA = {
     malaria:{present:true,zones:["Tout le territoire (sauf Dakar urbain)","Casamance","Bassins fluviaux"],treatment:"Atovaquone-Proguanil ou Méfloquine"},
     stats:{oblig:1,recomm:3,alertes:3}
   }
-};
+"Indonésie":{
+    flag:"🇮🇩",region:"Asie du Sud-Est",climate:"Tropical équatorial",
+    lat:-0.8,lng:113.9,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue présente sur tout l'archipel, paludisme hors Bali et Java",
+    vaccines:[
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},
+      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation locale"},
+      {type:"recommande",name:"Rage",note:"Maladie endémique, nombreux animaux errants"},
+      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales et rizicoles"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
+    ],
+    malaria:{present:true,zones:["Papouasie occidentale","Maluku","Nusa Tenggara","Kalimantan rural"],treatment:"Atovaquone-Proguanil ou Doxycycline"},
+    stats:{oblig:0,recomm:3,alertes:2}
+  },
+  "Tanzanie":{
+    flag:"🇹🇿",region:"Afrique de l'Est",climate:"Tropical de savane",
+    lat:-6.4,lng:34.9,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme généralisé, fièvre jaune obligatoire, risques vectoriels majeurs",
+    vaccines:[
+      {type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée du territoire"},
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
+      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
+      {type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique"},
+      {type:"conseille",name:"Rage",note:"Zones rurales et safaris"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
+    ],
+    malaria:{present:true,zones:["Tout le territoire","Zanzibar","Serengeti","Kilimanjaro (zones basses)"],treatment:"Atovaquone-Proguanil ou Méfloquine"},
+    stats:{oblig:1,recomm:3,alertes:3}
+  },
+  "Cambodge":{
+    flag:"🇰🇭",region:"Asie du Sud-Est",climate:"Tropical de mousson",
+    lat:12.6,lng:104.9,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme en zones forestières, dengue présente, risques digestifs importants",
+    vaccines:[
+      {type:"recommande",name:"Hépatite A",note:"Fortement recommandé"},
+      {type:"recommande",name:"Typhoïde",note:"Risque élevé eau/alimentation"},
+      {type:"recommande",name:"Rage",note:"Présence importante de chiens errants"},
+      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales rizicoles"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé ou soins locaux"}
+    ],
+    malaria:{present:true,zones:["Forêts frontières Thaïlande","Province de Mondulkiri","Province de Ratanakiri","Cardamomes"],treatment:"Atovaquone-Proguanil (multi-résistances)"},
+    stats:{oblig:0,recomm:3,alertes:2}
+  },
+  "Pérou":{
+    flag:"🇵🇪",region:"Amérique du Sud",climate:"Tropical / Aride / Andin",
+    lat:-9.2,lng:-75.0,risk:"high",riskLabel:"Risque élevé",riskDesc:"Fièvre jaune en Amazonie, paludisme, altitude extrême à surveiller",
+    vaccines:[
+      {type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire pour accès à la forêt amazonienne"},
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
+      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
+      {type:"recommande",name:"Rage",note:"Zones rurales et Amazonie"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
+    ],
+    malaria:{present:true,zones:["Bassin amazonien","Loreto","Madre de Dios","San Martín"],treatment:"Atovaquone-Proguanil ou Chloroquine selon zone"},
+    stats:{oblig:1,recomm:3,alertes:3}
+  },
+  "Philippines":{
+    flag:"🇵🇭",region:"Asie du Sud-Est",climate:"Tropical maritime",
+    lat:12.9,lng:121.8,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue présente dans tout l'archipel, paludisme dans certaines îles",
+    vaccines:[
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
+      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
+      {type:"recommande",name:"Rage",note:"Endémie de rage — risque réel"},
+      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales agricoles"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
+    ],
+    malaria:{present:true,zones:["Palawan","Mindanao rural","Îles Sulu","Luzon zones forestières"],treatment:"Atovaquone-Proguanil ou Doxycycline"},
+    stats:{oblig:0,recomm:3,alertes:2}
+  },
+  "Ghana":{
+    flag:"🇬🇭",region:"Afrique de l'Ouest",climate:"Tropical humide",
+    lat:7.9,lng:-1.0,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme généralisé, fièvre jaune endémique, risques gastro-intestinaux",
+    vaccines:[
+      {type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée"},
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
+      {type:"recommande",name:"Typhoïde",note:"Eau non potable courante"},
+      {type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique subsaharienne"},
+      {type:"conseille",name:"Rage",note:"Zones rurales"}
+    ],
+    malaria:{present:true,zones:["Tout le territoire","Accra et périphérie","Kumasi","Volta Region"],treatment:"Atovaquone-Proguanil ou Méfloquine"},
+    stats:{oblig:1,recomm:3,alertes:3}
+  },
+  "Turquie":{
+    flag:"🇹🇷",region:"Europe / Moyen-Orient",climate:"Méditerranéen / Continental",
+    lat:38.9,lng:35.2,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination généralement sûre, précautions alimentaires en zones rurales",
+    vaccines:[
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},
+      {type:"recommande",name:"Typhoïde",note:"Zones rurales, nourriture de rue"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"},
+      {type:"conseille",name:"Rage",note:"Zones rurales, nombreux chiens errants"}
+    ],
+    malaria:{present:false},
+    stats:{oblig:0,recomm:2,alertes:1}
+  },
+  "Sri Lanka":{
+    flag:"🇱🇰",region:"Asie du Sud",climate:"Tropical de mousson",
+    lat:7.9,lng:80.7,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue présente, paludisme résiduel au nord, risques digestifs",
+    vaccines:[
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
+      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation locale"},
+      {type:"recommande",name:"Rage",note:"Présente sur tout le territoire"},
+      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales, riziculture"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
+    ],
+    malaria:{present:true,zones:["Province du Nord","Province du Nord-Est","Zones forestières rurales"],treatment:"Chloroquine (sensibilité conservée)"},
+    stats:{oblig:0,recomm:3,alertes:2}
+  },
+  "Madagascar":{
+    flag:"🇲🇬",region:"Afrique / Océan Indien",climate:"Tropical / Semi-aride",
+    lat:-20.2,lng:46.7,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme généralisé, peste bubonique endémique, risques vectoriels multiples",
+    vaccines:[
+      {type:"recommande",name:"Hépatite A",note:"Fortement recommandé"},
+      {type:"recommande",name:"Typhoïde",note:"Eau non fiable, alimentation"},
+      {type:"recommande",name:"Rage",note:"Endémique, nombreux animaux"},
+      {type:"recommande",name:"Méningite ACWY",note:"Zones de rassemblement"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé ou soins locaux"}
+    ],
+    malaria:{present:true,zones:["Côtes Est et Ouest","Hauts Plateaux (risque moindre)","Toliara","Mahajanga"],treatment:"Atovaquone-Proguanil ou Méfloquine"},
+    stats:{oblig:0,recomm:4,alertes:3}
+  },
+  "Égypte":{
+    flag:"🇪🇬",region:"Afrique du Nord / Moyen-Orient",climate:"Désertique / Méditerranéen",
+    lat:26.8,lng:30.8,risk:"low",riskLabel:"Risque faible",riskDesc:"Risques digestifs principaux, ophtalmies, chaleur extrême",
+    vaccines:[
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},
+      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"},
+      {type:"conseille",name:"Rage",note:"Zones rurales, animaux errants"}
+    ],
+    malaria:{present:false},
+    stats:{oblig:0,recomm:2,alertes:1}
+  },
+  "Colombie":{
+    flag:"🇨🇴",region:"Amérique du Sud",climate:"Tropical / Andin",
+    lat:4.6,lng:-74.3,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme dans les basses terres, dengue urbaine, fièvre jaune en forêt",
+    vaccines:[
+      {type:"obligatoire",name:"Fièvre jaune",note:"Recommandé pour zones forestières et rurales"},
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
+      {type:"recommande",name:"Typhoïde",note:"Zones rurales"},
+      {type:"conseille",name:"Rage",note:"Zones rurales et Amazonie"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
+    ],
+    malaria:{present:true,zones:["Côte Pacifique","Chocó","Amazonie colombienne","Orinoquie"],treatment:"Atovaquone-Proguanil ou Chloroquine selon zone"},
+    stats:{oblig:1,recomm:2,alertes:2}
+  },
+  "Népal":{
+    flag:"🇳🇵",region:"Asie du Sud",climate:"Subtropical / Alpin",
+    lat:28.4,lng:84.1,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Mal des montagnes à haute altitude, paludisme en Teraï, rage endémique",
+    vaccines:[
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
+      {type:"recommande",name:"Typhoïde",note:"Risque élevé dans les villes et randonnées"},
+      {type:"recommande",name:"Rage",note:"Endémique — morsures fréquentes de singes et chiens"},
+      {type:"conseille",name:"Encéphalite japonaise",note:"Plaines du Teraï"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
+    ],
+    malaria:{present:true,zones:["Plaines du Teraï","Districts frontaliers Inde"],treatment:"Atovaquone-Proguanil ou Chloroquine"},
+    stats:{oblig:0,recomm:3,alertes:2}
+  },
+  "Éthiopie":{
+    flag:"🇪🇹",region:"Afrique de l'Est",climate:"Tropical d'altitude / Semi-aride",
+    lat:9.1,lng:40.5,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme hors altitude, méningite endémique, risques gastro-intestinaux",
+    vaccines:[
+      {type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée"},
+      {type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique, obligatoire pèlerinage"},
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
+      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
+      {type:"conseille",name:"Rage",note:"Zones rurales"}
+    ],
+    malaria:{present:true,zones:["Zones <2000m d'altitude","Vallée du Rift","Gambela","Bénishangul-Gumuz"],treatment:"Atovaquone-Proguanil ou Méfloquine"},
+    stats:{oblig:1,recomm:3,alertes:3}
+  },
+  "Australie":{
+    flag:"🇦🇺",region:"Océanie",climate:"Tropical / Tempéré / Désertique",
+    lat:-25.3,lng:133.8,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination très sûre, quelques risques naturels (araignées, serpents, UV)",
+    vaccines:[
+      {type:"conseille",name:"Hépatite A",note:"Par précaution pour zones rurales"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé ou soins médicaux"},
+      {type:"conseille",name:"Encéphalite japonaise",note:"Zones humides du nord Queensland"}
+    ],
+    malaria:{present:false},
+    stats:{oblig:0,recomm:0,alertes:1}
+  },
+  "Myanmar":{
+    flag:"🇲🇲",region:"Asie du Sud-Est",climate:"Tropical de mousson",
+    lat:17.1,lng:96.1,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme multi-résistant, dengue, accès aux soins limité",
+    vaccines:[
+      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
+      {type:"recommande",name:"Typhoïde",note:"Risque élevé eau/alimentation"},
+      {type:"recommande",name:"Rage",note:"Présente sur tout le territoire"},
+      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales rizicoles"},
+      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
+    ],
+    malaria:{present:true,zones:["Régions frontalières Thaïlande","Kachin","Shan","Chin","Zones forestières"],treatment:"Atovaquone-Proguanil (résistances artémisinine signalées)"},
+    stats:{oblig:0,recomm:3,alertes:3}
+  },
+  };
 
 const RISK_COLORS = {low:"#0e9e82", medium:"#c47800", high:"#e03c52"};
 const NAMES = Object.keys(DATA);
