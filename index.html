@@ -808,7 +808,16 @@
 </div>
 
 <div class="toast" id="toast"></div>
-
+<!-- Page éligibilité -->
+<div id="page-eligibilite" class="page">
+  <div class="page-header">
+    <h1 class="page-title">Patients éligibles</h1>
+    <input class="form-input" style="max-width:300px" 
+      placeholder="Rechercher un patient…" 
+      oninput="filterEligibilite(this.value)">
+  </div>
+  <div id="eligibilite-container"></div>
+</div>
 <!-- SCRIPTS -->
 <script src="data/drugs.js"></script>
 <script src="js/config.js"></script>
