@@ -631,35 +631,80 @@
 
 <!-- MODAL : Entretien pharmaceutique -->
 <div class="modal-overlay" id="modal-add-entretien">
-  <div class="modal" style="max-width:600px">
-    <div class="modal-header"><div class="modal-title">Nouvel entretien pharmaceutique</div><button class="modal-close" onclick="closeModal('add-entretien')">×</button></div>
-    <div class="modal-body">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="form-group"><label class="form-label">Patient *</label><input class="form-input" id="ent-patient" placeholder="Nom du patient" list="ent-patients-list"/><datalist id="ent-patients-list"></datalist></div>
-        <div class="form-group"><label class="form-label">Date *</label><input class="form-input" type="date" id="ent-date"/></div>
-      </div>
-      <div class="form-group"><label class="form-label">Type d'entretien *</label>
-        <select class="form-input" id="ent-type">
-          <option value="">— Choisir —</option>
-          <option>Asthme — Primo-entretien</option><option>Asthme — Entretien de suivi</option>
-          <option>Anticoagulants AVK — Primo-entretien</option><option>Anticoagulants AVK — Suivi</option>
-          <option>Anticoagulants AOD — Primo-entretien</option><option>Anticoagulants AOD — Suivi</option>
-          <option>Insuffisance cardiaque — Entretien</option><option>Diabète — Entretien éducatif</option>
-          <option>Sevrage tabagique</option><option>Bilan partagé de médication (BPM)</option>
-          <option>Accompagnement chimiothérapie orale</option>
-        </select>
-      </div>
-      <div class="form-group"><label class="form-label">Durée (minutes)</label>
-        <select class="form-input" id="ent-duree"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">1h</option></select>
-      </div>
-      <div class="form-group"><label class="form-label">Observations / Compte-rendu</label><textarea class="form-input" id="ent-notes" rows="3" placeholder="Résumé de l'entretien…" style="resize:vertical"></textarea></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="form-group"><label class="form-label">Statut facturation</label>
-          <select class="form-input" id="ent-facturation"><option>Non facturé</option><option>Facturé Assurance Maladie</option><option>Facturé mutuelle</option><option>Non facturable</option></select>
+  <div class="modal" style="max-width:660px">
+    <div class="modal-header">
+      <div class="modal-title">Nouvel entretien pharmaceutique</div>
+      <button class="modal-close" onclick="closeModal('add-entretien')">×</button>
+    </div>
+    <div class="modal-body" style="max-height:75vh;overflow-y:auto">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px">
+        <div class="form-group">
+          <label class="form-label">Patient *</label>
+          <input class="form-input" id="ent-patient" placeholder="Nom du patient" list="ent-patients-list"/>
+          <datalist id="ent-patients-list"></datalist>
         </div>
-        <div class="form-group"><label class="form-label">Montant (€)</label><input class="form-input" type="number" id="ent-montant" placeholder="0.00" step="0.01"/></div>
+        <div class="form-group">
+          <label class="form-label">Date *</label>
+          <input class="form-input" type="date" id="ent-date"/>
+        </div>
       </div>
-      <div class="form-group"><label class="form-label">Prochain entretien</label><input class="form-input" type="date" id="ent-prochain"/></div>
+      <input type="hidden" id="ent-type-hidden"/>
+      <input type="hidden" id="ent-code-acte"/>
+      <div class="form-group">
+        <label class="form-label">Type d'entretien *</label>
+        <div id="ent-type-selector"></div>
+      </div>
+      <div id="ent-trame-container"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+        <div class="form-group">
+          <label class="form-label">Durée (minutes)</label>
+          <select class="form-input" id="ent-duree">
+            <option value="15">15 min</option>
+            <option value="30" selected>30 min</option>
+            <option value="45">45 min</option>
+            <option value="60">1h</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Statut</label>
+          <select class="form-input" id="ent-statut">
+            <option value="planifie">Planifié</option>
+            <option value="en_cours">En cours</option>
+            <option value="realise" selected>Réalisé</option>
+            <option value="facture">Facturé</option>
+            <option value="annule">Annulé</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Observations / Compte-rendu</label>
+        <textarea class="form-input" id="ent-notes" rows="3" 
+          placeholder="Résumé de l'entretien…" style="resize:vertical"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div class="form-group">
+          <label class="form-label">Facturation</label>
+          <select class="form-input" id="ent-facturation">
+            <option>Non facturé</option>
+            <option>Facturé Assurance Maladie</option>
+            <option>Facturé mutuelle</option>
+            <option>Non facturable</option>
+            <option>En attente paiement</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Montant (€)</label>
+          <input class="form-input" type="number" id="ent-montant" placeholder="0.00" step="0.01"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pharmacien</label>
+          <input class="form-input" id="ent-pharmacien" placeholder="Nom du pharmacien"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Prochain entretien</label>
+        <input class="form-input" type="date" id="ent-prochain"/>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('add-entretien')">Annuler</button>
@@ -667,7 +712,7 @@
     </div>
   </div>
 </div>
-
+  
 <!-- MODAL : Confirmer archivage -->
 <div class="modal-overlay" id="modal-confirm-archive">
   <div class="modal" style="max-width:440px">
@@ -843,6 +888,11 @@
 <script src="js/bilan.js"></script>
 <script src="js/crat.js"></script>
 <script src="js/eligibilite.js"></script>
-  
+
+  <div class="modal-overlay" id="modal-entretien-detail">
+  <div class="modal" style="max-width:660px">
+    <div id="entretien-detail-content"></div>
+  </div>
+</div>
 </body>
 </html>
