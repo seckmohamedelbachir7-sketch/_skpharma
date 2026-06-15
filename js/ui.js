@@ -15,6 +15,7 @@ function showPage(name, el) {
   if (name === 'pathologies') loadPathologiesGlobales();
   if (name === 'entretiens') loadEntretiens();
   if (name === 'posologies') loadPosologiesGlobales();
+  if (name === 'eligibilite') detecterPatientsEligibles();
 }
 
 function switchTab(tab) {
