@@ -446,6 +446,7 @@ function renderTrame(typeKey) {
   if (!t) { container.innerHTML = ''; return; }
 
   container.innerHTML = `
+    ${typeof renderVoiceAssistantButton === 'function' ? renderVoiceAssistantButton() : ''}
     <div style="background:${t.colorPale};border:1px solid ${t.color}33;border-radius:10px;padding:14px 16px;margin-top:8px">
       <div style="font-size:12px;font-weight:700;color:${t.color};margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em">
         ${t.icon} Trame — ${t.label}
