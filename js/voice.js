@@ -468,12 +468,18 @@ function updateVoiceTranscriptDisplay(text) {
 // ============================================================
 // HOOK : injecter les micros après sélection du type
 // ============================================================
-// Surcharge de selectEntretienType pour ajouter les micros automatiquement
-const _origSelectEntretienType = typeof selectEntretienType === 'function'
-  ? selectEntretienType : null;
+// Surcharge de selectEntretienType pour ajouter les micros automatiquement.
+// IMPORTANT : on utilise window.selectEntretienType explicitement pour éviter
+// que le hoisting d'une déclaration "function selectEntretienType" plus bas
+// dans ce même fichier ne capture la nouvelle fonction au lieu de l'originale
+// (ce qui provoquait une récursion infinie / Maximum call stack size exceeded).
+(function patchSelectEntretienType() {
+  const original = window.selectEntretienType;
+  if (typeof original !== 'function') return; // entretiens.js pas encore chargé
 
-function selectEntretienType(typeKey) {
-  if (_origSelectEntretienType) _origSelectEntretienType(typeKey);
-  // Injecter micros sur les champs de la trame après rendu
-  setTimeout(() => injectVoiceOnTrame(typeKey), 400);
-}
+  window.selectEntretienType = function(typeKey) {
+    original(typeKey);
+    // Injecter micros sur les champs de la trame après rendu
+    setTimeout(() => injectVoiceOnTrame(typeKey), 400);
+  };
+})();
