@@ -437,6 +437,202 @@ function selectEntretienType(typeKey) {
 
   // Afficher la trame
   renderTrame(typeKey);
+
+  // Charger et afficher les posologies du patient pour ce type d'entretien
+  loadPosologiesForEntretien(typeKey);
+}
+
+// ============================================================
+// POSOLOGIES — Contexte patient + pré-remplissage trame
+// ============================================================
+
+// Mots-clés par type d'entretien pour repérer les posologies pertinentes
+const POSOLOGIE_KEYWORDS = {
+  "AVK":              ["warfarine","coumadine","previscan","sintrom","acenocoumarol","fluindione"],
+  "AOD":               ["xarelto","eliquis","pradaxa","lixiana","rivaroxaban","apixaban","dabigatran","edoxaban"],
+  "Asthme":            ["fostair","symbicort","seretide","ventoline","beclometasone","fluticasone","budesonide","salmeterol","formoterol","salbutamol"],
+  "Opioides":          ["morphine","oxycodone","oxycontin","fentanyl","hydromorphone","buprenorphine","tramadol","codeine"],
+  "Diabete":           ["metformine","glucophage","insuline","lantus","jardiance","ozempic","victoza","glipizide","gliclazide","amaryl"],
+  "Grossesse":         ["acide folique","progesterone","utrogestan","duphaston"],
+  "Bilan_medication":  [], // tous les médicaments sont pertinents
+  "Bilan_prevention":  []
+};
+
+async function loadPosologiesForEntretien(typeKey) {
+  const container = document.getElementById('ent-trame-container');
+  if (!container) return;
+
+  const patientNom = document.getElementById('ent-patient')?.value.trim();
+  if (!patientNom) return; // pas de patient saisi encore, rien à charger
+
+  // Conteneur dédié pour le bandeau posologies (inséré juste avant la trame)
+  let posoZone = document.getElementById('ent-posologies-context');
+  if (!posoZone) {
+    posoZone = document.createElement('div');
+    posoZone.id = 'ent-posologies-context';
+    container.prepend(posoZone);
+  }
+  posoZone.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);padding:8px 0">
+    <div style="width:12px;height:12px;border:2px solid rgba(14,158,130,0.2);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite"></div>
+    Recherche des posologies du patient…
+  </div>`;
+
+  try {
+    // Trouver le patient par nom (correspondance insensible à la casse)
+    const { data: patients, error: errP } = await sb
+      .from('patients')
+      .select('id, name')
+      .eq('pharmacist_id', currentUser.id)
+      .ilike('name', patientNom);
+
+    if (errP || !patients || !patients.length) {
+      posoZone.innerHTML = '';
+      return; // patient non trouvé en base (peut être un nouveau patient) — silencieux
+    }
+
+    const patientId = patients[0].id;
+
+    const { data: posologies, error: errPos } = await sb
+      .from('posologies')
+      .select('medicament, dosage, frequence, voie, statut, conditions_prise, effets_surveiller')
+      .eq('patient_id', patientId)
+      .eq('pharmacist_id', currentUser.id)
+      .eq('statut', 'En cours');
+
+    if (errPos) { posoZone.innerHTML = ''; return; }
+
+    renderPosologiesContext(posologies || [], typeKey, posoZone);
+    prefillTrameFromPosologies(posologies || [], typeKey);
+
+  } catch (err) {
+    posoZone.innerHTML = '';
+  }
+}
+
+function renderPosologiesContext(posologies, typeKey, posoZone) {
+  if (!posologies.length) {
+    posoZone.innerHTML = `<div style="font-size:11px;color:var(--text-dim);padding:6px 0;font-style:italic">
+      Aucune posologie active enregistrée pour ce patient.
+    </div>`;
+    return;
+  }
+
+  const keywords = POSOLOGIE_KEYWORDS[typeKey] || [];
+  const isRelevant = (med) => {
+    if (!keywords.length) return true; // pas de filtre = tout est pertinent (BPM, prévention)
+    const m = (med || '').toLowerCase();
+    return keywords.some(kw => m.includes(kw));
+  };
+
+  const relevantes = posologies.filter(p => isRelevant(p.medicament));
+  const autres      = posologies.filter(p => !isRelevant(p.medicament));
+
+  posoZone.innerHTML = `
+    <div style="background:var(--bg);border:var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">
+        💊 Posologies actives du patient (${posologies.length})
+      </div>
+      ${relevantes.length ? `
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:${autres.length?'10px':'0'}">
+          ${relevantes.map(p => renderPosoChip(p, true)).join('')}
+        </div>` : ''}
+      ${autres.length ? `
+        <details style="font-size:11px">
+          <summary style="cursor:pointer;color:var(--text-muted)">Autres médicaments du patient (${autres.length})</summary>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+            ${autres.map(p => renderPosoChip(p, false)).join('')}
+          </div>
+        </details>` : ''}
+    </div>`;
+}
+
+function renderPosoChip(p, highlighted) {
+  return `
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;
+      background:${highlighted ? 'var(--teal-pale)' : 'rgba(0,0,0,0.03)'};
+      border:1px solid ${highlighted ? 'var(--teal-border)' : 'var(--border-color,transparent)'}">
+      <span style="font-size:14px">${highlighted ? '✅' : '💊'}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:700;color:var(--text)">
+          ${p.medicament}${p.dosage ? ' — '+p.dosage : ''}
+        </div>
+        <div style="font-size:11px;color:var(--text-muted)">
+          ${[p.frequence, p.voie, p.conditions_prise].filter(Boolean).join(' · ') || 'Détails non renseignés'}
+        </div>
+      </div>
+    </div>`;
+}
+
+// Pré-remplissage intelligent de certains champs de trame à partir des posologies
+function prefillTrameFromPosologies(posologies, typeKey) {
+  const findMed = (keywords) => posologies.find(p => {
+    const m = (p.medicament || '').toLowerCase();
+    return keywords.some(kw => m.includes(kw));
+  });
+
+  if (typeKey === 'AOD') {
+    const med = findMed(POSOLOGIE_KEYWORDS.AOD);
+    if (med) {
+      const select = document.getElementById('trame_molecule');
+      if (select) {
+        const m = med.medicament.toLowerCase();
+        let match = null;
+        if (m.includes('xarelto') || m.includes('rivaroxaban')) match = 'Rivaroxaban (Xarelto)';
+        else if (m.includes('eliquis') || m.includes('apixaban')) match = 'Apixaban (Eliquis)';
+        else if (m.includes('pradaxa') || m.includes('dabigatran')) match = 'Dabigatran (Pradaxa)';
+        else if (m.includes('lixiana') || m.includes('edoxaban')) match = 'Edoxaban (Lixiana)';
+        if (match) select.value = match;
+      }
+    }
+  }
+
+  if (typeKey === 'Asthme') {
+    const med = findMed(POSOLOGIE_KEYWORDS.Asthme);
+    if (med) {
+      const el = document.getElementById('trame_traitement');
+      if (el) el.value = `${med.medicament}${med.dosage ? ' '+med.dosage : ''}`;
+    }
+  }
+
+  if (typeKey === 'Opioides') {
+    const med = findMed(POSOLOGIE_KEYWORDS.Opioides);
+    if (med) {
+      const select = document.getElementById('trame_molecule');
+      const doseEl = document.getElementById('trame_dose_journaliere');
+      if (doseEl) doseEl.value = `${med.medicament}${med.dosage ? ' '+med.dosage : ''}${med.frequence ? ' — '+med.frequence : ''}`;
+      if (select) {
+        const m = med.medicament.toLowerCase();
+        let match = null;
+        if (m.includes('morphine')) match = m.includes('lp') ? 'Morphine LP' : 'Morphine LI';
+        else if (m.includes('oxycodone') || m.includes('oxycontin')) match = 'Oxycodone LP';
+        else if (m.includes('fentanyl')) match = 'Fentanyl transdermique';
+        else if (m.includes('hydromorphone')) match = 'Hydromorphone';
+        else if (m.includes('buprenorphine')) match = 'Buprénorphine';
+        if (match) select.value = match;
+      }
+    }
+  }
+
+  if (typeKey === 'Diabete') {
+    const med = findMed(POSOLOGIE_KEYWORDS.Diabete);
+    if (med) {
+      const el = document.getElementById('trame_traitement');
+      if (el) el.value = `${med.medicament}${med.dosage ? ' '+med.dosage : ''}`;
+    }
+  }
+
+  if (typeKey === 'Grossesse') {
+    const all = posologies.map(p => `${p.medicament}${p.dosage ? ' '+p.dosage : ''}`).join(', ');
+    if (all) {
+      const el = document.getElementById('trame_medicaments_actuels');
+      if (el) el.value = all;
+    }
+  }
+
+  if (typeKey === 'Bilan_medication') {
+    const nbEl = document.getElementById('trame_nb_medicaments');
+    if (nbEl && posologies.length) nbEl.value = posologies.length;
+  }
 }
 
 function renderTrame(typeKey) {
