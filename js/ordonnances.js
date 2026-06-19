@@ -26,6 +26,23 @@ function renderPatientInfo(p) {
   const createdAt = p.created_at
     ? `<div class="info-item"><div class="info-label">Dossier créé le</div><div class="info-value">${formatDateTime(p.created_at)}</div></div>`
     : '';
+
+  const labelInsuf = { legere: 'Légère', moderee: 'Modérée', severe: 'Sévère', terminale: 'Terminale / dialyse' };
+
+  const sante = (p.poids || p.taille || p.insuffisance_renale || p.insuffisance_hepatique || p.insuffisance_cardiaque || p.dfg || p.antecedents) ? `
+    <div class="info-item" style="grid-column:1/-1;margin-top:8px;padding-top:12px;border-top:1px solid var(--border)">
+      <div class="info-label" style="letter-spacing:0.06em;margin-bottom:10px">Informations de santé</div>
+    </div>
+    ${p.poids ? `<div class="info-item"><div class="info-label">Poids</div><div class="info-value">${p.poids} kg</div></div>` : ''}
+    ${p.taille ? `<div class="info-item"><div class="info-label">Taille</div><div class="info-value">${p.taille} cm</div></div>` : ''}
+    ${p.imc ? `<div class="info-item"><div class="info-label">IMC</div><div class="info-value">${p.imc}</div></div>` : ''}
+    ${p.insuffisance_renale ? `<div class="info-item"><div class="info-label">Insuffisance rénale</div><div class="info-value">${labelInsuf[p.insuffisance_renale] || p.insuffisance_renale}</div></div>` : ''}
+    ${p.dfg ? `<div class="info-item"><div class="info-label">DFG</div><div class="info-value">${p.dfg} mL/min/1,73m²</div></div>` : ''}
+    ${p.insuffisance_hepatique ? `<div class="info-item"><div class="info-label">Insuffisance hépatique</div><div class="info-value">${labelInsuf[p.insuffisance_hepatique] || p.insuffisance_hepatique}</div></div>` : ''}
+    ${p.insuffisance_cardiaque ? `<div class="info-item"><div class="info-label">Insuffisance cardiaque</div><div class="info-value">${labelInsuf[p.insuffisance_cardiaque] || p.insuffisance_cardiaque}</div></div>` : ''}
+    ${p.antecedents ? `<div class="info-item" style="grid-column:1/-1"><div class="info-label">Antécédents</div><div class="info-value">${p.antecedents}</div></div>` : ''}
+  ` : '';
+
   document.getElementById('det-info-grid').innerHTML = `
     <div class="info-item"><div class="info-label">Date de naissance</div><div class="info-value">${p.dob ? formatDate(p.dob) : '—'}</div></div>
     <div class="info-item"><div class="info-label">Mutuelle</div><div class="info-value">${p.mutuelle||'—'}</div></div>
@@ -34,6 +51,7 @@ function renderPatientInfo(p) {
     <div class="info-item"><div class="info-label">Téléphone</div><div class="info-value">${p.telephone||'—'}</div></div>
     <div class="info-item"><div class="info-label">Notes</div><div class="info-value">${p.notes||'—'}</div></div>
     ${createdAt}
+    ${sante}
     <div style="grid-column:1/-1;margin-top:4px;display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn btn-ghost btn-sm" onclick="openEditPatient()">✏️ Modifier le dossier</button>
       <button class="btn btn-ghost btn-sm" onclick="scanOrdonnance()">📷 Scanner ordonnance</button>
@@ -41,7 +59,6 @@ function renderPatientInfo(p) {
       <button class="btn btn-danger btn-sm" onclick="softDeletePatient('${p.id}')">🗑 Mettre à la corbeille</button>
     </div>`;
 }
-
 function openEditPatient() {
   const p = currentPatient;
   document.getElementById('ep-name').value      = p.name        || '';
