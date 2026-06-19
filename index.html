@@ -95,26 +95,34 @@
 <div class="app-wrap" id="app-wrap">
   <nav>
     <div class="nav-logo">
-      <img src="logo.svg" style="height:56px;margin-right:10px;vertical-align:middle;border-radius:10px"/>
+      <img src="logo.svg" style="height:34px;margin-right:8px;vertical-align:middle;border-radius:8px"/>
     </div>
     <div class="nav-links">
       <div class="nav-link active" onclick="showPage('dashboard',this)">Tableau de bord</div>
+
+      <div class="nav-group-label">Dossiers</div>
       <div class="nav-link" onclick="showPage('patients',this)">Patients</div>
-      <div class="nav-link" onclick="showPage('medicaments',this)">Médicaments</div>
-      <div class="nav-link" onclick="showPage('pathologies',this)">Pathologies</div>
-      <div class="nav-link" onclick="showPage('entretiens',this)">Entretiens</div>
       <div class="nav-link" onclick="showPage('archive',this);loadArchive()">📦 Archive</div>
       <div class="nav-link" onclick="showPage('trash',this);loadTrash()">🗑 Corbeille <span id="trash-badge" class="trash-badge"></span></div>
+
+      <div class="nav-group-label">Clinique</div>
+      <div class="nav-link" onclick="showPage('medicaments',this)">Médicaments</div>
+      <div class="nav-link" onclick="showPage('pathologies',this)">Pathologies</div>
       <div class="nav-link" onclick="showPage('posologies',this)">Posologies</div>
-      <div class="nav-link" onclick="showPage('avis',this);loadAvis()">⭐ Avis clients</div>
-      <div class="nav-link" onclick="showPage('antibio',this)">🦠 Antibiotiques</div>
       <div class="nav-link" onclick="showPage('posologie-adaptee',this)">⚖️ Posologies adaptées</div>
-      <div class="nav-link" onclick="showPage('durees',this)">⏱ Durées de traitement</div>
       <div class="nav-link" onclick="showPage('interactions',this)">⚠️ Interactions</div>
-      <div class="nav-link" onclick="showPage('bilan',this)">📋 Bilan de médication</div>
+      <div class="nav-link" onclick="showPage('antibio',this)">🦠 Antibiotiques</div>
+      <div class="nav-link" onclick="showPage('durees',this)">⏱ Durées de traitement</div>
       <div class="nav-link" onclick="showPage('crat',this)">🤰 CRAT</div>
-      <div class="nav-link" onclick="showPage('voyage',this)">✈️ Conseils Voyage</div>
+
+      <div class="nav-group-label">Patientèle</div>
+      <div class="nav-link" onclick="showPage('entretiens',this)">Entretiens</div>
+      <div class="nav-link" onclick="showPage('bilan',this)">📋 Bilan de médication</div>
       <div class="nav-link" onclick="showPage('eligibilite',this)">🎯 Éligibilité</div>
+      <div class="nav-link" onclick="showPage('voyage',this)">✈️ Conseils Voyage</div>
+
+      <div class="nav-group-label">Avis</div>
+      <div class="nav-link" onclick="showPage('avis',this);loadAvis()">⭐ Avis clients</div>
     </div>
     <div class="nav-spacer"></div>
     <div class="nav-user">
@@ -804,8 +812,8 @@
     <div class="modal-body">
       <p style="font-size:13px;margin-bottom:14px;color:var(--text)">Des colonnes manquent dans votre base Supabase. Exécutez ce SQL dans votre <strong>Dashboard Supabase → SQL Editor</strong> puis rechargez la page :</p>
       <div style="position:relative">
-        <pre id="migration-sql" style="background:var(--navy);color:#4ecdb4;padding:16px;border-radius:8px;font-size:12px;overflow-x:auto;line-height:1.6;white-space:pre-wrap"></pre>
-        <button onclick="copyMigrationSQL()" style="position:absolute;top:8px;right:8px;padding:4px 10px;background:rgba(78,205,180,0.2);border:1px solid rgba(78,205,180,0.4);border-radius:6px;color:#4ecdb4;font-size:11px;cursor:pointer">Copier</button>
+        <pre id="migration-sql" style="background:var(--navy);color:var(--teal-light);padding:16px;border-radius:8px;font-size:12px;overflow-x:auto;line-height:1.6;white-space:pre-wrap"></pre>
+        <button onclick="copyMigrationSQL()" style="position:absolute;top:8px;right:8px;padding:4px 10px;background:rgba(227,196,115,0.18);border:1px solid rgba(227,196,115,0.4);border-radius:6px;color:var(--teal-light);font-size:11px;cursor:pointer">Copier</button>
       </div>
     </div>
     <div class="modal-footer">
@@ -898,3 +906,8 @@
 
 </body>
 </html>
+
+
+
+
+
