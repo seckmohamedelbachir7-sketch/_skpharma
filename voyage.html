@@ -28,13 +28,11 @@ body.dark {
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}
 
-/* PAGE HEADER */
 .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
 .page-title{font-size:22px;font-weight:700;color:var(--text);font-family:'Space Grotesk',sans-serif;letter-spacing:-0.5px;}
 .dest-badge{display:flex;align-items:center;gap:7px;background:var(--teal-pale);border:1px solid var(--teal-border);border-radius:99px;padding:5px 14px;font-size:12px;font-weight:700;color:var(--teal);}
 .dest-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:aipulse 2.4s ease-in-out infinite;}
 
-/* HERO */
 .hero{background:var(--navy);border-radius:var(--radius-lg);padding:26px 30px;margin-bottom:20px;position:relative;overflow:hidden;}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 100% 0%,rgba(14,158,130,0.18) 0%,transparent 55%);pointer-events:none;}
 .hero::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#4ecdb4,transparent);opacity:.7;}
@@ -54,12 +52,12 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
 .hero-input:focus{border-color:#4ecdb4;background:rgba(78,205,180,0.08);}
 .btn-search{padding:10px 20px;background:linear-gradient(135deg,var(--teal-light),var(--teal));color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 3px 12px rgba(14,158,130,0.35);transition:all .15s;}
 .btn-search:hover{filter:brightness(1.08);transform:translateY(-1px);}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;position:relative;z-index:1;}
-.chip{padding:4px 11px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.13);border-radius:99px;font-size:11px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all .15s;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;position:relative;z-index:1;max-height:90px;overflow-y:auto;}
+.chip{padding:4px 11px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.13);border-radius:99px;font-size:11px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all .15s;white-space:nowrap;}
 .chip:hover{background:rgba(78,205,180,0.15);border-color:#4ecdb4;color:#fff;}
 .chip.active{background:rgba(78,205,180,0.2);border-color:#4ecdb4;color:#4ecdb4;font-weight:600;}
 
-/* MAP */
+/* MAP — tuiles claires */
 .map-wrap{background:var(--bg-white);border:var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:20px;box-shadow:var(--shadow-sm);}
 .map-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:var(--border);}
 .map-header-left{display:flex;align-items:center;gap:10px;}
@@ -69,35 +67,31 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
 .map-legend{display:flex;align-items:center;gap:14px;font-size:11px;color:var(--text-muted);}
 .legend-item{display:flex;align-items:center;gap:5px;}
 .legend-dot{width:10px;height:10px;border-radius:50%;}
-#map{height:340px;width:100%;}
+#map{height:380px;width:100%;}
 
-/* Leaflet custom popup */
-.leaflet-popup-content-wrapper{background:var(--navy);border:1px solid rgba(78,205,180,0.3);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.4);padding:0;}
+.leaflet-popup-content-wrapper{background:#fff;border:1px solid #e4e9ef;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.15);padding:0;}
 .leaflet-popup-content{margin:0;padding:0;}
-.leaflet-popup-tip{background:var(--navy);}
+.leaflet-popup-tip{background:#fff;}
 .map-popup{padding:12px 16px;}
-.map-popup-name{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;}
-.map-popup-meta{font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:10px;}
+.map-popup-name{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#0f1c28;margin-bottom:4px;}
+.map-popup-meta{font-size:11px;color:#6b7c8d;margin-bottom:10px;}
 .map-popup-risk{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;margin-bottom:10px;}
-.map-popup-risk.low{background:rgba(14,158,130,0.2);color:#4ecdb4;border:1px solid rgba(78,205,180,0.3);}
-.map-popup-risk.medium{background:rgba(196,120,0,0.2);color:#f0a500;border:1px solid rgba(196,120,0,0.3);}
-.map-popup-risk.high{background:rgba(224,60,82,0.2);color:#f87080;border:1px solid rgba(224,60,82,0.3);}
-.map-popup-btn{display:block;width:100%;padding:7px;background:linear-gradient(135deg,var(--teal-light),var(--teal));color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;text-align:center;transition:filter .15s;}
+.map-popup-risk.low{background:#eaf7f4;color:#0e9e82;border:1px solid #a0ddd4;}
+.map-popup-risk.medium{background:#fff8e6;color:#c47800;border:1px solid #f0d08a;}
+.map-popup-risk.high{background:#fef0f2;color:#e03c52;border:1px solid #f9c0c8;}
+.map-popup-btn{display:block;width:100%;padding:7px;background:linear-gradient(135deg,#12c4a0,#0e9e82);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;text-align:center;transition:filter .15s;}
 .map-popup-btn:hover{filter:brightness(1.1);}
 
-/* PLACEHOLDER */
 .placeholder{background:var(--bg-white);border:var(--border);border-radius:var(--radius-lg);padding:54px 24px;text-align:center;box-shadow:var(--shadow-sm);}
 .placeholder-icon{font-size:38px;margin-bottom:12px;opacity:.35;}
 .placeholder h3{font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px;}
 .placeholder p{font-size:13px;color:var(--text-muted);}
 
-/* COUNTRY HEADER */
 .country-header{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
 .country-flag{font-size:34px;line-height:1;}
 .country-name{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.4px;}
 .country-meta{font-size:12px;color:var(--text-muted);margin-top:2px;}
 
-/* STATS ROW */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
 .stat-card{background:var(--bg-white);border:var(--border);border-radius:var(--radius-lg);padding:16px 18px;text-align:center;position:relative;overflow:hidden;box-shadow:var(--shadow-sm);}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:4px 4px 0 0;}
@@ -106,17 +100,15 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
 .stat-card.teal::before{background:linear-gradient(90deg,var(--teal),var(--teal-light));}
 .stat-card.navy::before{background:linear-gradient(90deg,#4ecdb4,#0e9e82);}
 .stat-val{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;line-height:1;margin-bottom:4px;}
-.stat-card.red   .stat-val{color:var(--red);}
+.stat-card.red .stat-val{color:var(--red);}
 .stat-card.amber .stat-val{color:var(--amber);}
-.stat-card.teal  .stat-val{color:var(--teal);}
-.stat-card.navy  .stat-val{color:#4ecdb4;}
+.stat-card.teal .stat-val{color:var(--teal);}
+.stat-card.navy .stat-val{color:#4ecdb4;}
 .stat-lbl{font-size:10px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;}
 
-/* RESULTS GRID */
 .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .col{display:flex;flex-direction:column;gap:16px;}
 
-/* CARD */
 .card{background:var(--bg-white);border:var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm);}
 .card-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:var(--border);}
 .card-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
@@ -126,7 +118,6 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
 .card-title-text{font-size:13px;font-weight:700;color:var(--text);font-family:'Space Grotesk',sans-serif;}
 .card-sub-text{font-size:11px;color:var(--text-muted);margin-top:1px;}
 
-/* RISK */
 .risk-banner{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:var(--radius);margin-bottom:12px;}
 .risk-banner.low{background:var(--teal-pale);border:1px solid var(--teal-border);}
 .risk-banner.medium{background:var(--amber-pale);border:1px solid #f0d08a;}
@@ -142,7 +133,6 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
 .risk-desc{font-size:12px;color:var(--text-muted);margin-top:2px;}
 .source-note{font-size:11px;color:var(--text-dim);margin-top:10px;padding-top:10px;border-top:var(--border);}
 
-/* VACCINES */
 .vaccine-item{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:var(--border);}
 .vaccine-item:last-child{border-bottom:none;padding-bottom:0;}
 .vaccine-badge{padding:3px 8px;border-radius:99px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;flex-shrink:0;margin-top:1px;}
@@ -152,7 +142,6 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
 .vaccine-name{font-size:13px;font-weight:600;color:var(--text);}
 .vaccine-note{font-size:11px;color:var(--text-muted);margin-top:2px;}
 
-/* MALARIA */
 .zone-item{display:flex;align-items:center;gap:9px;padding:8px 11px;background:var(--bg);border-radius:var(--radius);margin-bottom:5px;}
 .zone-dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;}
 .zone-name{font-size:13px;color:var(--text);flex:1;}
@@ -162,7 +151,6 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
 .treatment-val{font-size:13px;color:var(--text);}
 .no-malaria{display:flex;align-items:center;gap:9px;padding:13px 15px;background:var(--teal-pale);border-radius:var(--radius);border:1px solid var(--teal-border);font-size:13px;font-weight:600;color:var(--teal);}
 
-/* AI CARD */
 .ai-card{background:var(--bg-white);border:1.5px solid var(--teal-border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);}
 .ai-card-header{background:var(--navy);padding:13px 16px;display:flex;align-items:center;gap:9px;position:relative;overflow:hidden;}
 .ai-card-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(78,205,180,0.5),transparent);}
@@ -178,7 +166,6 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
 .btn-ai:hover{filter:brightness(1.07);transform:translateY(-1px);}
 .btn-ai:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 
-/* AI RESULT */
 .ai-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--teal);margin-top:13px;margin-bottom:5px;padding-bottom:4px;border-bottom:1px solid var(--teal-pale);}
 .ai-section-title:first-child{margin-top:0;}
 .ai-text{font-size:13px;color:var(--text);line-height:1.65;}
@@ -190,7 +177,6 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
 .med-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
 .med-tag{padding:3px 9px;background:var(--teal-pale);color:var(--teal);border:1px solid var(--teal-border);border-radius:99px;font-size:11px;font-weight:600;}
 
-/* SPINNER */
 .spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
 .spinner-teal{border-color:rgba(14,158,130,0.2);border-top-color:var(--teal);}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -199,7 +185,6 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
 <body>
 <div style="padding:28px;">
 
-  <!-- HEADER -->
   <div class="page-header">
     <div class="page-title">✈️ Conseils Voyage</div>
     <div class="dest-badge">
@@ -208,7 +193,6 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
     </div>
   </div>
 
-  <!-- HERO -->
   <div class="hero">
     <div class="hero-top">
       <div class="hero-left">
@@ -219,7 +203,7 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
             <div class="search-ico">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             </div>
-            <input class="hero-input" id="countryInput" type="text" placeholder="Pays de destination (ex: Thaïlande, Maroc…)"/>
+            <input class="hero-input" id="countryInput" type="text" placeholder="Pays de destination (ex: Japon, Sénégal…)"/>
           </div>
           <button class="btn-search" onclick="searchCountry()">Rechercher</button>
         </div>
@@ -232,14 +216,13 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
     </div>
   </div>
 
-  <!-- MAP -->
   <div class="map-wrap">
     <div class="map-header">
       <div class="map-header-left">
         <div class="map-icon">🗺️</div>
         <div>
           <div class="map-title">Carte des destinations</div>
-          <div class="map-sub">Cliquez sur un marqueur ou directement sur un pays pour charger les données</div>
+          <div class="map-sub">Cliquez sur un marqueur ou sur la carte pour charger les recommandations</div>
         </div>
       </div>
       <div class="map-legend">
@@ -251,7 +234,6 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
     <div id="map"></div>
   </div>
 
-  <!-- RESULTS -->
   <div id="results">
     <div class="placeholder">
       <div class="placeholder-icon">🌍</div>
@@ -263,309 +245,63 @@ body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);fon
 </div>
 <script>
 const DATA = {
-  "Thaïlande":{
-    flag:"🇹🇭",region:"Asie du Sud-Est",climate:"Tropical humide",
-    lat:13.7,lng:100.5,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Zones rurales à surveiller, paludisme en zones frontalières",
-    vaccines:[
-      {type:"obligatoire",name:"Fièvre jaune",note:"Si arrivée depuis un pays endémique"},
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},
-      {type:"recommande",name:"Typhoïde",note:"Surtout si zones rurales ou nourriture locale"},
-      {type:"recommande",name:"Hépatite B",note:"Séjour prolongé ou soins médicaux prévus"},
-      {type:"conseille",name:"Rage",note:"Séjour prolongé, activités plein air"},
-      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales rizicoles, saison des pluies"}
-    ],
-    malaria:{present:true,zones:["Zones frontalières Myanmar/Cambodge","Province de Tak","Province de Kanchanaburi"],treatment:"Atovaquone-Proguanil ou Doxycycline"},
-    stats:{oblig:1,recomm:3,alertes:2}
-  },
-  "Maroc":{
-    flag:"🇲🇦",region:"Afrique du Nord",climate:"Méditerranéen / Semi-aride",
-    lat:31.8,lng:-7.1,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination généralement sûre, précautions alimentaires standard",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},
-      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation potentiellement contaminées"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé ou contacts avec locaux"},
-      {type:"conseille",name:"Rage",note:"Présence de chiens errants, zones rurales"}
-    ],
-    malaria:{present:false},
-    stats:{oblig:0,recomm:2,alertes:1}
-  },
-  "Brésil":{
-    flag:"🇧🇷",region:"Amérique du Sud",climate:"Tropical / Équatorial",
-    lat:-14.2,lng:-51.9,risk:"high",riskLabel:"Risque élevé",riskDesc:"Fièvre jaune endémique, paludisme en Amazonie, dengue dans les villes",
-    vaccines:[
-      {type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire pour accès à certaines zones dont l'Amazonie"},
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Zones rurales et petites villes"},
-      {type:"recommande",name:"Rage",note:"Zones rurales, forêt amazonienne"},
-      {type:"conseille",name:"Méningite ACWY",note:"Si zones de festival / rassemblement"}
-    ],
-    malaria:{present:true,zones:["Bassin amazonien","État du Pará","État de l'Amazonas","État du Mato Grosso"],treatment:"Chloroquine ou Atovaquone-Proguanil selon la zone"},
-    stats:{oblig:1,recomm:3,alertes:3}
-  },
-  "Inde":{
-    flag:"🇮🇳",region:"Asie du Sud",climate:"Tropical / Aride selon régions",
-    lat:20.6,lng:78.9,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme répandu, dengue urbaine, risques gastro-intestinaux importants",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Fortement recommandé"},
-      {type:"recommande",name:"Typhoïde",note:"Risque élevé, eau et alimentation"},
-      {type:"recommande",name:"Hépatite B",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Rage",note:"Nombreux animaux errants"},
-      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales, saison des pluies"},
-      {type:"conseille",name:"Méningite ACWY",note:"Zones de pèlerinage"}
-    ],
-    malaria:{present:true,zones:["Odisha","Chhattisgarh","Jharkhand","Rajasthan rural","Nord-Est"],treatment:"Atovaquone-Proguanil (résistances à la chloroquine)"},
-    stats:{oblig:0,recomm:4,alertes:3}
-  },
-  "Kenya":{
-    flag:"🇰🇪",region:"Afrique de l'Est",climate:"Tropical d'altitude",
-    lat:0.0,lng:37.9,risk:"high",riskLabel:"Risque élevé",riskDesc:"Fièvre jaune, paludisme hors altitude, risques vectoriels multiples",
-    vaccines:[
-      {type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée du territoire"},
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
-      {type:"recommande",name:"Méningite ACWY",note:"Ceinture de méningite"},
-      {type:"conseille",name:"Rage",note:"Zones rurales, contacts avec animaux"}
-    ],
-    malaria:{present:true,zones:["Côte kényane","Lac Victoria","Zones rurales <2500m","Mombasa et périphérie"],treatment:"Atovaquone-Proguanil ou Méfloquine"},
-    stats:{oblig:1,recomm:3,alertes:3}
-  },
-  "Mexique":{
-    flag:"🇲🇽",region:"Amérique centrale",climate:"Tropical / Aride selon régions",
-    lat:23.6,lng:-102.5,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue et paludisme dans certaines zones, risques alimentaires",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Zones rurales et nourriture de rue"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"},
-      {type:"conseille",name:"Rage",note:"Zones rurales, contact avec animaux"}
-    ],
-    malaria:{present:true,zones:["Chiapas","Oaxaca rural","Sinaloa côtier","Nayarit"],treatment:"Chloroquine (zones rurales)"},
-    stats:{oblig:0,recomm:2,alertes:2}
-  },
-  "Vietnam":{
-    flag:"🇻🇳",region:"Asie du Sud-Est",climate:"Tropical humide",
-    lat:14.1,lng:108.3,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme dans les hauts plateaux, dengue urbaine",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation locale"},
-      {type:"recommande",name:"Rage",note:"Zones rurales, nombreux chiens errants"},
-      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rizicoles rurales"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
-    ],
-    malaria:{present:true,zones:["Hauts Plateaux du Centre","Dak Lak","Gia Lai","Kon Tum","Zones frontalières"],treatment:"Atovaquone-Proguanil ou Doxycycline"},
-    stats:{oblig:0,recomm:3,alertes:2}
-  },
-  "Sénégal":{
-    flag:"🇸🇳",region:"Afrique de l'Ouest",climate:"Sahélien / Tropical",
-    lat:14.5,lng:-14.5,risk:"high",riskLabel:"Risque élevé",riskDesc:"Fièvre jaune, paludisme généralisé, risques vectoriels importants",
-    vaccines:[
-      {type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée"},
-      {type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique subsaharienne"},
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
-      {type:"conseille",name:"Rage",note:"Zones rurales"}
-    ],
-    malaria:{present:true,zones:["Tout le territoire (sauf Dakar urbain)","Casamance","Bassins fluviaux"],treatment:"Atovaquone-Proguanil ou Méfloquine"},
-    stats:{oblig:1,recomm:3,alertes:3}
-  },
-"Indonésie":{
-    flag:"🇮🇩",region:"Asie du Sud-Est",climate:"Tropical équatorial",
-    lat:-0.8,lng:113.9,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue présente sur tout l'archipel, paludisme hors Bali et Java",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},
-      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation locale"},
-      {type:"recommande",name:"Rage",note:"Maladie endémique, nombreux animaux errants"},
-      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales et rizicoles"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
-    ],
-    malaria:{present:true,zones:["Papouasie occidentale","Maluku","Nusa Tenggara","Kalimantan rural"],treatment:"Atovaquone-Proguanil ou Doxycycline"},
-    stats:{oblig:0,recomm:3,alertes:2}
-  },
-  "Tanzanie":{
-    flag:"🇹🇿",region:"Afrique de l'Est",climate:"Tropical de savane",
-    lat:-6.4,lng:34.9,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme généralisé, fièvre jaune obligatoire, risques vectoriels majeurs",
-    vaccines:[
-      {type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée du territoire"},
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
-      {type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique"},
-      {type:"conseille",name:"Rage",note:"Zones rurales et safaris"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
-    ],
-    malaria:{present:true,zones:["Tout le territoire","Zanzibar","Serengeti","Kilimanjaro (zones basses)"],treatment:"Atovaquone-Proguanil ou Méfloquine"},
-    stats:{oblig:1,recomm:3,alertes:3}
-  },
-  "Cambodge":{
-    flag:"🇰🇭",region:"Asie du Sud-Est",climate:"Tropical de mousson",
-    lat:12.6,lng:104.9,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme en zones forestières, dengue présente, risques digestifs importants",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Fortement recommandé"},
-      {type:"recommande",name:"Typhoïde",note:"Risque élevé eau/alimentation"},
-      {type:"recommande",name:"Rage",note:"Présence importante de chiens errants"},
-      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales rizicoles"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé ou soins locaux"}
-    ],
-    malaria:{present:true,zones:["Forêts frontières Thaïlande","Province de Mondulkiri","Province de Ratanakiri","Cardamomes"],treatment:"Atovaquone-Proguanil (multi-résistances)"},
-    stats:{oblig:0,recomm:3,alertes:2}
-  },
-  "Pérou":{
-    flag:"🇵🇪",region:"Amérique du Sud",climate:"Tropical / Aride / Andin",
-    lat:-9.2,lng:-75.0,risk:"high",riskLabel:"Risque élevé",riskDesc:"Fièvre jaune en Amazonie, paludisme, altitude extrême à surveiller",
-    vaccines:[
-      {type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire pour accès à la forêt amazonienne"},
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
-      {type:"recommande",name:"Rage",note:"Zones rurales et Amazonie"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
-    ],
-    malaria:{present:true,zones:["Bassin amazonien","Loreto","Madre de Dios","San Martín"],treatment:"Atovaquone-Proguanil ou Chloroquine selon zone"},
-    stats:{oblig:1,recomm:3,alertes:3}
-  },
-  "Philippines":{
-    flag:"🇵🇭",region:"Asie du Sud-Est",climate:"Tropical maritime",
-    lat:12.9,lng:121.8,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue présente dans tout l'archipel, paludisme dans certaines îles",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
-      {type:"recommande",name:"Rage",note:"Endémie de rage — risque réel"},
-      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales agricoles"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
-    ],
-    malaria:{present:true,zones:["Palawan","Mindanao rural","Îles Sulu","Luzon zones forestières"],treatment:"Atovaquone-Proguanil ou Doxycycline"},
-    stats:{oblig:0,recomm:3,alertes:2}
-  },
-  "Ghana":{
-    flag:"🇬🇭",region:"Afrique de l'Ouest",climate:"Tropical humide",
-    lat:7.9,lng:-1.0,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme généralisé, fièvre jaune endémique, risques gastro-intestinaux",
-    vaccines:[
-      {type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée"},
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Eau non potable courante"},
-      {type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique subsaharienne"},
-      {type:"conseille",name:"Rage",note:"Zones rurales"}
-    ],
-    malaria:{present:true,zones:["Tout le territoire","Accra et périphérie","Kumasi","Volta Region"],treatment:"Atovaquone-Proguanil ou Méfloquine"},
-    stats:{oblig:1,recomm:3,alertes:3}
-  },
-  "Turquie":{
-    flag:"🇹🇷",region:"Europe / Moyen-Orient",climate:"Méditerranéen / Continental",
-    lat:38.9,lng:35.2,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination généralement sûre, précautions alimentaires en zones rurales",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},
-      {type:"recommande",name:"Typhoïde",note:"Zones rurales, nourriture de rue"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"},
-      {type:"conseille",name:"Rage",note:"Zones rurales, nombreux chiens errants"}
-    ],
-    malaria:{present:false},
-    stats:{oblig:0,recomm:2,alertes:1}
-  },
-  "Sri Lanka":{
-    flag:"🇱🇰",region:"Asie du Sud",climate:"Tropical de mousson",
-    lat:7.9,lng:80.7,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue présente, paludisme résiduel au nord, risques digestifs",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation locale"},
-      {type:"recommande",name:"Rage",note:"Présente sur tout le territoire"},
-      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales, riziculture"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
-    ],
-    malaria:{present:true,zones:["Province du Nord","Province du Nord-Est","Zones forestières rurales"],treatment:"Chloroquine (sensibilité conservée)"},
-    stats:{oblig:0,recomm:3,alertes:2}
-  },
-  "Madagascar":{
-    flag:"🇲🇬",region:"Afrique / Océan Indien",climate:"Tropical / Semi-aride",
-    lat:-20.2,lng:46.7,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme généralisé, peste bubonique endémique, risques vectoriels multiples",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Fortement recommandé"},
-      {type:"recommande",name:"Typhoïde",note:"Eau non fiable, alimentation"},
-      {type:"recommande",name:"Rage",note:"Endémique, nombreux animaux"},
-      {type:"recommande",name:"Méningite ACWY",note:"Zones de rassemblement"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé ou soins locaux"}
-    ],
-    malaria:{present:true,zones:["Côtes Est et Ouest","Hauts Plateaux (risque moindre)","Toliara","Mahajanga"],treatment:"Atovaquone-Proguanil ou Méfloquine"},
-    stats:{oblig:0,recomm:4,alertes:3}
-  },
-  "Égypte":{
-    flag:"🇪🇬",region:"Afrique du Nord / Moyen-Orient",climate:"Désertique / Méditerranéen",
-    lat:26.8,lng:30.8,risk:"low",riskLabel:"Risque faible",riskDesc:"Risques digestifs principaux, ophtalmies, chaleur extrême",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},
-      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"},
-      {type:"conseille",name:"Rage",note:"Zones rurales, animaux errants"}
-    ],
-    malaria:{present:false},
-    stats:{oblig:0,recomm:2,alertes:1}
-  },
-  "Colombie":{
-    flag:"🇨🇴",region:"Amérique du Sud",climate:"Tropical / Andin",
-    lat:4.6,lng:-74.3,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme dans les basses terres, dengue urbaine, fièvre jaune en forêt",
-    vaccines:[
-      {type:"obligatoire",name:"Fièvre jaune",note:"Recommandé pour zones forestières et rurales"},
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Zones rurales"},
-      {type:"conseille",name:"Rage",note:"Zones rurales et Amazonie"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
-    ],
-    malaria:{present:true,zones:["Côte Pacifique","Chocó","Amazonie colombienne","Orinoquie"],treatment:"Atovaquone-Proguanil ou Chloroquine selon zone"},
-    stats:{oblig:1,recomm:2,alertes:2}
-  },
-  "Népal":{
-    flag:"🇳🇵",region:"Asie du Sud",climate:"Subtropical / Alpin",
-    lat:28.4,lng:84.1,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Mal des montagnes à haute altitude, paludisme en Teraï, rage endémique",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Risque élevé dans les villes et randonnées"},
-      {type:"recommande",name:"Rage",note:"Endémique — morsures fréquentes de singes et chiens"},
-      {type:"conseille",name:"Encéphalite japonaise",note:"Plaines du Teraï"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
-    ],
-    malaria:{present:true,zones:["Plaines du Teraï","Districts frontaliers Inde"],treatment:"Atovaquone-Proguanil ou Chloroquine"},
-    stats:{oblig:0,recomm:3,alertes:2}
-  },
-  "Éthiopie":{
-    flag:"🇪🇹",region:"Afrique de l'Est",climate:"Tropical d'altitude / Semi-aride",
-    lat:9.1,lng:40.5,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme hors altitude, méningite endémique, risques gastro-intestinaux",
-    vaccines:[
-      {type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée"},
-      {type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique, obligatoire pèlerinage"},
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},
-      {type:"conseille",name:"Rage",note:"Zones rurales"}
-    ],
-    malaria:{present:true,zones:["Zones <2000m d'altitude","Vallée du Rift","Gambela","Bénishangul-Gumuz"],treatment:"Atovaquone-Proguanil ou Méfloquine"},
-    stats:{oblig:1,recomm:3,alertes:3}
-  },
-  "Australie":{
-    flag:"🇦🇺",region:"Océanie",climate:"Tropical / Tempéré / Désertique",
-    lat:-25.3,lng:133.8,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination très sûre, quelques risques naturels (araignées, serpents, UV)",
-    vaccines:[
-      {type:"conseille",name:"Hépatite A",note:"Par précaution pour zones rurales"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé ou soins médicaux"},
-      {type:"conseille",name:"Encéphalite japonaise",note:"Zones humides du nord Queensland"}
-    ],
-    malaria:{present:false},
-    stats:{oblig:0,recomm:0,alertes:1}
-  },
-  "Myanmar":{
-    flag:"🇲🇲",region:"Asie du Sud-Est",climate:"Tropical de mousson",
-    lat:17.1,lng:96.1,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme multi-résistant, dengue, accès aux soins limité",
-    vaccines:[
-      {type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},
-      {type:"recommande",name:"Typhoïde",note:"Risque élevé eau/alimentation"},
-      {type:"recommande",name:"Rage",note:"Présente sur tout le territoire"},
-      {type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales rizicoles"},
-      {type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}
-    ],
-    malaria:{present:true,zones:["Régions frontalières Thaïlande","Kachin","Shan","Chin","Zones forestières"],treatment:"Atovaquone-Proguanil (résistances artémisinine signalées)"},
-    stats:{oblig:0,recomm:3,alertes:3}
-  },
-  };
+  "Thaïlande":{flag:"🇹🇭",region:"Asie du Sud-Est",climate:"Tropical humide",lat:13.7,lng:100.5,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Zones rurales à surveiller, paludisme en zones frontalières",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Si arrivée depuis un pays endémique"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},{type:"recommande",name:"Typhoïde",note:"Surtout si zones rurales ou nourriture locale"},{type:"recommande",name:"Hépatite B",note:"Séjour prolongé ou soins médicaux prévus"},{type:"conseille",name:"Rage",note:"Séjour prolongé, activités plein air"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales rizicoles, saison des pluies"}],malaria:{present:true,zones:["Zones frontalières Myanmar/Cambodge","Province de Tak","Province de Kanchanaburi"],treatment:"Atovaquone-Proguanil ou Doxycycline"},stats:{oblig:1,recomm:3,alertes:2}},
+  "Maroc":{flag:"🇲🇦",region:"Afrique du Nord",climate:"Méditerranéen / Semi-aride",lat:31.8,lng:-7.1,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination généralement sûre, précautions alimentaires standard",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation potentiellement contaminées"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé ou contacts avec locaux"},{type:"conseille",name:"Rage",note:"Présence de chiens errants, zones rurales"}],malaria:{present:false},stats:{oblig:0,recomm:2,alertes:1}},
+  "Brésil":{flag:"🇧🇷",region:"Amérique du Sud",climate:"Tropical / Équatorial",lat:-14.2,lng:-51.9,risk:"high",riskLabel:"Risque élevé",riskDesc:"Fièvre jaune endémique, paludisme en Amazonie, dengue dans les villes",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire pour accès à certaines zones dont l'Amazonie"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Zones rurales et petites villes"},{type:"recommande",name:"Rage",note:"Zones rurales, forêt amazonienne"},{type:"conseille",name:"Méningite ACWY",note:"Si zones de festival / rassemblement"}],malaria:{present:true,zones:["Bassin amazonien","État du Pará","État de l'Amazonas","État du Mato Grosso"],treatment:"Chloroquine ou Atovaquone-Proguanil selon la zone"},stats:{oblig:1,recomm:3,alertes:3}},
+  "Inde":{flag:"🇮🇳",region:"Asie du Sud",climate:"Tropical / Aride selon régions",lat:20.6,lng:78.9,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme répandu, dengue urbaine, risques gastro-intestinaux importants",vaccines:[{type:"recommande",name:"Hépatite A",note:"Fortement recommandé"},{type:"recommande",name:"Typhoïde",note:"Risque élevé, eau et alimentation"},{type:"recommande",name:"Hépatite B",note:"Recommandé pour tous"},{type:"recommande",name:"Rage",note:"Nombreux animaux errants"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales, saison des pluies"},{type:"conseille",name:"Méningite ACWY",note:"Zones de pèlerinage"}],malaria:{present:true,zones:["Odisha","Chhattisgarh","Jharkhand","Rajasthan rural","Nord-Est"],treatment:"Atovaquone-Proguanil (résistances à la chloroquine)"},stats:{oblig:0,recomm:4,alertes:3}},
+  "Kenya":{flag:"🇰🇪",region:"Afrique de l'Est",climate:"Tropical d'altitude",lat:0.0,lng:37.9,risk:"high",riskLabel:"Risque élevé",riskDesc:"Fièvre jaune, paludisme hors altitude, risques vectoriels multiples",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée du territoire"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"recommande",name:"Méningite ACWY",note:"Ceinture de méningite"},{type:"conseille",name:"Rage",note:"Zones rurales, contacts avec animaux"}],malaria:{present:true,zones:["Côte kényane","Lac Victoria","Zones rurales <2500m","Mombasa et périphérie"],treatment:"Atovaquone-Proguanil ou Méfloquine"},stats:{oblig:1,recomm:3,alertes:3}},
+  "Mexique":{flag:"🇲🇽",region:"Amérique centrale",climate:"Tropical / Aride selon régions",lat:23.6,lng:-102.5,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue et paludisme dans certaines zones, risques alimentaires",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Zones rurales et nourriture de rue"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"},{type:"conseille",name:"Rage",note:"Zones rurales, contact avec animaux"}],malaria:{present:true,zones:["Chiapas","Oaxaca rural","Sinaloa côtier","Nayarit"],treatment:"Chloroquine (zones rurales)"},stats:{oblig:0,recomm:2,alertes:2}},
+  "Vietnam":{flag:"🇻🇳",region:"Asie du Sud-Est",climate:"Tropical humide",lat:14.1,lng:108.3,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme dans les hauts plateaux, dengue urbaine",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation locale"},{type:"recommande",name:"Rage",note:"Zones rurales, nombreux chiens errants"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones rizicoles rurales"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Hauts Plateaux du Centre","Dak Lak","Gia Lai","Kon Tum","Zones frontalières"],treatment:"Atovaquone-Proguanil ou Doxycycline"},stats:{oblig:0,recomm:3,alertes:2}},
+  "Sénégal":{flag:"🇸🇳",region:"Afrique de l'Ouest",climate:"Sahélien / Tropical",lat:14.5,lng:-14.5,risk:"high",riskLabel:"Risque élevé",riskDesc:"Fièvre jaune, paludisme généralisé, risques vectoriels importants",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée"},{type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique subsaharienne"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"conseille",name:"Rage",note:"Zones rurales"}],malaria:{present:true,zones:["Tout le territoire (sauf Dakar urbain)","Casamance","Bassins fluviaux"],treatment:"Atovaquone-Proguanil ou Méfloquine"},stats:{oblig:1,recomm:3,alertes:3}},
+  "Indonésie":{flag:"🇮🇩",region:"Asie du Sud-Est",climate:"Tropical équatorial",lat:-0.8,lng:113.9,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue présente sur tout l'archipel, paludisme hors Bali et Java",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation locale"},{type:"recommande",name:"Rage",note:"Maladie endémique, nombreux animaux errants"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales et rizicoles"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Papouasie occidentale","Maluku","Nusa Tenggara","Kalimantan rural"],treatment:"Atovaquone-Proguanil ou Doxycycline"},stats:{oblig:0,recomm:3,alertes:2}},
+  "Tanzanie":{flag:"🇹🇿",region:"Afrique de l'Est",climate:"Tropical de savane",lat:-6.4,lng:34.9,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme généralisé, fièvre jaune obligatoire, risques vectoriels majeurs",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée du territoire"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique"},{type:"conseille",name:"Rage",note:"Zones rurales et safaris"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Tout le territoire","Zanzibar","Serengeti","Kilimanjaro (zones basses)"],treatment:"Atovaquone-Proguanil ou Méfloquine"},stats:{oblig:1,recomm:3,alertes:3}},
+  "Cambodge":{flag:"🇰🇭",region:"Asie du Sud-Est",climate:"Tropical de mousson",lat:12.6,lng:104.9,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme en zones forestières, dengue présente, risques digestifs importants",vaccines:[{type:"recommande",name:"Hépatite A",note:"Fortement recommandé"},{type:"recommande",name:"Typhoïde",note:"Risque élevé eau/alimentation"},{type:"recommande",name:"Rage",note:"Présence importante de chiens errants"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales rizicoles"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé ou soins locaux"}],malaria:{present:true,zones:["Forêts frontières Thaïlande","Province de Mondulkiri","Province de Ratanakiri","Cardamomes"],treatment:"Atovaquone-Proguanil (multi-résistances)"},stats:{oblig:0,recomm:3,alertes:2}},
+  "Pérou":{flag:"🇵🇪",region:"Amérique du Sud",climate:"Tropical / Aride / Andin",lat:-9.2,lng:-75.0,risk:"high",riskLabel:"Risque élevé",riskDesc:"Fièvre jaune en Amazonie, paludisme, altitude extrême à surveiller",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire pour accès à la forêt amazonienne"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"recommande",name:"Rage",note:"Zones rurales et Amazonie"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Bassin amazonien","Loreto","Madre de Dios","San Martín"],treatment:"Atovaquone-Proguanil ou Chloroquine selon zone"},stats:{oblig:1,recomm:3,alertes:3}},
+  "Philippines":{flag:"🇵🇭",region:"Asie du Sud-Est",climate:"Tropical maritime",lat:12.9,lng:121.8,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue présente dans tout l'archipel, paludisme dans certaines îles",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"recommande",name:"Rage",note:"Endémie de rage — risque réel"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales agricoles"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Palawan","Mindanao rural","Îles Sulu","Luzon zones forestières"],treatment:"Atovaquone-Proguanil ou Doxycycline"},stats:{oblig:0,recomm:3,alertes:2}},
+  "Ghana":{flag:"🇬🇭",region:"Afrique de l'Ouest",climate:"Tropical humide",lat:7.9,lng:-1.0,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme généralisé, fièvre jaune endémique, risques gastro-intestinaux",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau non potable courante"},{type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique subsaharienne"},{type:"conseille",name:"Rage",note:"Zones rurales"}],malaria:{present:true,zones:["Tout le territoire","Accra et périphérie","Kumasi","Volta Region"],treatment:"Atovaquone-Proguanil ou Méfloquine"},stats:{oblig:1,recomm:3,alertes:3}},
+  "Turquie":{flag:"🇹🇷",region:"Europe / Moyen-Orient",climate:"Méditerranéen / Continental",lat:38.9,lng:35.2,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination généralement sûre, précautions alimentaires en zones rurales",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},{type:"recommande",name:"Typhoïde",note:"Zones rurales, nourriture de rue"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"},{type:"conseille",name:"Rage",note:"Zones rurales, nombreux chiens errants"}],malaria:{present:false},stats:{oblig:0,recomm:2,alertes:1}},
+  "Sri Lanka":{flag:"🇱🇰",region:"Asie du Sud",climate:"Tropical de mousson",lat:7.9,lng:80.7,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue présente, paludisme résiduel au nord, risques digestifs",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation locale"},{type:"recommande",name:"Rage",note:"Présente sur tout le territoire"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales, riziculture"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Province du Nord","Province du Nord-Est","Zones forestières rurales"],treatment:"Chloroquine (sensibilité conservée)"},stats:{oblig:0,recomm:3,alertes:2}},
+  "Madagascar":{flag:"🇲🇬",region:"Afrique / Océan Indien",climate:"Tropical / Semi-aride",lat:-20.2,lng:46.7,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme généralisé, peste bubonique endémique, risques vectoriels multiples",vaccines:[{type:"recommande",name:"Hépatite A",note:"Fortement recommandé"},{type:"recommande",name:"Typhoïde",note:"Eau non fiable, alimentation"},{type:"recommande",name:"Rage",note:"Endémique, nombreux animaux"},{type:"recommande",name:"Méningite ACWY",note:"Zones de rassemblement"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé ou soins locaux"}],malaria:{present:true,zones:["Côtes Est et Ouest","Hauts Plateaux (risque moindre)","Toliara","Mahajanga"],treatment:"Atovaquone-Proguanil ou Méfloquine"},stats:{oblig:0,recomm:4,alertes:3}},
+  "Égypte":{flag:"🇪🇬",region:"Afrique du Nord / Moyen-Orient",climate:"Désertique / Méditerranéen",lat:26.8,lng:30.8,risk:"low",riskLabel:"Risque faible",riskDesc:"Risques digestifs principaux, ophtalmies, chaleur extrême",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous les voyageurs"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"},{type:"conseille",name:"Rage",note:"Zones rurales, animaux errants"}],malaria:{present:false},stats:{oblig:0,recomm:2,alertes:1}},
+  "Colombie":{flag:"🇨🇴",region:"Amérique du Sud",climate:"Tropical / Andin",lat:4.6,lng:-74.3,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme dans les basses terres, dengue urbaine, fièvre jaune en forêt",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Recommandé pour zones forestières et rurales"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Zones rurales"},{type:"conseille",name:"Rage",note:"Zones rurales et Amazonie"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Côte Pacifique","Chocó","Amazonie colombienne","Orinoquie"],treatment:"Atovaquone-Proguanil ou Chloroquine selon zone"},stats:{oblig:1,recomm:2,alertes:2}},
+  "Népal":{flag:"🇳🇵",region:"Asie du Sud",climate:"Subtropical / Alpin",lat:28.4,lng:84.1,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Mal des montagnes à haute altitude, paludisme en Teraï, rage endémique",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Risque élevé dans les villes et randonnées"},{type:"recommande",name:"Rage",note:"Endémique — morsures fréquentes de singes et chiens"},{type:"conseille",name:"Encéphalite japonaise",note:"Plaines du Teraï"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Plaines du Teraï","Districts frontaliers Inde"],treatment:"Atovaquone-Proguanil ou Chloroquine"},stats:{oblig:0,recomm:3,alertes:2}},
+  "Éthiopie":{flag:"🇪🇹",region:"Afrique de l'Est",climate:"Tropical d'altitude / Semi-aride",lat:9.1,lng:40.5,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme hors altitude, méningite endémique, risques gastro-intestinaux",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée"},{type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique, obligatoire pèlerinage"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"conseille",name:"Rage",note:"Zones rurales"}],malaria:{present:true,zones:["Zones <2000m d'altitude","Vallée du Rift","Gambela","Bénishangul-Gumuz"],treatment:"Atovaquone-Proguanil ou Méfloquine"},stats:{oblig:1,recomm:3,alertes:3}},
+  "Australie":{flag:"🇦🇺",region:"Océanie",climate:"Tropical / Tempéré / Désertique",lat:-25.3,lng:133.8,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination très sûre, quelques risques naturels (araignées, serpents, UV)",vaccines:[{type:"conseille",name:"Hépatite A",note:"Par précaution pour zones rurales"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé ou soins médicaux"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones humides du nord Queensland"}],malaria:{present:false},stats:{oblig:0,recomm:0,alertes:1}},
+  "Myanmar":{flag:"🇲🇲",region:"Asie du Sud-Est",climate:"Tropical de mousson",lat:17.1,lng:96.1,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme multi-résistant, dengue, accès aux soins limité",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Risque élevé eau/alimentation"},{type:"recommande",name:"Rage",note:"Présente sur tout le territoire"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales rizicoles"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Régions frontalières Thaïlande","Kachin","Shan","Chin","Zones forestières"],treatment:"Atovaquone-Proguanil (résistances artémisinine signalées)"},stats:{oblig:0,recomm:3,alertes:3}},
+  "Japon":{flag:"🇯🇵",region:"Asie de l'Est",climate:"Tempéré / Subtropical",lat:36.2,lng:138.2,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination très sûre, excellents standards sanitaires",vaccines:[{type:"conseille",name:"Encéphalite japonaise",note:"Séjour prolongé en zones rurales"},{type:"conseille",name:"Hépatite A",note:"Précaution standard, risque très faible"}],malaria:{present:false},stats:{oblig:0,recomm:0,alertes:1}},
+  "Chine":{flag:"🇨🇳",region:"Asie de l'Est",climate:"Varié (tropical au nord tempéré froid)",lat:35.8,lng:104.2,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Risques digestifs, encéphalite japonaise dans certaines zones, qualité de l'air variable",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Zones rurales et petites villes"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones agricoles rurales sud et centre"},{type:"conseille",name:"Rage",note:"Zones rurales, chiens errants"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Yunnan province (frontière Myanmar)","Hainan île"],treatment:"Atovaquone-Proguanil (Yunnan) ou Chloroquine (Hainan)"},stats:{oblig:0,recomm:2,alertes:2}},
+  "Corée du Sud":{flag:"🇰🇷",region:"Asie de l'Est",climate:"Tempéré continental",lat:36.5,lng:127.8,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination très sûre, excellente infrastructure médicale",vaccines:[{type:"conseille",name:"Hépatite A",note:"Par précaution"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales, été"}],malaria:{present:false},stats:{oblig:0,recomm:0,alertes:1}},
+  "Singapour":{flag:"🇸🇬",region:"Asie du Sud-Est",climate:"Tropical équatorial",lat:1.35,lng:103.82,risk:"low",riskLabel:"Risque faible",riskDesc:"Dengue saisonnière possible, excellents standards de santé publique",vaccines:[{type:"recommande",name:"Hépatite A",note:"Précaution standard"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:false},stats:{oblig:0,recomm:1,alertes:1}},
+  "Malaisie":{flag:"🇲🇾",region:"Asie du Sud-Est",climate:"Tropical équatorial",lat:4.2,lng:108.0,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Dengue présente, paludisme en zones forestières de Bornéo",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"conseille",name:"Rage",note:"Zones rurales et forêts"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Sabah (Bornéo)","Sarawak intérieur","Pahang forêts"],treatment:"Atovaquone-Proguanil ou Doxycycline"},stats:{oblig:0,recomm:2,alertes:2}},
+  "Afrique du Sud":{flag:"🇿🇦",region:"Afrique Australe",climate:"Tempéré / Semi-aride",lat:-28.5,lng:24.7,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme dans les zones nordiques, excellente infrastructure médicale dans les villes",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour les voyageurs"},{type:"recommande",name:"Typhoïde",note:"Zones rurales"},{type:"conseille",name:"Rage",note:"Zones rurales et sauvages"}],malaria:{present:true,zones:["Limpopo","Mpumalanga (Kruger)","KwaZulu-Natal côtes nord"],treatment:"Atovaquone-Proguanil ou Méfloquine"},stats:{oblig:0,recomm:2,alertes:2}},
+  "Nouvelle-Zélande":{flag:"🇳🇿",region:"Océanie",climate:"Tempéré océanique",lat:-40.9,lng:174.9,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination très sûre, pas de maladies tropicales",vaccines:[{type:"conseille",name:"Hépatite A",note:"Précaution standard"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:false},stats:{oblig:0,recomm:0,alertes:0}},
+  "Argentine":{flag:"🇦🇷",region:"Amérique du Sud",climate:"Tempéré / Subtropical / Andin",lat:-38.4,lng:-63.6,risk:"low",riskLabel:"Risque faible",riskDesc:"Dengue saisonnière dans le nord, destination globalement sûre",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Fièvre jaune",note:"Zones tropicales du nord-est (Iguazú, Misiones)"},{type:"conseille",name:"Typhoïde",note:"Zones rurales"},{type:"conseille",name:"Rage",note:"Zones rurales"}],malaria:{present:false},stats:{oblig:0,recomm:2,alertes:1}},
+  "Chili":{flag:"🇨🇱",region:"Amérique du Sud",climate:"Varié : désertique au nord, tempéré au centre, froid au sud",lat:-35.7,lng:-71.5,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination très sûre pour l'Amérique du Sud, risques naturels (séismes, UV)",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"conseille",name:"Typhoïde",note:"Zones rurales et nord"},{type:"conseille",name:"Rage",note:"Zones rurales"}],malaria:{present:false},stats:{oblig:0,recomm:1,alertes:1}},
+  "Bolivie":{flag:"🇧🇴",region:"Amérique du Sud",climate:"Tropical / Andin",lat:-16.3,lng:-63.6,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme en Amazonie, altitude extrême (mal des montagnes), fièvre jaune",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire pour zones tropicales"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"conseille",name:"Rage",note:"Zones rurales et Amazonie"}],malaria:{present:true,zones:["Basses terres amazoniennes","Beni","Santa Cruz (zones rurales)"],treatment:"Atovaquone-Proguanil ou Chloroquine"},stats:{oblig:1,recomm:2,alertes:3}},
+  "Jordanie":{flag:"🇯🇴",region:"Moyen-Orient",climate:"Méditerranéen / Désertique",lat:30.6,lng:36.8,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination sûre, précautions alimentaires standard",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:false},stats:{oblig:0,recomm:2,alertes:1}},
+  "Émirats arabes unis":{flag:"🇦🇪",region:"Moyen-Orient",climate:"Désertique aride",lat:23.4,lng:53.8,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination très sûre, chaleur extrême en été, excellente infrastructure",vaccines:[{type:"recommande",name:"Hépatite A",note:"Précaution standard"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:false},stats:{oblig:0,recomm:1,alertes:1}},
+  "Cuba":{flag:"🇨🇺",region:"Caraïbes",climate:"Tropical maritime",lat:21.5,lng:-77.8,risk:"low",riskLabel:"Risque faible",riskDesc:"Dengue saisonnière possible, bonnes structures médicales",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation locale"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:false},stats:{oblig:0,recomm:2,alertes:1}},
+  "République dominicaine":{flag:"🇩🇴",region:"Caraïbes",climate:"Tropical maritime",lat:18.7,lng:-70.2,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme dans certaines zones rurales, dengue, zika historique",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"},{type:"conseille",name:"Rage",note:"Zones rurales"}],malaria:{present:true,zones:["Zones frontalières Haïti","Zones rurales intérieures","La Altagracia"],treatment:"Chloroquine"},stats:{oblig:0,recomm:2,alertes:2}},
+  "Tunisie":{flag:"🇹🇳",region:"Afrique du Nord",climate:"Méditerranéen / Désertique",lat:33.9,lng:9.5,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination sûre, précautions alimentaires standards, risque digestif modéré",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"},{type:"conseille",name:"Rage",note:"Zones rurales"}],malaria:{present:false},stats:{oblig:0,recomm:2,alertes:1}},
+  "Algérie":{flag:"🇩🇿",region:"Afrique du Nord",climate:"Méditerranéen / Désertique saharien",lat:28.0,lng:2.6,risk:"low",riskLabel:"Risque faible",riskDesc:"Destination globalement sûre, précautions dans le sud désertique",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"conseille",name:"Rage",note:"Zones rurales"},{type:"conseille",name:"Méningite ACWY",note:"Si pèlerinage ou voyage dans le Sahel"}],malaria:{present:false},stats:{oblig:0,recomm:2,alertes:1}},
+  "Côte d'Ivoire":{flag:"🇨🇮",region:"Afrique de l'Ouest",climate:"Tropical équatorial",lat:7.5,lng:-5.5,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme endémique, fièvre jaune obligatoire, risques vectoriels",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique"},{type:"conseille",name:"Rage",note:"Zones rurales"}],malaria:{present:true,zones:["Tout le territoire","Abidjan et périphérie","Nord rural","Zones forestières"],treatment:"Atovaquone-Proguanil ou Méfloquine"},stats:{oblig:1,recomm:3,alertes:3}},
+  "Cameroun":{flag:"🇨🇲",region:"Afrique Centrale",climate:"Tropical humide / Sahélien",lat:4.0,lng:12.3,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme généralisé, fièvre jaune, onchocercose en zones rurales",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation"},{type:"recommande",name:"Méningite ACWY",note:"Région Nord (ceinture méningitique)"},{type:"conseille",name:"Rage",note:"Zones rurales"}],malaria:{present:true,zones:["Tout le territoire","Yaoundé et Douala","Zones forestières","Adamaoua"],treatment:"Atovaquone-Proguanil ou Méfloquine"},stats:{oblig:1,recomm:3,alertes:3}},
+  "Portugal":{flag:"🇵🇹",region:"Europe du Sud",climate:"Méditerranéen / Océanique",lat:39.4,lng:-8.2,risk:"low",riskLabel:"Risque très faible",riskDesc:"Destination européenne très sûre, aucune précaution particulière",vaccines:[],malaria:{present:false},stats:{oblig:0,recomm:0,alertes:0}},
+  "Espagne":{flag:"🇪🇸",region:"Europe du Sud",climate:"Méditerranéen / Continental",lat:40.5,lng:-3.7,risk:"low",riskLabel:"Risque très faible",riskDesc:"Destination européenne très sûre, aucune précaution particulière",vaccines:[],malaria:{present:false},stats:{oblig:0,recomm:0,alertes:0}},
+  "Italie":{flag:"🇮🇹",region:"Europe du Sud",climate:"Méditerranéen / Continental",lat:41.9,lng:12.6,risk:"low",riskLabel:"Risque très faible",riskDesc:"Destination européenne très sûre, aucune précaution particulière",vaccines:[],malaria:{present:false},stats:{oblig:0,recomm:0,alertes:0}},
+  "Grèce":{flag:"🇬🇷",region:"Europe du Sud",climate:"Méditerranéen",lat:39.1,lng:21.8,risk:"low",riskLabel:"Risque très faible",riskDesc:"Destination sûre, risque très faible de West Nile en été (zones rurales)",vaccines:[{type:"conseille",name:"Hépatite A",note:"Précaution standard pour zones rurales"}],malaria:{present:false},stats:{oblig:0,recomm:0,alertes:1}},
+  "Canada":{flag:"🇨🇦",region:"Amérique du Nord",climate:"Tempéré / Subarctique",lat:56.1,lng:-106.3,risk:"low",riskLabel:"Risque très faible",riskDesc:"Destination très sûre, précautions hivernales selon saison",vaccines:[],malaria:{present:false},stats:{oblig:0,recomm:0,alertes:0}},
+  "États-Unis":{flag:"🇺🇸",region:"Amérique du Nord",climate:"Varié selon régions",lat:37.1,lng:-95.7,risk:"low",riskLabel:"Risque très faible",riskDesc:"Destination très sûre, West Nile et Lyme dans certaines régions",vaccines:[{type:"conseille",name:"Hépatite A",note:"Précaution standard"}],malaria:{present:false},stats:{oblig:0,recomm:0,alertes:1}},
+  "Russie":{flag:"🇷🇺",region:"Europe de l'Est / Asie",climate:"Continental froid / Subarctique",lat:61.5,lng:105.3,risk:"low",riskLabel:"Risque faible",riskDesc:"Encéphalite à tiques en zones forestières, conditions hivernales",vaccines:[{type:"recommande",name:"Hépatite A",note:"Recommandé pour zones rurales"},{type:"conseille",name:"Encéphalite à tiques",note:"Zones forestières Sibérie et Oural"},{type:"conseille",name:"Rage",note:"Zones rurales"}],malaria:{present:false},stats:{oblig:0,recomm:1,alertes:1}},
+  "Laos":{flag:"🇱🇦",region:"Asie du Sud-Est",climate:"Tropical de mousson",lat:17.9,lng:102.6,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme dans les zones montagneuses, dengue, risques digestifs",vaccines:[{type:"recommande",name:"Hépatite A",note:"Fortement recommandé"},{type:"recommande",name:"Typhoïde",note:"Eau et alimentation locale"},{type:"recommande",name:"Rage",note:"Présente sur tout le territoire"},{type:"conseille",name:"Encéphalite japonaise",note:"Zones rurales"},{type:"conseille",name:"Hépatite B",note:"Séjour prolongé"}],malaria:{present:true,zones:["Provinces montagneuses nord","Attapeu","Xékong","Zones frontalières"],treatment:"Atovaquone-Proguanil ou Doxycycline"},stats:{oblig:0,recomm:3,alertes:2}},
+  "Équateur":{flag:"🇪🇨",region:"Amérique du Sud",climate:"Tropical / Andin",lat:-1.8,lng:-78.2,risk:"medium",riskLabel:"Risque modéré",riskDesc:"Paludisme en basses terres, fièvre jaune en Amazonie",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Fortement recommandé pour zones amazoniennes"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Zones rurales"},{type:"conseille",name:"Rage",note:"Zones rurales et forêts"}],malaria:{present:true,zones:["Provinces côtières","Esmeraldas","Amazonie équatoriale"],treatment:"Atovaquone-Proguanil ou Chloroquine"},stats:{oblig:1,recomm:2,alertes:2}},
+  "Nigeria":{flag:"🇳🇬",region:"Afrique de l'Ouest",climate:"Tropical / Sahélien",lat:9.1,lng:8.7,risk:"high",riskLabel:"Risque élevé",riskDesc:"Paludisme endémique majeur, fièvre de Lassa, méningite, dengue",vaccines:[{type:"obligatoire",name:"Fièvre jaune",note:"Obligatoire à l'entrée"},{type:"recommande",name:"Méningite ACWY",note:"Ceinture méningitique nord du pays"},{type:"recommande",name:"Hépatite A",note:"Recommandé pour tous"},{type:"recommande",name:"Typhoïde",note:"Eau non potable"},{type:"conseille",name:"Rage",note:"Zones rurales"}],malaria:{present:true,zones:["Tout le territoire","Lagos","Abuja et périphérie","Nord rural"],treatment:"Atovaquone-Proguanil ou Méfloquine"},stats:{oblig:1,recomm:3,alertes:3}}
+};
 
 const RISK_COLORS = {low:"#0e9e82", medium:"#c47800", high:"#e03c52"};
 const NAMES = Object.keys(DATA);
 const COUNT = NAMES.length;
 
-// Counters
 document.getElementById('destCount').textContent = COUNT;
 document.getElementById('heroCount').textContent  = COUNT;
 
@@ -579,80 +315,51 @@ NAMES.forEach(n => {
   chipsRow.appendChild(c);
 });
 
-// Map
-const map = L.map('map', {
-  center:[20,10], zoom:2,
-  minZoom:1, maxZoom:10,
-  zoomControl:true,
-  attributionControl:false
-});
+// Map — tuiles claires OpenStreetMap
+const map = L.map('map', {center:[20,10],zoom:2,minZoom:1,maxZoom:10,zoomControl:true,attributionControl:false});
 
-// Tile layer dark style
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
   attribution:'&copy; OpenStreetMap &copy; CARTO',
   maxZoom:19
 }).addTo(map);
 
-// Country polygons via GeoJSON click
+// Click carte → reverse geocode
 map.on('click', async (e) => {
-  // reverse geocode with nominatim to get country name
   try {
     const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${e.latlng.lat}&lon=${e.latlng.lng}&format=json&accept-language=fr`);
     const j = await r.json();
     const raw = (j.address?.country || '').trim();
-    // Try exact match or partial
     const match = NAMES.find(n => n.toLowerCase() === raw.toLowerCase())
                 || NAMES.find(n => raw.toLowerCase().includes(n.toLowerCase()))
                 || NAMES.find(n => n.toLowerCase().includes(raw.toLowerCase()));
-    if (match) { loadCountry(match); }
-  } catch(err) {}
+    if (match) loadCountry(match);
+  } catch(err){}
 });
 
-// Markers
+// Marqueurs
 const markers = {};
 NAMES.forEach(name => {
   const d = DATA[name];
   const color = RISK_COLORS[d.risk];
   const icon = L.divIcon({
     className:'',
-    html:`<div style="
-      width:32px;height:32px;
-      background:${color};
-      border:3px solid rgba(255,255,255,0.9);
-      border-radius:50% 50% 50% 0;
-      transform:rotate(-45deg);
-      box-shadow:0 3px 10px rgba(0,0,0,0.4);
-      cursor:pointer;
-    "></div>
-    <div style="
-      position:absolute;top:4px;left:4px;
-      width:24px;height:24px;
-      display:flex;align-items:center;justify-content:center;
-      font-size:14px;transform:rotate(45deg);
-    ">${d.flag}</div>`,
-    iconSize:[32,32],
-    iconAnchor:[10,32],
-    popupAnchor:[6,-30]
+    html:`<div style="width:30px;height:30px;background:${color};border:3px solid rgba(255,255,255,0.95);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 2px 8px rgba(0,0,0,0.3);cursor:pointer;"></div>
+    <div style="position:absolute;top:4px;left:4px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:13px;transform:rotate(45deg);">${d.flag}</div>`,
+    iconSize:[30,30],iconAnchor:[10,30],popupAnchor:[5,-28]
   });
-
-  const popup = L.popup({className:'',maxWidth:220}).setContent(`
+  const popup = L.popup({maxWidth:220}).setContent(`
     <div class="map-popup">
       <div class="map-popup-name">${d.flag} ${name}</div>
       <div class="map-popup-meta">${d.region} · ${d.climate}</div>
       <div class="map-popup-risk ${d.risk}">
-        <span style="width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block;"></span>
+        <span style="width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block;margin-right:4px;"></span>
         ${d.riskLabel}
       </div>
-      <button class="map-popup-btn" onclick="loadCountry('${name}');map.closePopup()">
-        Voir les recommandations →
-      </button>
+      <button class="map-popup-btn" onclick="loadCountry('${name}');map.closePopup()">Voir les recommandations →</button>
     </div>`);
-
-  const marker = L.marker([d.lat, d.lng], {icon}).addTo(map).bindPopup(popup);
-  markers[name] = marker;
+  markers[name] = L.marker([d.lat, d.lng], {icon}).addTo(map).bindPopup(popup);
 });
 
-// Search
 document.getElementById('countryInput').addEventListener('keydown', e => { if(e.key==='Enter') searchCountry(); });
 
 function searchCountry() {
@@ -662,18 +369,13 @@ function searchCountry() {
 
 function loadCountry(name) {
   document.getElementById('countryInput').value = name;
-  // update chips
-  document.querySelectorAll('.chip').forEach(c => {
-    c.classList.toggle('active', c.textContent.includes(name));
-  });
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.textContent.includes(name)));
   const d = DATA[name];
   if(!d) { renderUnknown(name); return; }
-  // fly map to country
   map.flyTo([d.lat, d.lng], 5, {duration:1.2});
   markers[name]?.openPopup();
   render(name, d);
-  // scroll to results
-  setTimeout(() => document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'}), 400);
+  setTimeout(() => document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}), 400);
 }
 
 function renderUnknown(name) {
@@ -682,18 +384,16 @@ function renderUnknown(name) {
       <div class="placeholder-icon">🔍</div>
       <h3>${name} — pas encore dans la base locale</h3>
       <p>Utilisez l'analyse IA pour générer des recommandations.</p>
-      <button class="btn-ai" style="max-width:260px;margin:20px auto 0" onclick="runAIOnly('${name}')">
-        ✨ Analyser avec l'IA
-      </button>
+      <button class="btn-ai" style="max-width:260px;margin:20px auto 0" onclick="runAIOnly('${name}')">✨ Analyser avec l'IA</button>
     </div>`;
 }
 
 function render(name, d) {
-  const vaccHTML = d.vaccines.map(v=>`
+  const vaccHTML = d.vaccines.length ? d.vaccines.map(v=>`
     <div class="vaccine-item">
       <span class="vaccine-badge ${v.type}">${v.type}</span>
       <div><div class="vaccine-name">${v.name}</div><div class="vaccine-note">${v.note}</div></div>
-    </div>`).join('');
+    </div>`).join('') : `<div style="font-size:13px;color:var(--text-muted);padding:8px 0;">Aucune vaccination spécifique requise pour cette destination.</div>`;
 
   const malHTML = d.malaria.present
     ? d.malaria.zones.map(z=>`
@@ -702,10 +402,7 @@ function render(name, d) {
           <div class="zone-name">${z}</div>
           <span class="zone-pill">Risque</span>
         </div>`).join('')
-      +`<div class="treatment-box">
-          <div class="treatment-label">Prophylaxie recommandée</div>
-          <div class="treatment-val">${d.malaria.treatment}</div>
-        </div>`
+      +`<div class="treatment-box"><div class="treatment-label">Prophylaxie recommandée</div><div class="treatment-val">${d.malaria.treatment}</div></div>`
     :`<div class="no-malaria">✓ Pas de risque paludéen sur cette destination</div>`;
 
   document.getElementById('results').innerHTML = `
@@ -717,49 +414,28 @@ function render(name, d) {
       </div>
     </div>
     <div class="stats-row">
-      <div class="stat-card navy">
-        <div class="stat-val">${COUNT}</div>
-        <div class="stat-lbl">Destinations</div>
-      </div>
-      <div class="stat-card red">
-        <div class="stat-val">${d.stats.oblig}</div>
-        <div class="stat-lbl">Vaccin(s) obligatoire(s)</div>
-      </div>
-      <div class="stat-card amber">
-        <div class="stat-val">${d.stats.recomm}</div>
-        <div class="stat-lbl">Vaccin(s) recommandé(s)</div>
-      </div>
-      <div class="stat-card teal">
-        <div class="stat-val">${d.stats.alertes}</div>
-        <div class="stat-lbl">Points de vigilance</div>
-      </div>
+      <div class="stat-card navy"><div class="stat-val">${COUNT}</div><div class="stat-lbl">Destinations</div></div>
+      <div class="stat-card red"><div class="stat-val">${d.stats.oblig}</div><div class="stat-lbl">Vaccin(s) obligatoire(s)</div></div>
+      <div class="stat-card amber"><div class="stat-val">${d.stats.recomm}</div><div class="stat-lbl">Vaccin(s) recommandé(s)</div></div>
+      <div class="stat-card teal"><div class="stat-val">${d.stats.alertes}</div><div class="stat-lbl">Points de vigilance</div></div>
     </div>
     <div class="results-grid">
       <div class="col">
         <div class="card">
           <div class="card-header">
             <div class="card-icon teal">🛡️</div>
-            <div>
-              <div class="card-title-text">Niveau de risque sanitaire</div>
-              <div class="card-sub-text">Évaluation globale destination</div>
-            </div>
+            <div><div class="card-title-text">Niveau de risque sanitaire</div><div class="card-sub-text">Évaluation globale destination</div></div>
           </div>
           <div class="risk-banner ${d.risk}">
             <div class="risk-dot"></div>
-            <div>
-              <div class="risk-label">${d.riskLabel}</div>
-              <div class="risk-desc">${d.riskDesc}</div>
-            </div>
+            <div><div class="risk-label">${d.riskLabel}</div><div class="risk-desc">${d.riskDesc}</div></div>
           </div>
           <div class="source-note">ℹ️ Source : Institut Pasteur · Ministère de la Santé · OMS</div>
         </div>
         <div class="card">
           <div class="card-header">
             <div class="card-icon amber">💉</div>
-            <div>
-              <div class="card-title-text">Vaccinations</div>
-              <div class="card-sub-text">${d.vaccines.length} vaccins référencés</div>
-            </div>
+            <div><div class="card-title-text">Vaccinations</div><div class="card-sub-text">${d.vaccines.length} vaccin(s) référencé(s)</div></div>
           </div>
           ${vaccHTML}
         </div>
@@ -768,10 +444,7 @@ function render(name, d) {
         <div class="card">
           <div class="card-header">
             <div class="card-icon red">🦟</div>
-            <div>
-              <div class="card-title-text">Paludisme</div>
-              <div class="card-sub-text">${d.malaria.present?'Zones à risque identifiées':'Aucune zone à risque'}</div>
-            </div>
+            <div><div class="card-title-text">Paludisme</div><div class="card-sub-text">${d.malaria.present?'Zones à risque identifiées':'Aucune zone à risque'}</div></div>
           </div>
           ${malHTML}
         </div>
@@ -785,9 +458,6 @@ function render(name, d) {
             <label class="form-label">Patient concerné (optionnel)</label>
             <select class="form-input" id="patientSelect">
               <option value="">— Conseil général sans patient —</option>
-              <option value="p1">Martin, Jean-Pierre (42 ans) — Asthme, Metformine</option>
-              <option value="p2">Dubois, Marie (67 ans) — HTA, Anticoagulants</option>
-              <option value="p3">Ahmed, Karim (28 ans) — Aucune pathologie connue</option>
             </select>
             <div id="aiResult">
               <button class="btn-ai" onclick="runAI('${name}')">✨ Générer l'analyse IA</button>
@@ -799,22 +469,14 @@ function render(name, d) {
 }
 
 async function runAI(name) {
+  document.getElementById('aiResult').innerHTML = `<div style="display:flex;align-items:center;gap:10px;padding:14px 0;color:var(--text-muted);font-size:13px;"><div class="spinner spinner-teal"></div> Analyse en cours…</div>`;
   const sel = document.getElementById('patientSelect');
   const patient = sel?.value ? sel.options[sel.selectedIndex].text : null;
-  document.getElementById('aiResult').innerHTML = `
-    <div style="display:flex;align-items:center;gap:10px;padding:14px 0;color:var(--text-muted);font-size:13px;">
-      <div class="spinner spinner-teal"></div> Analyse en cours…
-    </div>`;
   await callAI(name, patient);
 }
 
 async function runAIOnly(name) {
-  document.getElementById('results').innerHTML = `
-    <div class="placeholder">
-      <div style="display:flex;align-items:center;gap:10px;justify-content:center;color:var(--teal);font-size:13px;padding:20px 0;">
-        <div class="spinner spinner-teal"></div> Analyse IA en cours pour ${name}…
-      </div>
-    </div>`;
+  document.getElementById('results').innerHTML = `<div class="placeholder"><div style="display:flex;align-items:center;gap:10px;justify-content:center;color:var(--teal);font-size:13px;padding:20px 0;"><div class="spinner spinner-teal"></div> Analyse IA en cours pour ${name}…</div></div>`;
   await callAI(name, null);
 }
 
@@ -830,8 +492,8 @@ Risque : ${d ? d.riskLabel : 'à évaluer'}${patCtx}
 Réponds UNIQUEMENT en JSON valide (pas de markdown, pas de backticks) :
 {"resume":"2 phrases synthèse clinique","points_vigilance":["p1","p2","p3"],"conseils_officine":["c1","c2","c3"],"medications_voyage":["m1","m2"],"avertissement":"1 phrase alerte principale patient"}`;
   try {
-    const res  = await fetch('/api/analyze-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}],max_tokens:900})});
-    const raw  = await res.json();
+    const res = await fetch('/api/analyze-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}],max_tokens:900})});
+    const raw = await res.json();
     const text = (raw.content?.[0]?.text||raw.choices?.[0]?.message?.content||'').replace(/```json|```/g,'').trim();
     let parsed; try{parsed=JSON.parse(text);}catch{parsed=null;}
     renderAI(parsed, text, name);
@@ -859,10 +521,7 @@ function renderAI(parsed, raw, name) {
     <div style="font-size:11px;color:var(--text-dim);margin-top:12px;padding-top:10px;border-top:var(--border);">✨ Analyse IA — à valider par le pharmacien · Claude</div>`;
 }
 
-// Sync dark mode avec le parent
 try { if(window.parent?.document.body.classList.contains('dark')) document.body.classList.add('dark'); } catch(e){}
 </script>
 </body>
 </html>
-ENDOFFILE
-echo "OK"
