@@ -457,6 +457,45 @@
       <div class="form-group"><label class="form-label">Allergies</label><input class="form-input" id="p-allergies" placeholder="Pénicilline, Aspirine…"/></div>
       <div class="form-group"><label class="form-label">Téléphone</label><input class="form-input" id="p-tel" placeholder="06 12 34 56 78"/></div>
       <div class="form-group"><label class="form-label">Notes</label><input class="form-input" id="p-notes" placeholder="Observations complémentaires…"/></div>
+      <!-- ── Informations de santé ── -->
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:12px">Informations de santé</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group"><label class="form-label">Poids (kg)</label><input class="form-input" type="number" id="p-poids" placeholder="ex : 72" min="0" step="0.1"/></div>
+        <div class="form-group"><label class="form-label">Taille (cm)</label><input class="form-input" type="number" id="p-taille" placeholder="ex : 175" min="0" step="0.1"/></div>
+      </div>
+
+      <div class="form-group"><label class="form-label">Insuffisance rénale</label>
+        <select class="form-input" id="p-insuf-renale">
+          <option value="">Non spécifié</option>
+          <option value="legere">Légère</option>
+          <option value="moderee">Modérée</option>
+          <option value="severe">Sévère</option>
+          <option value="terminale">Terminale / dialyse</option>
+        </select>
+      </div>
+
+      <div class="form-group"><label class="form-label">DFG (mL/min/1,73m²)</label><input class="form-input" type="number" id="p-dfg" placeholder="ex : 45" min="0" step="0.1"/></div>
+
+      <div class="form-group"><label class="form-label">Insuffisance hépatique</label>
+        <select class="form-input" id="p-insuf-hepatique">
+          <option value="">Non spécifié</option>
+          <option value="legere">Légère</option>
+          <option value="moderee">Modérée</option>
+          <option value="severe">Sévère</option>
+        </select>
+      </div>
+
+      <div class="form-group"><label class="form-label">Insuffisance cardiaque</label>
+        <select class="form-input" id="p-insuf-cardiaque">
+          <option value="">Non spécifié</option>
+          <option value="legere">Légère</option>
+          <option value="moderee">Modérée</option>
+          <option value="severe">Sévère</option>
+        </select>
+      </div>
+
+      <div class="form-group"><label class="form-label">Antécédents / Autres pathologies</label><input class="form-input" id="p-antecedents" placeholder="ex : diabète type 2, hypertension…"/></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('add-patient')">Annuler</button>
