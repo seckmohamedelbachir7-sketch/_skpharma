@@ -53,21 +53,38 @@ function filterPatients(q) {
 async function savePatient() {
   const name = document.getElementById('p-name').value.trim();
   if (!name) return showToast('Le nom est obligatoire', 'error');
+
+  // Calcul IMC automatique
+  const poids = parseFloat(document.getElementById('p-poids').value) || null;
+  const taille = parseFloat(document.getElementById('p-taille').value) || null;
+  const imc = (poids && taille) ? parseFloat((poids / Math.pow(taille / 100, 2)).toFixed(1)) : null;
+
   const { error } = await sb.from('patients').insert({
     pharmacist_id: currentUser.id,
-    name, dob: document.getElementById('p-dob').value || null,
-    mutuelle: document.getElementById('p-mutuelle').value || null,
-    pathologies: document.getElementById('p-patho').value || null,
-    allergies: document.getElementById('p-allergies').value || null,
-    telephone: document.getElementById('p-tel').value || null,
-    notes: document.getElementById('p-notes').value || null
+    name,
+    dob:                    document.getElementById('p-dob').value || null,
+    mutuelle:               document.getElementById('p-mutuelle').value || null,
+    pathologies:            document.getElementById('p-patho').value || null,
+    allergies:              document.getElementById('p-allergies').value || null,
+    telephone:              document.getElementById('p-tel').value || null,
+    notes:                  document.getElementById('p-notes').value || null,
+    // ↓ nouvelles colonnes
+    poids,
+    taille,
+    imc,
+    insuffisance_renale:    document.getElementById('p-insuf-renale').value || null,
+    dfg:                    parseFloat(document.getElementById('p-dfg').value) || null,
+    insuffisance_hepatique: document.getElementById('p-insuf-hepatique').value || null,
+    insuffisance_cardiaque: document.getElementById('p-insuf-cardiaque').value || null,
+    antecedents:            document.getElementById('p-antecedents').value || null,
   });
+
   if (error) return showToast('Erreur : ' + error.message, 'error');
   closeModal('add-patient');
-  clearForm(['p-name','p-dob','p-mutuelle','p-patho','p-allergies','p-tel','p-notes']);
+  clearForm(['p-name','p-dob','p-mutuelle','p-patho','p-allergies','p-tel','p-notes',
+             'p-poids','p-taille','p-insuf-renale','p-dfg','p-insuf-hepatique','p-insuf-cardiaque','p-antecedents']);
   showToast('Patient enregistré avec succès', 'success');
-  loadPatients();
-  loadDashboard();
+  loadPatients(); loadDashboard();
 }
 
 async function deletePatient(id) {
