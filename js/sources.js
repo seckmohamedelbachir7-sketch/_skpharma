@@ -2,15 +2,11 @@
  * sources.js — Module "Sources & Références" pour SKPharma
  * Style "Apothicaire de Luxe" (or antique / bleu marine / parchemin)
  *
- * Usage :
- *   import { renderSourcesPage } from './sources.js';
- *   renderSourcesPage(document.getElementById('main-content'));
- *
- * Ou en navigation SPA existante, appeler renderSourcesPage(container)
- * quand l'utilisateur clique sur l'item "Sources" du menu.
+ * Chargé en script global (pas de modules ES), comme les autres fichiers
+ * de /js/. La page est injectée dans #page-sources au premier appel.
  */
 
-export const SOURCES = [
+const SOURCES = [
   {
     category: "OFFICIELLE FR",
     name: "BDPM",
@@ -243,7 +239,7 @@ function renderGrid(grid, list) {
     : `<div class="sources-empty">Aucune source ne correspond à votre recherche.</div>`;
 }
 
-export function renderSourcesPage(container) {
+function renderSourcesPage(container) {
   if (!container) return;
   injectStylesOnce();
 
@@ -280,4 +276,10 @@ export function renderSourcesPage(container) {
     );
     renderGrid(grid, filtered);
   });
+}
+
+// Appelée depuis la nav : onclick="showPage('sources',this);loadSourcesPage()"
+function loadSourcesPage() {
+  const container = document.getElementById("page-sources");
+  renderSourcesPage(container);
 }
